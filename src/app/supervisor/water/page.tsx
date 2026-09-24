@@ -10,6 +10,7 @@ import {
   Droplet,
   ExternalLink,
   MapPin,
+  ShieldAlert,
   ShieldCheck,
   Users,
   Waves,
@@ -21,43 +22,81 @@ import { Button } from "@/components/ui/button";
 
 export default function SupervisorWaterDashboard() {
   const areas = [
-    { id: "area-xyz", name: "XYZ Colony", reports: 78, status: "Pending Verification", tone: "danger" as const, caseId: "case-xyz-001" },
-    { id: "area-abc", name: "ABC Colony", reports: 34, status: "In Progress", tone: "warning" as const, caseId: "case-abc-002" },
-    { id: "area-def", name: "DEF Colony", reports: 12, status: "Verified & Resolved", tone: "normal" as const, caseId: "case-def-003" },
-    { id: "area-ghi", name: "GHI Colony", reports: 56, status: "Pending Verification", tone: "danger" as const, caseId: "case-ghi-004" },
+    {
+      id: "area-xyz",
+      name: "XYZ Colony",
+      status: "High",
+      tone: "danger" as const,
+      reports: 78,
+      stage: "Pending",
+      caseId: "case-xyz-001",
+    },
+    {
+      id: "area-abc",
+      name: "ABC Colony",
+      status: "Moderate",
+      tone: "warning" as const,
+      reports: 34,
+      stage: "In Progress",
+      caseId: "case-abc-001",
+    },
+    {
+      id: "area-def",
+      name: "DEF Colony",
+      status: "Normal",
+      tone: "normal" as const,
+      reports: 12,
+      stage: "Verified",
+      caseId: "case-def-001",
+    },
+    {
+      id: "area-ghi",
+      name: "GHI Colony",
+      status: "High",
+      tone: "danger" as const,
+      reports: 56,
+      stage: "Pending",
+      caseId: "case-ghi-001",
+    },
   ];
 
   return (
     <div className="space-y-6">
       <PageHeader
-        title="Ward 24 Water Supply Operations"
+        title="Ward 24 Water Operations"
         subtitle="Monitor area supply schedules, triage AI-grouped citizen pressure reports, and coordinate field verification teams."
         badge={
           <div className="flex items-center gap-2">
-            <StatusBadge status="warning" label="3 Cases Require Action" />
-            <span className="text-xs font-mono text-white/50">Ward 24 Desk</span>
+            <span className="text-xs font-mono font-bold text-teal-400 bg-teal-500/10 border border-teal-500/20 px-2.5 py-0.5 rounded-full">
+              Ward 24
+            </span>
+            <span className="text-xs font-mono text-white/50">4 Localities Under Watch</span>
           </div>
         }
         actions={
           <Link href="/supervisor/water/verified">
-            <Button variant="outline" size="sm" className="h-8 gap-1.5 border-white/10 bg-white/5 text-xs text-white">
+            <Button
+              variant="outline"
+              size="sm"
+              className="h-8 gap-1.5 border-white/10 bg-white/5 hover:bg-white/10 text-xs text-teal-300 rounded-xl"
+            >
               <ShieldCheck className="h-3.5 w-3.5 text-teal-400" />
-              <span>Verified Reports Archive</span>
+              <span>Verified Reports &amp; Dept Updates</span>
             </Button>
           </Link>
         }
       />
 
-      {/* Exact KPIs from Section 6.13 */}
+      {/* 6.1 Exact KPIs matching §6.1 */}
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
         <KpiCard
           title="Assigned Areas"
           value="12"
-          subtitle="Ward 24 localities"
+          subtitle="Ward 24 coverage"
           badge={<StatusBadge status="normal" label="Covered" />}
         />
         <KpiCard
-          title="Active Concerns"
+          title="Active Water Concerns"
           value="5"
           subtitle="Grouped supply issues"
           badge={<StatusBadge status="warning" label="Active" />}
@@ -69,80 +108,202 @@ export default function SupervisorWaterDashboard() {
           badge={<StatusBadge status="warning" label="Pending" />}
         />
         <KpiCard
-          title="Field Teams Ready"
+          title="Field Teams Available"
           value="6"
-          subtitle="GPS enabled inspectors"
+          subtitle="GPS-enabled assistants"
           badge={<StatusBadge status="normal" label="Available" />}
         />
         <KpiCard
           title="Reports Verified Today"
           value="8"
-          subtitle="Forwarded to Board"
-          badge={<StatusBadge status="complete" label="Resolved" />}
+          subtitle="Validated on ground"
+          badge={<StatusBadge status="complete" label="Verified" />}
         />
       </div>
 
-      {/* AI Water Supply Alerts (Grouped Case Highlight) */}
-      <div className="p-6 rounded-2xl border border-rose-500/30 bg-rose-500/[0.03] backdrop-blur-xl space-y-4">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2 text-rose-400 font-bold text-xs uppercase tracking-wider">
-            <AlertTriangle className="h-4 w-4" />
-            <span>AI Supply Alert · High Severity Concern</span>
+      {/* Area Table matching §6.1 */}
+      <div className="rounded-3xl border border-white/10 bg-[#070D0A]/95 p-6 backdrop-blur-xl shadow-xl space-y-4">
+        <div className="flex items-center justify-between pb-3 border-b border-white/10">
+          <div>
+            <h3 className="text-base font-bold text-white">Ward Localities &amp; Report Triage</h3>
+            <p className="text-xs text-white/50">Aggregates and counts only — no household data.</p>
           </div>
-          <span className="text-xs font-mono text-white/50">Generated 08:00 AM Today</span>
+          <span className="text-xs font-mono text-white/40">4 Key Sectors</span>
         </div>
 
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-          <div>
-            <h3 className="text-lg font-bold text-white mb-1">
-              XYZ Colony — 78 Citizen Reports (Low Water Pressure)
-            </h3>
-            <p className="text-xs text-white/70 max-w-2xl leading-relaxed">
-              Planned schedule: 7:00 AM – 8:00 AM. 61 households report low pressure, 11 short duration, 6 zero flow. AI pattern assessment: Possible supply-demand gap at Feeder Valve 4B. Field verification required before department escalation.
-            </p>
-          </div>
-
-          <Link href="/supervisor/water/cases/case-xyz-001" className="shrink-0">
-            <Button className="bg-rose-500 text-white hover:bg-rose-400 font-semibold text-xs h-9 px-5 gap-2 shadow-lg shadow-rose-500/20">
-              <span>Open Case Workspace</span>
-              <ArrowRight className="h-3.5 w-3.5" />
-            </Button>
-          </Link>
+        <div className="overflow-x-auto">
+          <table className="w-full text-left text-xs text-white/80">
+            <thead>
+              <tr className="border-b border-white/10 text-white/40 font-mono text-[11px]">
+                <th className="pb-3 font-semibold">Area</th>
+                <th className="pb-3 font-semibold">Status</th>
+                <th className="pb-3 text-right font-semibold">Citizen Reports</th>
+                <th className="pb-3 text-right font-semibold">Stage</th>
+                <th className="pb-3 text-right font-semibold">Action</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-white/5 font-mono text-xs">
+              {areas.map((a) => (
+                <tr key={a.id} className="hover:bg-white/[0.02]">
+                  <td className="py-3.5 font-sans font-bold text-white">
+                    <Link
+                      href={`/supervisor/water/areas/${a.id}`}
+                      className="hover:text-teal-300 transition-colors"
+                    >
+                      {a.name}
+                    </Link>
+                  </td>
+                  <td className="py-3.5">
+                    <StatusBadge status={a.tone} label={a.status} />
+                  </td>
+                  <td className="py-3.5 text-right font-bold text-white">{a.reports}</td>
+                  <td className="py-3.5 text-right text-white/70">{a.stage}</td>
+                  <td className="py-3.5 text-right">
+                    <Link href={`/supervisor/water/areas/${a.id}`}>
+                      <Button
+                        size="sm"
+                        variant="ghost"
+                        className="h-7 text-[11px] text-teal-400 hover:text-teal-300 font-semibold"
+                      >
+                        Area Report &rarr;
+                      </Button>
+                    </Link>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
       </div>
 
-      {/* Ward Areas Triage Table */}
-      <div className="rounded-2xl border border-white/10 bg-[#070D0A]/95 p-6 backdrop-blur-xl">
-        <h3 className="text-base font-bold text-white mb-4">Ward 24 Localities & Case Status</h3>
+      {/* 6.2 AI Water Supply Alerts matching §6.2 */}
+      <div className="space-y-4">
+        <div className="flex items-center justify-between">
+          <h3 className="text-base font-bold text-white flex items-center gap-2">
+            <AlertTriangle className="h-4 w-4 text-amber-400" />
+            <span>AI Water Supply Alerts</span>
+          </h3>
+          <span className="text-xs font-mono text-white/50">Human in the Loop</span>
+        </div>
 
-        <div className="divide-y divide-white/5">
-          {areas.map((a) => (
-            <div key={a.id} className="py-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4 text-xs">
-              <div className="flex items-center gap-4">
-                <div className={`h-8 w-8 rounded-lg flex items-center justify-center ${
-                  a.tone === "danger" ? "bg-rose-500/15 text-rose-400" : a.tone === "warning" ? "bg-amber-500/15 text-amber-400" : "bg-emerald-500/15 text-emerald-400"
-                }`}>
-                  <Droplet className="h-4 w-4" />
-                </div>
-                <div>
-                  <Link href={`/supervisor/water/areas/${a.id}`} className="font-bold text-white hover:text-teal-300 text-sm">
-                    {a.name}
-                  </Link>
-                  <p className="text-white/50 text-[11px] mt-0.5">{a.reports} citizen reports logged today</p>
-                </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {/* Card 1: 🔴 HIGH · XYZ Colony */}
+          <div className="p-6 rounded-3xl border border-rose-500/30 bg-rose-500/[0.03] backdrop-blur-xl shadow-xl flex flex-col justify-between space-y-4">
+            <div>
+              <div className="flex items-center justify-between mb-2">
+                <span className="text-xs font-mono font-bold text-rose-400 uppercase tracking-wider flex items-center gap-1.5">
+                  <ShieldAlert className="h-4 w-4" />
+                  <span>🔴 HIGH · XYZ Colony</span>
+                </span>
+                <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-rose-500/20 text-rose-300">
+                  78 households
+                </span>
               </div>
 
-              <div className="flex items-center gap-4">
-                <StatusBadge status={a.tone} label={a.status} />
-                <Link href={`/supervisor/water/cases/${a.caseId}`}>
-                  <Button variant="outline" size="sm" className="h-8 border-white/10 bg-white/5 text-xs text-white hover:bg-white/10">
-                    <span>Manage Case</span>
-                    <ArrowRight className="h-3 w-3 ml-1" />
-                  </Button>
-                </Link>
+              <div className="space-y-1.5 text-xs">
+                <p className="text-white/80">
+                  Planned supply: <strong className="font-mono text-white">7:00–8:00 AM</strong> · Availability significantly below expected · Frequency: High · Historical: Below normal.
+                </p>
+                <div className="p-3 rounded-xl bg-black/40 border border-white/5 text-[11px] text-rose-200/90 leading-relaxed font-mono">
+                  AI assessment: Possible supply-demand gap. Field verification required.
+                </div>
               </div>
             </div>
-          ))}
+
+            <div className="pt-3 border-t border-white/10 flex items-center gap-3">
+              <Link href="/supervisor/water/cases/case-xyz-001" className="flex-1">
+                <Button className="w-full bg-rose-500 text-white hover:bg-rose-400 font-bold text-xs h-9 rounded-xl shadow-lg shadow-rose-500/20">
+                  Open Case
+                </Button>
+              </Link>
+              <Link href="/supervisor/water/areas/area-xyz">
+                <Button
+                  variant="outline"
+                  className="border-white/15 bg-white/5 hover:bg-white/10 text-xs text-white h-9 rounded-xl px-4"
+                >
+                  View Area Report
+                </Button>
+              </Link>
+            </div>
+          </div>
+
+          {/* Card 2: 🔴 HIGH · GHI Colony */}
+          <div className="p-6 rounded-3xl border border-rose-500/20 bg-white/[0.02] backdrop-blur-xl shadow-xl flex flex-col justify-between space-y-4">
+            <div>
+              <div className="flex items-center justify-between mb-2">
+                <span className="text-xs font-mono font-bold text-rose-400 uppercase tracking-wider">
+                  🔴 HIGH · GHI Colony
+                </span>
+                <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-white/10 text-white/70">
+                  56 households
+                </span>
+              </div>
+              <p className="text-xs text-white/70">
+                Planned supply: 6:30–7:30 AM · Field verification assigned to <strong className="text-white">Arif Khan</strong>.
+              </p>
+            </div>
+
+            <div className="pt-3 border-t border-white/5 flex items-center justify-between text-xs">
+              <span className="text-white/40 font-mono">Status: Verification Assigned</span>
+              <Link href="/supervisor/water/cases/case-ghi-001">
+                <Button variant="ghost" size="sm" className="h-8 text-xs text-teal-400">
+                  Open Case &rarr;
+                </Button>
+              </Link>
+            </div>
+          </div>
+
+          {/* Card 3: 🟡 MODERATE · ABC Colony */}
+          <div className="p-6 rounded-3xl border border-amber-500/20 bg-white/[0.02] backdrop-blur-xl shadow-xl flex flex-col justify-between space-y-4">
+            <div>
+              <div className="flex items-center justify-between mb-2">
+                <span className="text-xs font-mono font-bold text-amber-400 uppercase tracking-wider">
+                  🟡 MODERATE · ABC Colony
+                </span>
+                <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-white/10 text-white/70">
+                  34 households
+                </span>
+              </div>
+              <p className="text-xs text-white/70">
+                Planned supply: 7:30–8:30 AM · Field verification in progress with <strong className="text-white">Suresh M</strong>.
+              </p>
+            </div>
+
+            <div className="pt-3 border-t border-white/5 flex items-center justify-between text-xs">
+              <span className="text-white/40 font-mono">Status: In Progress</span>
+              <Link href="/supervisor/water/cases/case-abc-001">
+                <Button variant="ghost" size="sm" className="h-8 text-xs text-teal-400">
+                  Open Case &rarr;
+                </Button>
+              </Link>
+            </div>
+          </div>
+
+          {/* Card 4: 🟢 NORMAL · DEF Colony */}
+          <div className="p-6 rounded-3xl border border-emerald-500/20 bg-white/[0.02] backdrop-blur-xl shadow-xl flex flex-col justify-between space-y-4">
+            <div>
+              <div className="flex items-center justify-between mb-2">
+                <span className="text-xs font-mono font-bold text-emerald-400 uppercase tracking-wider">
+                  🟢 NORMAL · DEF Colony
+                </span>
+                <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-white/10 text-white/70">
+                  12 households
+                </span>
+              </div>
+              <p className="text-xs text-white/70">
+                Planned supply: 8:00–9:00 AM · Full pressure confirmed on ground.
+              </p>
+            </div>
+
+            <div className="pt-3 border-t border-white/5 flex items-center justify-between text-xs">
+              <span className="text-emerald-400 font-mono">Status: Verified</span>
+              <Link href="/supervisor/water/cases/case-def-001">
+                <Button variant="ghost" size="sm" className="h-8 text-xs text-emerald-400">
+                  View Log &rarr;
+                </Button>
+              </Link>
+            </div>
+          </div>
         </div>
       </div>
     </div>

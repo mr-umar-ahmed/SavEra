@@ -2,9 +2,22 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { ArrowRight, CheckCircle2, Droplet, Waves } from "lucide-react";
+import {
+  ArrowRight,
+  Check,
+  CheckCircle2,
+  Droplet,
+  Info,
+  Layers,
+  MapPin,
+  Sparkles,
+  Waves,
+} from "lucide-react";
 import { PageHeader } from "@/components/savera/PageHeader";
+import { EstimatedChip } from "@/components/savera/EstimatedChip";
+import { SkipRow } from "@/components/savera/SkipRow";
 import { Button } from "@/components/ui/button";
+import { toast } from "sonner";
 import { useCurrentHousehold } from "@/lib/api/hooks";
 import { useDataStore } from "@/stores/data";
 
@@ -12,119 +25,230 @@ export default function WaterSetupPage() {
   const router = useRouter();
   const { household } = useCurrentHousehold();
   const setSectionStatus = useDataStore((s) => s.setSectionStatus);
+  const updateHousehold = useDataStore((s) => s.updateHousehold);
 
-  const [sumpLitres, setSumpLitres] = useState(3000);
-  const [overheadLitres, setOverheadLitres] = useState(1000);
-  const [hasPurifier, setHasPurifier] = useState(true);
+  // 1. Usage points (multi-select) matching §1
+  const [usagePoints, setUsagePoints] = useState<string[]>([
+    "Kitchen tap",
+    "Bathroom (2)",
+    "Washing area",
+    "Overhead tank",
+    "RO purifier",
+  ]);
+
+  // 2. Area / supply zone
+  const [areaZone] = useState("Ward 24 · XYZ Colony");
+
+  // 3. Supply schedule (read-only from seed, editable)
+  const [scheduleTime, setScheduleTime] = useState("7:00–8:00 AM · Daily");
+  const [plannedLiters] = useState("4,50,000 L (colony)");
+
+  // 4. Storage capacities
+  const [overheadTank, setOverheadTank] = useState(1000);
+  const [sumpCapacity, setSumpCapacity] = useState(2000);
+
+  const toggleUsagePoint = (point: string) => {
+    setUsagePoints((prev) =>
+      prev.includes(point) ? prev.filter((p) => p !== point) : [...prev, point]
+    );
+  };
 
   const handleSave = () => {
     if (household) {
       setSectionStatus(household.id, "water", "complete");
+      updateHousehold(household.id, {
+        water: {
+          usagePoints,
+          storageLitres: overheadTank + sumpCapacity,
+          source: "municipal",
+          scheduleAreaId: "area-xyz",
+        },
+      });
     }
+    toast.success("Water configuration saved.");
     router.push("/citizen/water");
   };
+
+  const handleSkip = () => {
+    if (household) {
+      setSectionStatus(household.id, "water", "later");
+    }
+    toast.info("Using default XYZ Colony water norms.");
+    router.push("/citizen/water");
+  };
+
+  const availablePoints = [
+    "Kitchen tap",
+    "Bathroom (2)",
+    "Washing area",
+    "Garden",
+    "Overhead tank",
+    "Borewell",
+    "RO purifier",
+  ];
 
   return (
     <div className="max-w-3xl mx-auto space-y-6">
       <PageHeader
-        title="Water Supply & Habitat Setup"
-        subtitle="Map your supply schedule, storage capacity, and regional scarcity factors."
+        title="Water Setup"
+        subtitle="Map usage points, storage capacity, and calculate regional scarcity impact."
         breadcrumbs={[
           { label: "Habitat Hub", href: "/citizen" },
           { label: "Water Setup" },
         ]}
       />
 
-      <div className="rounded-2xl border border-white/10 bg-[#070D0A]/95 p-6 backdrop-blur-xl space-y-6">
-        {/* Scheduled Supply Card */}
-        <div className="p-4 rounded-xl border border-teal-500/20 bg-teal-500/5">
-          <div className="flex items-center gap-2 text-teal-400 font-bold text-xs uppercase tracking-wider mb-1">
-            <Droplet className="h-4 w-4" />
-            <span>Assigned Municipal Schedule</span>
+      <div className="rounded-3xl border border-white/10 bg-[#070D0A]/95 p-6 sm:p-8 backdrop-blur-2xl space-y-6 shadow-2xl">
+        {/* 1. Usage Points */}
+        <div className="space-y-3">
+          <div className="flex items-center justify-between">
+            <label className="text-xs font-semibold text-white">
+              1. Household Usage Points &amp; Connections
+            </label>
+            <span className="text-[11px] font-mono text-teal-400">
+              {usagePoints.length} selected
+            </span>
           </div>
-          <div className="text-sm font-semibold text-white">XYZ Colony, Ward 24 · Raichur Water Board</div>
-          <p className="text-xs text-white/60 mt-0.5">
-            Planned Delivery: <span className="text-emerald-400 font-mono font-medium">Daily 7:00 AM – 8:00 AM</span> (~450 L allocated per household)
+
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2.5">
+            {availablePoints.map((point) => {
+              const isSelected = usagePoints.includes(point);
+              return (
+                <button
+                  key={point}
+                  type="button"
+                  onClick={() => toggleUsagePoint(point)}
+                  className={`p-3 rounded-xl text-xs font-medium text-left border transition-all flex items-center justify-between ${
+                    isSelected
+                      ? "bg-teal-500/15 border-teal-500/40 text-teal-300 font-semibold"
+                      : "bg-white/5 border-white/10 text-white/70 hover:bg-white/10"
+                  }`}
+                >
+                  <span className="truncate">{point}</span>
+                  {isSelected && <Check className="h-3.5 w-3.5 shrink-0 text-teal-400 ml-1.5" />}
+                </button>
+              );
+            })}
+          </div>
+          <SkipRow
+            onSkip={() => setUsagePoints(["Kitchen tap", "Bathroom (2)", "Washing area"])}
+            onLater={() => {}}
+          />
+        </div>
+
+        {/* 2 & 3. Area / Supply Zone & Supply Schedule */}
+        <div className="p-5 rounded-2xl bg-teal-500/[0.04] border border-teal-500/20 space-y-4">
+          <div className="flex items-center justify-between">
+            <span className="text-xs font-mono font-bold text-teal-400 uppercase tracking-wider flex items-center gap-1.5">
+              <Droplet className="h-4 w-4" />
+              <span>2. Supply Zone &amp; 3. Municipal Schedule</span>
+            </span>
+            <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-teal-500/20 text-teal-300">
+              Pre-filled
+            </span>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs font-mono">
+            <div>
+              <span className="text-white/40 block font-sans mb-1">Area / Supply Zone:</span>
+              <span className="text-sm font-bold text-white block">{areaZone}</span>
+            </div>
+
+            <div>
+              <span className="text-white/40 block font-sans mb-1">Planned Supply Schedule:</span>
+              <span className="text-sm font-bold text-emerald-400 block">{scheduleTime}</span>
+              <span className="text-[11px] text-white/50 block font-sans mt-0.5">
+                Planned: {plannedLiters}
+              </span>
+            </div>
+          </div>
+        </div>
+
+        {/* 4. Storage Capacities */}
+        <div className="space-y-4">
+          <label className="text-xs font-semibold text-white block">
+            4. Water Storage Capacities
+          </label>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            {/* Overhead Tank */}
+            <div className="p-4 rounded-2xl bg-white/[0.02] border border-white/10 space-y-2">
+              <span className="text-xs text-white/70 block">Overhead Tank Capacity</span>
+              <div className="grid grid-cols-3 gap-2">
+                {[500, 1000, 1500].map((litres) => (
+                  <button
+                    key={litres}
+                    type="button"
+                    onClick={() => setOverheadTank(litres)}
+                    className={`py-2 rounded-xl text-xs font-mono font-semibold border transition-all ${
+                      overheadTank === litres
+                        ? "bg-teal-500 text-black shadow-md shadow-teal-500/20"
+                        : "bg-white/5 border-white/10 text-white/70 hover:bg-white/10"
+                    }`}
+                  >
+                    {litres} L
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Sump Capacity */}
+            <div className="p-4 rounded-2xl bg-white/[0.02] border border-white/10 space-y-2">
+              <span className="text-xs text-white/70 block">Underground Sump Capacity</span>
+              <div className="grid grid-cols-3 gap-2">
+                {[1500, 2000, 3000].map((litres) => (
+                  <button
+                    key={litres}
+                    type="button"
+                    onClick={() => setSumpCapacity(litres)}
+                    className={`py-2 rounded-xl text-xs font-mono font-semibold border transition-all ${
+                      sumpCapacity === litres
+                        ? "bg-teal-500 text-black shadow-md shadow-teal-500/20"
+                        : "bg-white/5 border-white/10 text-white/70 hover:bg-white/10"
+                    }`}
+                  >
+                    {litres} L
+                  </button>
+                ))}
+              </div>
+            </div>
+          </div>
+          <SkipRow
+            onSkip={() => {
+              setOverheadTank(1000);
+              setSumpCapacity(2000);
+            }}
+            onLater={() => {}}
+          />
+        </div>
+
+        {/* 5. Regional Scarcity Impact Card matching §1 verbatim */}
+        <div className="p-4 rounded-2xl bg-white/[0.02] border border-white/10 space-y-2 text-xs">
+          <div className="flex items-center justify-between">
+            <span className="font-semibold text-white flex items-center gap-1.5">
+              <Info className="h-4 w-4 text-teal-400" />
+              <span>5. Regional Scarcity Impact</span>
+            </span>
+            <EstimatedChip confidence="Medium" />
+          </div>
+          <p className="text-white/70 leading-relaxed">
+            &ldquo;XYZ Colony is in a moderate-stress supply zone. Reporting your daily supply experience helps the ward balance supply.&rdquo;
           </p>
         </div>
 
-        {/* Storage Capacity */}
-        <div>
-          <label className="block text-xs font-semibold text-white mb-2">Underground Sump Capacity</label>
-          <div className="grid grid-cols-3 gap-2.5">
-            {[2000, 3000, 5000].map((litres) => (
-              <button
-                key={litres}
-                type="button"
-                onClick={() => setSumpLitres(litres)}
-                className={`p-3 rounded-xl text-xs font-mono font-medium text-left border transition-all ${
-                  sumpLitres === litres
-                    ? "bg-teal-500/15 border-teal-500/40 text-teal-300"
-                    : "bg-white/5 border-white/10 text-white/70 hover:bg-white/10"
-                }`}
-              >
-                {litres.toLocaleString()} Litres
-              </button>
-            ))}
-          </div>
-        </div>
+        {/* Actions */}
+        <div className="pt-6 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between gap-4">
+          <SkipRow
+            onSkip={handleSkip}
+            onLater={handleSkip}
+            label="All fields skippable · SAVERA applies standard XYZ Colony norms."
+          />
 
-        <div>
-          <label className="block text-xs font-semibold text-white mb-2">Overhead Tank Storage</label>
-          <div className="grid grid-cols-3 gap-2.5">
-            {[500, 1000, 1500].map((litres) => (
-              <button
-                key={litres}
-                type="button"
-                onClick={() => setOverheadLitres(litres)}
-                className={`p-3 rounded-xl text-xs font-mono font-medium text-left border transition-all ${
-                  overheadLitres === litres
-                    ? "bg-teal-500/15 border-teal-500/40 text-teal-300"
-                    : "bg-white/5 border-white/10 text-white/70 hover:bg-white/10"
-                }`}
-              >
-                {litres.toLocaleString()} Litres
-              </button>
-            ))}
-          </div>
-        </div>
-
-        {/* Purifier / Backup */}
-        <div>
-          <label className="block text-xs font-semibold text-white mb-2">RO / UV Purifier Installed</label>
-          <div className="flex gap-2">
-            <button
-              type="button"
-              onClick={() => setHasPurifier(true)}
-              className={`px-4 py-2 rounded-xl text-xs font-medium border transition-all ${
-                hasPurifier
-                  ? "bg-teal-500/15 border-teal-500/40 text-teal-300"
-                  : "bg-white/5 border-white/10 text-white/60"
-              }`}
-            >
-              Yes (RO Water Purifier)
-            </button>
-            <button
-              type="button"
-              onClick={() => setHasPurifier(false)}
-              className={`px-4 py-2 rounded-xl text-xs font-medium border transition-all ${
-                !hasPurifier
-                  ? "bg-teal-500/15 border-teal-500/40 text-teal-300"
-                  : "bg-white/5 border-white/10 text-white/60"
-              }`}
-            >
-              No (Direct Tap / Filter)
-            </button>
-          </div>
-        </div>
-
-        {/* Action */}
-        <div className="pt-4 border-t border-white/10 flex justify-end">
           <Button
             onClick={handleSave}
-            className="bg-teal-500 text-black hover:bg-teal-400 font-semibold text-xs h-9 px-6 gap-2"
+            className="w-full sm:w-auto bg-teal-500 text-black hover:bg-teal-400 font-bold text-xs h-10 px-6 gap-2 rounded-xl shadow-lg shadow-teal-500/20"
           >
-            <span>Save & Go to Water Portal</span>
+            <span>Save &amp; Open Water Portal</span>
             <ArrowRight className="h-3.5 w-3.5" />
           </Button>
         </div>

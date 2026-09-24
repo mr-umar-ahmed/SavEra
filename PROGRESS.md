@@ -12,7 +12,7 @@ _Last updated: 2026-09-25 02:50 IST_
 | 0 Foundation | ✅ | complete: types, tokens, catalogues, engine, seed, stores, chrome, 49 routes, 103 tests, next build clean |
 | 1 Landing + Auth | ✅ | slice S1 complete: 3D hero with particle streams, verbatim copy, 6-step loop, portals, connected layer, 6-persona auth, 6-box OTP |
 | 2 Citizen Electricity | ✅ | slice S2 complete: habitat hub, household setup, 6-step wizard (9 categories, simulated OCR, seasonal baseline), 6-tab dashboard with reconciliation & printable report |
-| 3 Water pipeline | ⬜ | slice S3 queued |
+| 3 Water pipeline | ✅ | slice S3 complete: citizen setup, water dashboard with report flow, status timeline, area report, supervisor dashboard, area report telemetry, case workspace state machine, verified logs, gov water board, gov cases |
 | 4 LPG | ⬜ | slice S4 queued |
 | 5 Green Score / Carbon | ⬜ | slice S5 queued |
 | 6 Electricity Sup + Gov | ⬜ | slice S6 queued |
@@ -44,7 +44,7 @@ _Last updated: 2026-09-25 02:50 IST_
 |---|---|---|---|---|
 | S1 | Landing + Auth | ✅ | ✅ | ✅ |
 | S2 | Citizen electricity (setup + dashboard) | ✅ | ✅ | ✅ |
-| S3 | Water pipeline (citizen, supervisor, gov) | ⬜ | ⬜ | ⬜ |
+| S3 | Water pipeline (citizen, supervisor, gov) | ✅ | ✅ | ✅ |
 | S4 | LPG (citizen, supervisor, gov) | ⬜ | ⬜ | ⬜ |
 | S5 | Green Score, leaderboard, progress, carbon, city green score | ⬜ | ⬜ | ⬜ |
 | S6 | Grid ops, ward electricity, ADR, official alerts | ⬜ | ⬜ | ⬜ |
