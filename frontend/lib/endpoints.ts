@@ -5,18 +5,30 @@
  */
 import { apiFetch, type ApiOptions } from "@/lib/api";
 import type {
+  Alert,
+  AnomalyWard,
   Appliance,
   ApplianceInput,
   ApplianceTypeInfo,
+  ComparisonWard,
+  Dashboard,
+  ElectricityInsights,
   ElectricityReading,
   ElectricityReadingInput,
+  GreenScoreInsights,
+  HeatmapResponse,
   LpgCurrent,
   LpgCycle,
+  LpgInsights,
   OcrJob,
   OcrJobCreated,
+  PeerComparison,
   Profile,
   ProfileUpdate,
+  ResourceType,
+  SupervisorWard,
   Ward,
+  WaterInsights,
   WaterReading,
   WaterReadingCreated,
   WaterReadingInput,
@@ -151,4 +163,81 @@ export function uploadBill(file: File, ctx: Ctx) {
 
 export function getBillJob(id: string, ctx: Ctx) {
   return apiFetch<OcrJob>(`/bills/jobs/${id}`, ctx);
+}
+
+// --- alerts ----------------------------------------------------------------
+
+export function getAlerts(
+  opts: { unreadOnly?: boolean; limit?: number } | undefined,
+  ctx: Ctx,
+) {
+  return apiFetch<Alert[]>("/alerts", {
+    ...ctx,
+    query: { unread_only: opts?.unreadOnly, limit: opts?.limit },
+  });
+}
+
+export function getUnreadCount(ctx: Ctx) {
+  return apiFetch<{ count: number }>("/alerts/unread-count", ctx);
+}
+
+export function markAlertRead(id: string, ctx: Ctx) {
+  return apiFetch<Alert>(`/alerts/${id}/read`, { ...ctx, method: "POST" });
+}
+
+export function markAllAlertsRead(ctx: Ctx) {
+  return apiFetch<{ updated: number }>("/alerts/read-all", { ...ctx, method: "POST" });
+}
+
+// --- insights --------------------------------------------------------------
+
+/** Everything the home screen shows, in one round trip. */
+export function getDashboard(ctx: Ctx) {
+  return apiFetch<Dashboard>("/insights/dashboard", ctx);
+}
+
+export function getElectricityInsights(months: number | undefined, ctx: Ctx) {
+  return apiFetch<ElectricityInsights>("/insights/electricity", { ...ctx, query: { months } });
+}
+
+export function getWaterInsights(days: number | undefined, ctx: Ctx) {
+  return apiFetch<WaterInsights>("/insights/water", { ...ctx, query: { days } });
+}
+
+export function getLpgInsights(ctx: Ctx) {
+  return apiFetch<LpgInsights>("/insights/lpg", ctx);
+}
+
+export function getGreenScoreInsights(months: number | undefined, ctx: Ctx) {
+  return apiFetch<GreenScoreInsights>("/insights/green-score", { ...ctx, query: { months } });
+}
+
+/** Ward average for one resource — answers `available: false` below 10 households. */
+export function getPeerComparison(resource: ResourceType, ctx: Ctx) {
+  return apiFetch<PeerComparison>("/insights/peer-comparison", { ...ctx, query: { resource } });
+}
+
+// --- supervisor --------------------------------------------------------------
+
+export function getSupervisorWards(ctx: Ctx) {
+  return apiFetch<SupervisorWard[]>("/supervisor/wards", ctx);
+}
+
+export function getWardHeatmap(wardId: number, ctx: Ctx) {
+  return apiFetch<HeatmapResponse>(`/supervisor/wards/${wardId}/heatmap`, ctx);
+}
+
+export function getSupervisorAnomalies(month: string | undefined, ctx: Ctx) {
+  return apiFetch<AnomalyWard[]>("/supervisor/anomalies", { ...ctx, query: { month } });
+}
+
+export function getSupervisorComparison(
+  resource: ResourceType,
+  month: string | undefined,
+  ctx: Ctx,
+) {
+  return apiFetch<ComparisonWard[]>("/supervisor/comparison", {
+    ...ctx,
+    query: { resource, month },
+  });
 }

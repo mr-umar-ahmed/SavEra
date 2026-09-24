@@ -2,26 +2,24 @@ import { Flame } from "lucide-react";
 import type { Metadata } from "next";
 
 import { EmptyState } from "@/components/common/empty-state";
+import { TipsCard } from "@/components/common/tips-card";
 import { CylinderCard } from "@/components/lpg/cylinder-card";
 import { StartCylinderButton } from "@/components/readings/add-buttons";
 import { withAuth } from "@/lib/api.server";
-import { getLpgCurrent, getLpgCycles } from "@/lib/endpoints";
+import { getLpgInsights } from "@/lib/endpoints";
 import { formatDate, formatNumber, pluralise } from "@/lib/format";
 
 export const metadata: Metadata = { title: "Cooking gas" };
 
 /**
- * The cylinder in use plus the ones before it. Two closed cylinders already
- * make the prediction yours rather than the national average, which is why the
- * history is shown as prominently as the current one.
+ * LPG page: the cylinder in use with its prediction, past cylinders with burn
+ * rates, and conservation tips when the burn rate is above the household's usual.
  */
 export default async function LpgPage() {
-  const { current, cycles } = await withAuth(async (ctx) => {
-    const [current, cycles] = await Promise.all([getLpgCurrent(ctx), getLpgCycles(24, ctx)]);
-    return { current, cycles };
-  });
+  const insights = await withAuth((ctx) => getLpgInsights(ctx));
 
-  const past = cycles.filter((cycle) => !cycle.is_open);
+  const open = insights.cycles.find((c) => c.is_open) ?? null;
+  const past = insights.cycles.filter((c) => !c.is_open);
 
   return (
     <div className="space-y-5">
@@ -32,11 +30,11 @@ export default async function LpgPage() {
             Mark when a cylinder starts and when it runs out — that is all we need.
           </p>
         </div>
-        {current.cycle ? null : <StartCylinderButton />}
+        {open ? null : <StartCylinderButton />}
       </header>
 
-      {current.cycle ? (
-        <CylinderCard cycle={current.cycle} prediction={current.prediction} />
+      {open && insights.current.cycle ? (
+        <CylinderCard cycle={insights.current.cycle as any} prediction={insights.current.prediction} />
       ) : (
         <EmptyState
           icon={Flame}
@@ -45,6 +43,9 @@ export default async function LpgPage() {
           action={<StartCylinderButton label="Start tracking a cylinder" />}
         />
       )}
+
+      {/* Conservation tips (only when burn rate is above usual) */}
+      <TipsCard tips={insights.tips} />
 
       {past.length > 0 ? (
         <section className="space-y-3">
@@ -67,6 +68,13 @@ export default async function LpgPage() {
             ))}
           </ul>
         </section>
+      ) : null}
+
+      {insights.baseline ? (
+        <p className="rounded-xl border border-border bg-secondary/50 p-3 text-xs text-muted-foreground">
+          Your usual burn rate is about {formatNumber(insights.baseline.mean, 2)} kg per day, worked out
+          from your last {insights.baseline.sample_count} cylinders.
+        </p>
       ) : null}
     </div>
   );
