@@ -55,6 +55,13 @@ the test session drops and recreates that database).
 Local API calls without a Supabase project: set `SUPABASE_JWT_SECRET` in `.env` and mint a
 token with `python scripts/mint_dev_token.py --email you@example.com`.
 
+Demo data — three named households with six months of bills, daily water and LPG cycles,
+plus 39 filler households so the ward averages are real:
+```bash
+.venv/Scripts/python -m seed_data.test_users            # idempotent; --reset to start over
+.venv/Scripts/python -m seed_data.test_users --verify   # re-check an existing seed
+```
+
 ### 3. Frontend
 ```bash
 cd frontend
@@ -62,13 +69,30 @@ npm install
 cp ../.env.example .env.local                      # keep only the NEXT_PUBLIC_* lines
 npm run dev
 ```
-Open http://localhost:3000. `npm run typecheck`, `npm test` and `npm run build` are the gates.
+Open http://localhost:3000. The gates are `npm run guard` (catches Tailwind 3 / `middleware.ts`
+drift), `npm run lint`, `npm run typecheck`, `npm test` and `npm run build` — CI runs all five.
+
+Signing in needs a real Supabase project: set `NEXT_PUBLIC_SUPABASE_URL` and
+`NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` from **Project settings → API**, and add
+`http://localhost:3000/auth/confirm` under **Authentication → URL configuration → Redirect
+URLs** so magic links come back to the app.
 
 ### 4. Everything in Docker
 ```bash
 docker compose up --build
 ```
 runs migrations and starts the API on port 8000; run the frontend with `npm run dev`.
+
+## Bill OCR
+
+`POST /bills/upload` answers 202 and reads the photo in the background; the client polls
+`GET /bills/jobs/{id}` and shows the extracted figures for confirmation. Nothing is ever saved
+as a reading by OCR alone.
+
+Without `GCV_API_KEY` the job falls back to Tesseract, and without a Tesseract binary it
+finishes as `engine: "none"` with `needs_review: true` — the form then drops to manual entry
+rather than failing. Parser development needs neither: `parse_bill()` is a pure function over
+OCR rows, and `backend/tests/test_ocr.py` drives it offline.
 
 ## Environment variables
 

@@ -2,6 +2,9 @@ import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
 
 import { getSupabasePublishableKey, getSupabaseUrl } from "@/lib/env";
+import { safeNextPath } from "@/lib/safe-path";
+
+export { safeNextPath };
 
 /** Routes reachable without a session. Everything else (including `/`) is protected. */
 const PUBLIC_EXACT = new Set(["/login", "/signup", "/manifest.webmanifest"]);
@@ -13,20 +16,6 @@ const HOME = "/";
 export function isPublicPath(pathname: string): boolean {
   if (PUBLIC_EXACT.has(pathname)) return true;
   return PUBLIC_PREFIXES.some((prefix) => pathname.startsWith(prefix));
-}
-
-/**
- * Accepts a `next` value only when it is an in-app path: starts with `/` and
- * a letter, never `//` or a scheme. Returns null for anything else, so callers
- * fall back to `/` and an open redirect is impossible.
- */
-export function safeNextPath(raw: string | null | undefined): string | null {
-  if (!raw) return null;
-  const value = raw.trim();
-  if (!/^\/[a-z]/i.test(value)) return null;
-  if (value.startsWith("//") || value.includes("\\") || /[\r\n]/.test(value)) return null;
-  if (/^\/[a-z][a-z0-9+.-]*:/i.test(value)) return null;
-  return value;
 }
 
 /**

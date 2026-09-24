@@ -1,7 +1,7 @@
 import type { EmailOtpType } from "@supabase/supabase-js";
 import { NextResponse, type NextRequest } from "next/server";
 
-import { safeNextPath } from "@/lib/supabase/proxy";
+import { safeNextPath } from "@/lib/safe-path";
 import { createClient } from "@/lib/supabase/server";
 
 const OTP_TYPES: ReadonlySet<string> = new Set([
