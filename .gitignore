@@ -1,0 +1,41 @@
+# --- OS / editors ---
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp
+
+# --- env & secrets ---
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+service-account*.json
+firebase-service-account.json
+
+# --- python ---
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+htmlcov/
+.coverage
+*.egg-info/
+
+# --- node / next ---
+node_modules/
+.next/
+out/
+coverage/
+*.tsbuildinfo
+next-env.d.ts
+.vercel
+
+# --- local tooling (portable postgres, uploads) ---
+.local/
+uploads/
+*.log
