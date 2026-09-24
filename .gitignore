@@ -38,4 +38,5 @@ next-env.d.ts
 # --- local tooling (portable postgres, uploads) ---
 .local/
 uploads/
+.pytest_uploads/
 *.log
