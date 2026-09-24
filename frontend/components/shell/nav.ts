@@ -1,11 +1,10 @@
-import { Droplets, Flame, Home, Zap, type LucideIcon } from "lucide-react";
+import { Bell, Droplets, Flame, Home, Zap, type LucideIcon } from "lucide-react";
 
 /**
  * The primary destinations. The same list drives the mobile tab bar and the
  * desktop sidebar so the two can never drift apart.
  *
- * Alerts joins this list in Phase 3, when there is an alerts page to reach —
- * a tab that leads nowhere is worse than one that is not there yet.
+ * Alerts joined the list in Phase 3, once there was a page for it to reach.
  */
 export interface NavItem {
   href: string;
@@ -20,6 +19,7 @@ export const NAV_ITEMS: readonly NavItem[] = [
   { href: "/electricity", label: "Power", icon: Zap, activeClass: "text-electricity-fg" },
   { href: "/water", label: "Water", icon: Droplets, activeClass: "text-water-fg" },
   { href: "/lpg", label: "Gas", icon: Flame, activeClass: "text-lpg-fg" },
+  { href: "/alerts", label: "Alerts", icon: Bell, activeClass: "text-primary" },
 ];
 
 /** Marks the deepest matching item, so `/electricity/123` still lights "Power". */

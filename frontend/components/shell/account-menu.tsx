@@ -1,6 +1,6 @@
 "use client";
 
-import { LogOut, MapPin, UserRound } from "lucide-react";
+import { LogOut, MapPin, Shield, UserRound } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -22,6 +22,7 @@ export interface AccountMenuProps {
   name: string | null;
   email: string;
   wardName: string | null;
+  role?: string;
 }
 
 /** Two letters for the avatar: initials when we have a name, else the email. */
@@ -34,7 +35,7 @@ export function initialsFor(name: string | null, email: string): string {
   return email.slice(0, 2).toUpperCase();
 }
 
-export function AccountMenu({ name, email, wardName }: AccountMenuProps) {
+export function AccountMenu({ name, email, wardName, role }: AccountMenuProps) {
   const router = useRouter();
   const [signingOut, setSigningOut] = useState(false);
 
@@ -85,6 +86,14 @@ export function AccountMenu({ name, email, wardName }: AccountMenuProps) {
             Profile &amp; appliances
           </Link>
         </DropdownMenuItem>
+        {role === "supervisor" || role === "admin" ? (
+          <DropdownMenuItem asChild>
+            <Link href="/supervisor">
+              <Shield aria-hidden />
+              Supervisor dashboard
+            </Link>
+          </DropdownMenuItem>
+        ) : null}
         <DropdownMenuSeparator />
         <DropdownMenuItem onSelect={signOut} disabled={signingOut}>
           <LogOut aria-hidden />

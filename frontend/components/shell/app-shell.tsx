@@ -42,6 +42,7 @@ export function AppShell({ profile, children }: { profile: Profile; children: Re
             name={profile.name}
             email={profile.email}
             wardName={profile.ward_name}
+            role={profile.role}
           />
         </header>
 

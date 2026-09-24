@@ -9,6 +9,7 @@ describe("NAV_ITEMS", () => {
       "/electricity",
       "/water",
       "/lpg",
+      "/alerts",
     ]);
   });
 
@@ -33,7 +34,7 @@ describe("isActive", () => {
   });
 
   it("lights exactly one tab for any app route", () => {
-    for (const pathname of ["/", "/electricity", "/water", "/lpg", "/lpg/2026"]) {
+    for (const pathname of ["/", "/electricity", "/water", "/lpg", "/lpg/2026", "/alerts"]) {
       const lit = NAV_ITEMS.filter((item) => isActive(item.href, pathname));
       expect(lit).toHaveLength(1);
     }
