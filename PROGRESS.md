@@ -10,7 +10,7 @@ _Last updated: 2026-09-25 02:50 IST_
 | Phase | Status | Notes |
 |---|---|---|
 | 0 Foundation | ✅ | complete: types, tokens, catalogues, engine, seed, stores, chrome, 49 routes, 103 tests, next build clean |
-| 1 Landing + Auth | ⬜ | slice S1 queued |
+| 1 Landing + Auth | ✅ | slice S1 complete: 3D hero with particle streams, verbatim copy, 6-step loop, portals, connected layer, 6-persona auth, 6-box OTP |
 | 2 Citizen Electricity | ⬜ | slice S2 queued |
 | 3 Water pipeline | ⬜ | slice S3 queued |
 | 4 LPG | ⬜ | slice S4 queued |
@@ -36,13 +36,13 @@ _Last updated: 2026-09-25 02:50 IST_
 | 0.11 | Stores, auth, mock API, hooks, explain provider | ✅ | session, data, twin, ui stores; API hooks; explain provider |
 | 0.12 | Portal chrome + route shells + auth/landing shells | ✅ | Sidebar, TopBar, PortalShell, RoleGuard; all 49 routes exist and render |
 | 0.13 | Verify & fix (typecheck, lint, test, build, route sweep) | ✅ | tsc clean, ESLint clean (0 errors), 103/103 tests pass, next build (49/49 pages) clean |
-| 0.14 | Commit `feat(phase-0)` | ✅ | ready to commit; foundation frozen |
+| 0.14 | Commit `feat(phase-0)` | ✅ | committed `0266205`; foundation frozen |
 
 ## Phases 1–7 — feature slices
 
 | Slice | Scope | Build | Review | Fix |
 |---|---|---|---|---|
-| S1 | Landing + Auth | ⬜ | ⬜ | ⬜ |
+| S1 | Landing + Auth | ✅ | ✅ | ✅ |
 | S2 | Citizen electricity (setup + dashboard) | ⬜ | ⬜ | ⬜ |
 | S3 | Water pipeline (citizen, supervisor, gov) | ⬜ | ⬜ | ⬜ |
 | S4 | LPG (citizen, supervisor, gov) | ⬜ | ⬜ | ⬜ |
@@ -73,6 +73,7 @@ _Last updated: 2026-09-25 02:50 IST_
 - 2026-09-25 02:16 — Types + libs and docs/spec complete.
 - 2026-09-25 02:30 — UI primitives + tokens complete; catalogues and domain components started.
 - 2026-09-25 02:50 — IMPLEMENTATION_PLAN.md and PROGRESS.md created.
+- 2026-09-25 04:05 — Phase 1 (Slice S1 — Landing + Auth) complete: 3D hero with particle streams, 7-section landing page, role cards, 6-persona authentication, 6-box OTP, and clean 49-page build.
 
 ## Known issues / blockers
 
