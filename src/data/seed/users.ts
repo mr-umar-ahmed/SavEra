@@ -1,0 +1,56 @@
+import type { User } from "@/types";
+
+export const SEED_USERS: User[] = [
+  {
+    id: "u-citizen-1",
+    role: "citizen",
+    householdId: "H-1024",
+    wardId: "ward-24",
+    name: "Priya Sharma",
+    email: "citizen@savera.demo",
+    mobile: "9000000001",
+    displayNamePublic: false,
+  },
+  {
+    id: "u-citizen-2",
+    role: "citizen",
+    householdId: "H-1088",
+    wardId: "ward-24",
+    name: "Anand Kulkarni",
+    email: "citizen2@savera.demo",
+    mobile: "9000000002",
+    displayNamePublic: false,
+  },
+  {
+    id: "u-supervisor-24",
+    role: "supervisor",
+    wardId: "ward-24",
+    name: "K. Ramesh (Ward 24 Supervisor)",
+    email: "supervisor@savera.demo",
+    displayNamePublic: true,
+  },
+  {
+    id: "u-gov-electricity",
+    role: "gov",
+    department: "electricity",
+    name: "Executive Engineer (GESCOM / City Grid)",
+    email: "electricity@savera.demo",
+    displayNamePublic: true,
+  },
+  {
+    id: "u-gov-water",
+    role: "gov",
+    department: "water",
+    name: "Chief Engineer (Water Supply & Sewerage Board)",
+    email: "water@savera.demo",
+    displayNamePublic: true,
+  },
+  {
+    id: "u-gov-gas",
+    role: "gov",
+    department: "gas",
+    name: "District Nodal Officer (LPG Distribution Cell)",
+    email: "gas@savera.demo",
+    displayNamePublic: true,
+  },
+];

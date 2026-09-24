@@ -1,0 +1,75 @@
+/* SAVERA Leaflet theming. Imported by AreaMapInner together with leaflet/dist/leaflet.css. */
+
+.savera-map .leaflet-container {
+  background: var(--card);
+  font-family: inherit;
+  outline: none;
+}
+
+/* Dark tiles: invert the OSM raster so it sits on the #050B08 surface. */
+.dark .savera-map .leaflet-tile-pane {
+  filter: invert(1) hue-rotate(180deg) brightness(0.85) contrast(0.9) saturate(0.6);
+}
+
+.savera-map .leaflet-control-attribution {
+  background: color-mix(in srgb, var(--card) 80%, transparent);
+  color: var(--muted-foreground);
+  font-size: 10px;
+  padding: 2px 6px;
+  border-top-left-radius: 8px;
+}
+
+.savera-map .leaflet-control-attribution a {
+  color: var(--primary);
+}
+
+.savera-map .leaflet-bar {
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 10px 30px -15px rgba(0, 0, 0, 0.5);
+}
+
+.savera-map .leaflet-bar a {
+  background: var(--card);
+  color: var(--foreground);
+  border-bottom-color: var(--border);
+  width: 32px;
+  height: 32px;
+  line-height: 30px;
+}
+
+.savera-map .leaflet-bar a:hover,
+.savera-map .leaflet-bar a:focus {
+  background: var(--muted);
+  color: var(--foreground);
+}
+
+.savera-map .leaflet-bar a.leaflet-disabled {
+  color: var(--muted-foreground);
+  background: var(--card);
+}
+
+.savera-map .leaflet-tooltip {
+  background: var(--popover);
+  color: var(--popover-foreground);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 6px 10px;
+  font-size: 12px;
+  line-height: 1.4;
+  box-shadow: 0 16px 32px -16px rgba(0, 0, 0, 0.6);
+}
+
+.savera-map .leaflet-tooltip::before {
+  display: none;
+}
+
+.savera-map .leaflet-interactive {
+  cursor: pointer;
+  transition: fill-opacity 200ms ease;
+}
+
+.savera-map .leaflet-interactive:focus {
+  outline: none;
+}

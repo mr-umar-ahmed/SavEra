@@ -1,429 +1,322 @@
-'use client';
+"use client";
 
-import { useState, useRef, useEffect } from "react";
 import Link from "next/link";
-import { 
-  ArrowRight, Leaf, ShieldAlert, Zap, Home, Building2, 
-  Radio, CloudLightning, Globe2, Lock, 
-  ChevronDown, CheckCircle2, Battery, Wifi,
-  ScanLine, Cpu, Activity, Lightbulb, Target, Network, Layers
+import {
+  ArrowRight,
+  BarChart3,
+  Box,
+  CheckCircle2,
+  Cpu,
+  Droplet,
+  Flame,
+  Globe,
+  Leaf,
+  Layers,
+  Repeat,
+  Shield,
+  Sparkles,
+  TrendingDown,
+  Users,
+  Zap,
 } from "lucide-react";
-import { Outfit, Inter } from "next/font/google";
-import { 
-  motion, 
-  useScroll, 
-  useTransform, 
-  useSpring,
-  useInView
-} from "framer-motion";
-import { clsx, type ClassValue } from "clsx";
-import { twMerge } from "tailwind-merge";
-import { useTheme } from "./components/ThemeProvider";
+import { Button } from "@/components/ui/button";
 
-// 1. Font Configuration
-const outfit = Outfit({ subsets: ["latin"], variable: "--font-outfit" });
-const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
-
-// ==============================================================================
-// UTILITIES & SHARED COMPONENTS
-// ==============================================================================
-
-function cn(...inputs: ClassValue[]) {
-  return twMerge(clsx(inputs));
-}
-
-const Counter = ({ value }: { value: number }) => {
-  const ref = useRef(null);
-  const isInView = useInView(ref);
-  const springValue = useSpring(0, { bounce: 0, duration: 2000 });
-  const displayValue = useTransform(springValue, (latest) => Math.floor(latest));
-
-  useEffect(() => {
-    if (isInView) springValue.set(value);
-  }, [isInView, value, springValue]);
-
-  return <motion.span ref={ref}>{displayValue}</motion.span>;
-};
-
-const SpotlightCard = ({ children, className = "" }: { children: React.ReactNode; className?: string }) => {
-  const divRef = useRef<HTMLDivElement>(null);
-  const [position, setPosition] = useState({ x: 0, y: 0 });
-  const [opacity, setOpacity] = useState(0);
-
-  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (!divRef.current) return;
-    const rect = divRef.current.getBoundingClientRect();
-    setPosition({ x: e.clientX - rect.left, y: e.clientY - rect.top });
-  };
-
+export default function LandingPage() {
   return (
-    <div
-      ref={divRef}
-      onMouseMove={handleMouseMove}
-      onMouseEnter={() => setOpacity(1)}
-      onMouseLeave={() => setOpacity(0)}
-      className={cn(
-        `relative overflow-hidden rounded-[2.5rem] border border-white/10 bg-[#0A0F0D] transition-colors duration-300 group shadow-2xl`,
-        className
-      )}
-    >
-      <div
-        className="pointer-events-none absolute -inset-px opacity-0 transition duration-300 group-hover:opacity-100"
-        style={{
-          background: `radial-gradient(600px circle at ${position.x}px ${position.y}px, rgba(16, 185, 129, 0.15), transparent 40%)`,
-        }}
-      />
-      <div className="relative h-full">{children}</div>
-    </div>
-  );
-};
-
-// ==============================================================================
-// MAIN PAGE COMPONENT
-// ==============================================================================
-
-export default function SaveraLanding() {
-  const { colors } = useTheme();
-  const { scrollY } = useScroll();
-  const opacity = useTransform(scrollY, [0, 300], [1, 0]);
-  const y = useTransform(scrollY, [0, 300], [0, 100]);
-
-  return (
-    <div className={`${outfit.variable} ${inter.variable} w-full font-sans antialiased bg-[#050B08] text-white transition-colors duration-300 min-h-screen selection:bg-emerald-500/30 overflow-x-hidden`}>
-      
-      {/* ================= HERO SECTION ================= */}
-      <section className="relative min-h-screen flex flex-col items-center justify-center overflow-hidden pt-20">
-        
-        {/* Animated Background Mesh */}
-        <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden">
-          <div className="absolute top-[10%] left-[10%] w-[600px] h-[600px] rounded-full blur-[120px] animate-pulse mix-blend-screen bg-emerald-500/20" />
-          <div className="absolute bottom-[10%] right-[10%] w-[600px] h-[600px] rounded-full blur-[120px] mix-blend-screen bg-blue-600/20" />
-          <div className="absolute inset-0 bg-[size:60px_60px] opacity-20 mask-image:radial-gradient(ellipse_at_center,black,transparent) bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)]" />
-        </div>
-
-        <motion.div style={{ opacity, y }} className="relative z-10 text-center px-4 max-w-5xl mx-auto space-y-8">
-          
-          <motion.div 
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="inline-flex items-center gap-3 px-5 py-2.5 rounded-full border border-emerald-500/30 bg-emerald-500/10 backdrop-blur-md mb-4"
-          >
-            <span className="relative flex h-2.5 w-2.5">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-              <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500"></span>
+    <div className="min-h-screen bg-[#050B08] text-white selection:bg-emerald-500/30 overflow-x-hidden">
+      {/* Top Navbar */}
+      <nav className="sticky top-0 z-50 border-b border-white/10 bg-[#050B08]/80 backdrop-blur-xl">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+          <div className="flex items-center gap-2.5">
+            <div className="h-8 w-8 rounded-lg bg-gradient-to-br from-emerald-400 to-teal-600 flex items-center justify-center shadow-lg shadow-emerald-500/20">
+              <Sparkles className="h-4 w-4 text-[#050B08]" />
+            </div>
+            <span className="font-extrabold tracking-wider text-lg text-white font-sans">
+              SAV<span className="text-emerald-400">ERA</span>
             </span>
-            <span className="text-xs font-bold uppercase tracking-widest text-emerald-300">
-              The Sustainable Future Protocol
+            <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-emerald-500/15 text-emerald-400 border border-emerald-500/25 ml-1">
+              v2.0 Civic AI
             </span>
-          </motion.div>
-
-          <motion.h1 
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.8, ease: "easeOut" }}
-            className="text-6xl md:text-8xl lg:text-9xl font-black font-display tracking-tighter leading-[0.9] bg-clip-text text-transparent bg-gradient-to-b from-white via-white to-white/40"
-          >
-            Energy Intel <br /> For Everyone.
-          </motion.h1>
-          
-          <motion.p 
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.4 }}
-            className="text-xl md:text-2xl max-w-3xl mx-auto font-light leading-relaxed text-white/60"
-          >
-            SavEra bridges the gap between individual resource waste and macro-level grid stress. We transform dead utility data into a <span className="font-bold text-emerald-400">live behavioral engine</span> for citizens and a <span className="font-bold text-blue-400">SCADA command center</span> for governments.
-          </motion.p>
-
-          <motion.div 
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.6 }}
-            className="pt-8 flex flex-col sm:flex-row gap-6 justify-center items-center"
-          >
-            <Link 
-              href="/auth" 
-              className="group relative inline-flex items-center gap-3 px-8 py-4 rounded-full font-bold text-lg hover:scale-105 transition-all duration-300 shadow-[0_0_40px_-5px_rgba(16,185,129,0.4)] bg-emerald-500 text-black hover:bg-emerald-400"
-            >
-              <Zap className="w-5 h-5" />
-              <span>Initialize Platform</span>
-            </Link>
-            <a 
-              href="#architecture" 
-              className="group relative inline-flex items-center gap-3 px-8 py-4 rounded-full font-bold text-lg hover:scale-105 transition-all duration-300 border border-white/20 bg-white/5 text-white hover:bg-white/10"
-            >
-              <span>View Architecture</span>
-              <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-            </a>
-          </motion.div>
-        </motion.div>
-
-        <motion.div style={{ opacity }} className="absolute bottom-10 left-1/2 -translate-x-1/2 animate-bounce text-white/30">
-          <ChevronDown className="w-8 h-8" />
-        </motion.div>
-      </section>
-
-      {/* ================= HOW IT WORKS (THE GOLDEN PATH) ================= */}
-      <section className="relative z-10 py-32 px-4 border-t border-white/5 bg-[#020617]/50">
-        <div className="max-w-7xl mx-auto">
-          <div className="mb-20 text-center">
-            <h2 className="text-sm font-bold uppercase tracking-widest mb-4 text-emerald-500">The Golden Path</h2>
-            <h3 className="text-4xl md:text-5xl font-black font-display mb-6">How SavEra Works</h3>
-            <p className="text-white/50 max-w-2xl mx-auto text-lg">A seamless pipeline from analog paper bills to digital automated savings.</p>
           </div>
 
-          <div className="grid md:grid-cols-3 gap-8 relative">
-            {/* Connecting Line (Desktop) */}
-            <div className="hidden md:block absolute top-12 left-[15%] right-[15%] h-0.5 bg-gradient-to-r from-emerald-500/0 via-emerald-500/50 to-blue-500/0 z-0" />
-
-            {[
-              {
-                step: "01",
-                icon: <Home className="w-6 h-6 text-emerald-400" />,
-                title: "Contextualize Habitat",
-                desc: "Tell the AI about your property type and local high-drain appliances (e.g., 1HP Submersible Pumps in semi-urban sectors)."
-              },
-              {
-                step: "02",
-                icon: <ScanLine className="w-6 h-6 text-teal-400" />,
-                title: "AI Bill Extraction",
-                desc: "Upload standard MESCOM or utility bills. Our edge-computed OCR strips the raw units and cross-references them with local tariffs."
-              },
-              {
-                step: "03",
-                icon: <Lightbulb className="w-6 h-6 text-amber-400" />,
-                title: "Automate Fixes",
-                desc: "Receive localized AI diagnostic reports and click 'Automate' to instantly apply energy-saving protocols to your smart home."
-              }
-            ].map((item, i) => (
-              <div key={i} className="relative z-10 flex flex-col items-center text-center group">
-                <div className="w-24 h-24 rounded-full bg-[#0A0F0D] border-2 border-white/10 flex items-center justify-center mb-8 relative shadow-xl group-hover:border-emerald-500/50 transition-colors duration-500">
-                  <div className="absolute inset-2 rounded-full bg-white/5 flex items-center justify-center">
-                    {item.icon}
-                  </div>
-                  <span className="absolute -top-3 -right-3 w-8 h-8 rounded-full bg-emerald-500 text-black font-black text-sm flex items-center justify-center">
-                    {item.step}
-                  </span>
-                </div>
-                <h4 className="text-2xl font-bold font-display mb-4">{item.title}</h4>
-                <p className="text-white/60 leading-relaxed max-w-sm">{item.desc}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ================= THE DUAL-SIDED ECOSYSTEM ================= */}
-      <section id="architecture" className="relative z-10 py-32 px-4 md:px-8 max-w-7xl mx-auto">
-        <div className="mb-20 text-center">
-          <h2 className="text-sm font-bold uppercase tracking-widest mb-4 text-blue-500">B2B2C Architecture</h2>
-          <h3 className="text-4xl md:text-6xl font-black font-display mb-6">A Two-Sided Protocol</h3>
-          <p className="text-white/50 max-w-2xl mx-auto text-lg">SavEra empowers the individual while supplying vital macro-telemetry to local governments.</p>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          
-          {/* THE RESIDENT LAYER (B2C) */}
-          <SpotlightCard className="p-10 flex flex-col justify-between border-emerald-500/20">
-            <div className="absolute top-0 right-0 p-12 opacity-5 pointer-events-none">
-                <Layers className="w-64 h-64 text-emerald-500 transform translate-x-12 -translate-y-12" />
-            </div>
-            <div className="relative z-10">
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-xs font-bold uppercase tracking-widest mb-8">
-                Layer 1: The Citizen
-              </div>
-              <h4 className="text-4xl font-black font-display mb-4">Household Control</h4>
-              <p className="text-white/60 mb-10 leading-relaxed text-lg max-w-md">
-                We turn the boring chore of paying utility bills into an engaging, gamified "Mission Center."
-              </p>
-              
-              <ul className="space-y-6">
-                {[
-                  { title: "Statistical Disaggregation", desc: "Estimates water/gas breakdown without needing expensive smart meters." },
-                  { title: "Behavioral Gamification", desc: "Earn XP and badges through co-op community challenges." },
-                  { title: "One-Click System Upgrades", desc: "Instantly apply AI-recommended fixes to optimize consumption." }
-                ].map((feature, idx) => (
-                  <li key={idx} className="flex gap-4">
-                    <div className="w-8 h-8 rounded-full bg-emerald-500/10 flex items-center justify-center shrink-0 mt-1">
-                      <CheckCircle2 className="w-4 h-4 text-emerald-500" />
-                    </div>
-                    <div>
-                      <h5 className="font-bold text-white">{feature.title}</h5>
-                      <p className="text-sm text-white/50 mt-1">{feature.desc}</p>
-                    </div>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </SpotlightCard>
-
-          {/* THE GOVERNMENT LAYER (B2G) */}
-          <SpotlightCard className="p-10 flex flex-col justify-between border-blue-500/20">
-            <div className="absolute top-0 right-0 p-12 opacity-5 pointer-events-none">
-                <Globe2 className="w-64 h-64 text-blue-500 transform translate-x-12 -translate-y-12" />
-            </div>
-            <div className="relative z-10">
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-500/10 border border-blue-500/30 text-blue-400 text-xs font-bold uppercase tracking-widest mb-8">
-                Layer 2: The Authority
-              </div>
-              <h4 className="text-4xl font-black font-display mb-4">Grid Governance</h4>
-              <p className="text-white/60 mb-10 leading-relaxed text-lg max-w-md">
-                Aggregated, anonymized data feeds directly into a SCADA-style dashboard for utility providers.
-              </p>
-              
-              <ul className="space-y-6">
-                {[
-                  { title: "Live IoT Telemetry", desc: "Simulated polling pipeline processes real-time load matrices across sectors." },
-                  { title: "Predictive Grid Stress", desc: "Identifies regional overload thresholds before blackouts occur." },
-                  { title: "Targeted Infrastructure Planning", desc: "Data-driven insights for where to deploy new substations or pipelines." }
-                ].map((feature, idx) => (
-                  <li key={idx} className="flex gap-4">
-                    <div className="w-8 h-8 rounded-full bg-blue-500/10 flex items-center justify-center shrink-0 mt-1">
-                      <CheckCircle2 className="w-4 h-4 text-blue-400" />
-                    </div>
-                    <div>
-                      <h5 className="font-bold text-white">{feature.title}</h5>
-                      <p className="text-sm text-white/50 mt-1">{feature.desc}</p>
-                    </div>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </SpotlightCard>
-
-        </div>
-      </section>
-
-      {/* ================= EMERGENCY / OFFLINE SECTION ================= */}
-      <section id="emergency" className="relative py-32 border-t border-white/5 overflow-hidden bg-gradient-to-b from-[#050B08] via-red-950/10 to-[#050B08]">
-        
-        {/* Radar Effect Background */}
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] border border-red-500/10 rounded-full opacity-50 pointer-events-none">
-           <div className="w-full h-full rounded-full animate-[spin_10s_linear_infinite] border-t border-red-500/30 bg-gradient-to-tr from-transparent to-red-900/5" />
-        </div>
-
-        <div className="max-w-7xl mx-auto px-4 relative z-10 flex flex-col md:flex-row items-center gap-16">
-          <div className="flex-1 space-y-8">
-            <motion.div 
-              whileHover={{ scale: 1.05 }}
-              className="inline-flex items-center gap-2 text-red-400 border border-red-500/30 px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider bg-red-500/10 shadow-[0_0_20px_-5px_rgba(239,68,68,0.4)]"
-            >
-              <Radio className="w-3 h-3 animate-pulse" />
-              Disaster Management Domain
-            </motion.div>
-            <h2 className="text-5xl md:text-7xl font-black font-display leading-[0.9]">
-              Lifeline when <br />
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-orange-600">Grid Fails.</span>
-            </h2>
-            <p className="text-white/60 text-lg leading-relaxed max-w-lg">
-              Standard utility apps fail when the power cuts out and Wi-Fi drops. SavEra integrates <span className="text-white font-bold">Cell Broadcast Technology (CBT)</span> via Ntfy protocols.
-            </p>
-            <ul className="space-y-3">
-              <li className="flex items-center gap-3 text-sm font-medium text-white/80"><CheckCircle2 className="w-4 h-4 text-red-500" /> Bypasses local ISP outages</li>
-              <li className="flex items-center gap-3 text-sm font-medium text-white/80"><CheckCircle2 className="w-4 h-4 text-red-500" /> Government pushes instant rolling-blackout alerts</li>
-              <li className="flex items-center gap-3 text-sm font-medium text-white/80"><CheckCircle2 className="w-4 h-4 text-red-500" /> Caches critical offline safety protocols</li>
-            </ul>
-          </div>
-
-          {/* Interactive Phone Mockup */}
-          <div className="flex-1 flex justify-center">
-            <motion.div 
-               initial={{ y: 50, opacity: 0 }}
-               whileInView={{ y: 0, opacity: 1 }}
-               viewport={{ once: true }}
-               className="w-[320px] bg-[#0A0A0A] border border-white/10 rounded-[3rem] p-4 shadow-2xl relative"
-            >
-               <div className="absolute top-0 left-1/2 -translate-x-1/2 w-32 h-6 bg-black rounded-b-2xl border-b border-l border-r border-white/10 z-20" />
-               <div className="h-full bg-[#111] rounded-[2.5rem] overflow-hidden relative min-h-[600px]">
-                 {/* Map Background */}
-                 <div className="absolute inset-0 bg-neutral-900 opacity-50 grayscale" style={{ backgroundImage: 'radial-gradient(circle, #333 1px, transparent 1px)', backgroundSize: '20px 20px' }} />
-                 
-                 {/* Notification Pop */}
-                 <motion.div 
-                  animate={{ y: [20, 0], opacity: [0, 1] }}
-                  transition={{ delay: 0.5, type: 'spring' }}
-                  className="absolute top-12 left-4 right-4 bg-black/80 backdrop-blur-xl border border-red-500/40 p-4 rounded-2xl shadow-2xl"
-                 >
-                    <div className="flex gap-3">
-                      <div className="bg-red-500/20 border border-red-500/50 text-red-500 p-2 rounded-lg h-fit shrink-0">
-                        <ShieldAlert className="w-5 h-5" />
-                      </div>
-                      <div>
-                        <div className="flex justify-between items-start">
-                          <h5 className="text-white font-bold text-sm">⚠️ SAVERA GRID COMMAND</h5>
-                          <span className="text-[10px] text-white/40">Now</span>
-                        </div>
-                        <p className="text-white/70 text-xs mt-1 leading-snug">Critical Load: Reduce AC usage immediately. Grid shutdown in 10m.</p>
-                      </div>
-                    </div>
-                 </motion.div>
-
-                 {/* Offline Indicator */}
-                 <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col items-center">
-                    <Wifi className="w-12 h-12 text-rose-500 animate-pulse mb-2" />
-                    <span className="text-rose-500 font-mono text-xs tracking-widest">NO SIGNAL</span>
-                 </div>
-                 <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex items-center gap-2 bg-black/80 px-4 py-2 rounded-full border border-white/10">
-                    <Battery className="w-4 h-4 text-emerald-400" />
-                    <span className="text-[10px] text-white/80 font-bold uppercase tracking-widest">Offline Cache Mode</span>
-                 </div>
-               </div>
-            </motion.div>
-          </div>
-        </div>
-      </section>
-
-      {/* ================= TECH STACK ================= */}
-      <section id="tech" className="py-32 border-t border-white/5 relative bg-[#0A0F0D]">
-        <div className="max-w-7xl mx-auto px-4 text-center">
-          <h2 className="text-3xl font-bold font-display mb-16 text-white">Powered by Production-Grade Tech</h2>
-          <div className="grid md:grid-cols-4 gap-6">
-            {[
-              { icon: <Cpu />, title: "Next.js 14 App Router", desc: "Server-side rendering & optimized edge routing." },
-              { icon: <Activity />, title: "Recharts & Motion", desc: "High-performance data visualization & telemetry." },
-              { icon: <Network />, title: "API Polling Engine", desc: "Simulated local mesh network for IoT meter injection." },
-              { icon: <Lock />, title: "Zero-Knowledge", desc: "AES-256 encrypted payload structure for user privacy." }
-            ].map((item, i) => (
-              <motion.div 
-                key={i}
-                whileHover={{ y: -5 }}
-                className="p-8 border border-white/5 bg-white/[0.02] hover:bg-white/[0.05] rounded-3xl transition-colors relative group text-left"
+          <div className="flex items-center gap-3">
+            <Link href="/auth">
+              <Button
+                variant="outline"
+                size="sm"
+                className="border-white/10 bg-white/5 hover:bg-white/10 text-white text-xs h-8"
               >
-                 <div className="w-12 h-12 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center mb-6 relative z-10 text-emerald-400">
-                   {item.icon}
-                 </div>
-                 <h3 className="text-lg font-bold mb-2 text-white">{item.title}</h3>
-                 <p className="text-white/50 text-sm">{item.desc}</p>
-              </motion.div>
-            ))}
+                Sign In / Demo
+              </Button>
+            </Link>
+            <Link href="/auth">
+              <Button
+                size="sm"
+                className="bg-emerald-500 text-black hover:bg-emerald-400 text-xs font-semibold h-8 gap-1.5 shadow-lg shadow-emerald-500/20"
+              >
+                <span>Initialize SAVERA</span>
+                <ArrowRight className="h-3.5 w-3.5" />
+              </Button>
+            </Link>
+          </div>
+        </div>
+      </nav>
+
+      {/* Hero Section */}
+      <section className="relative pt-20 pb-24 overflow-hidden">
+        {/* Glow gradients */}
+        <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[350px] bg-gradient-to-tr from-emerald-500/20 to-teal-500/10 blur-[130px] rounded-full pointer-events-none" />
+
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs font-mono mb-8">
+            <Sparkles className="h-3.5 w-3.5" />
+            <span>AI-Powered Household-to-City Resource Intelligence</span>
+          </div>
+
+          <h1 className="text-4xl sm:text-6xl lg:text-7xl font-extrabold tracking-tight text-white max-w-4xl mx-auto leading-[1.1] mb-6">
+            Intelligent Energy, Water & LPG <span className="bg-gradient-to-r from-emerald-400 via-teal-300 to-cyan-400 bg-clip-text text-transparent">Action Platform</span>
+          </h1>
+
+          <p className="text-base sm:text-lg text-white/70 max-w-3xl mx-auto leading-relaxed mb-10">
+            SAVERA is an AI-powered resource intelligence and action platform that measures household electricity, water and LPG usage, builds personalised baselines, detects abnormal consumption, predicts next-month consumption and cost, gives actionable recommendations, connects citizens with utility services, and — through digital simulation, authorised integrations, compatible hardware and human-verified government workflows — helps translate digital insight into real-world resource-saving action.
+          </p>
+
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-16">
+            <Link href="/auth" className="w-full sm:w-auto">
+              <Button
+                size="lg"
+                className="w-full sm:w-auto bg-gradient-to-r from-emerald-500 to-teal-500 text-black hover:from-emerald-400 hover:to-teal-400 font-bold px-8 h-12 text-sm gap-2 shadow-xl shadow-emerald-500/25"
+              >
+                <span>Launch Demo Environment</span>
+                <ArrowRight className="h-4 w-4" />
+              </Button>
+            </Link>
+            <Link href="/citizen/electricity" className="w-full sm:w-auto">
+              <Button
+                variant="outline"
+                size="lg"
+                className="w-full sm:w-auto border-white/15 bg-white/[0.03] hover:bg-white/10 text-white font-medium px-8 h-12 text-sm"
+              >
+                Explore Citizen Dashboard
+              </Button>
+            </Link>
+          </div>
+
+          {/* Impact Stats Banner */}
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-5xl mx-auto pt-6 border-t border-white/10 text-left">
+            <div className="p-4 rounded-xl bg-white/[0.02] border border-white/5">
+              <div className="flex items-center justify-between mb-1">
+                <span className="text-2xl font-bold font-mono text-emerald-400">14.2%</span>
+                <TrendingDown className="h-4 w-4 text-emerald-400" />
+              </div>
+              <div className="text-xs font-semibold text-white">Peak Load Averted</div>
+              <div className="text-[10px] text-white/40 mt-0.5">Estimated via Automated DR</div>
+            </div>
+
+            <div className="p-4 rounded-xl bg-white/[0.02] border border-white/5">
+              <div className="flex items-center justify-between mb-1">
+                <span className="text-2xl font-bold font-mono text-teal-400">3.2M L</span>
+                <Droplet className="h-4 w-4 text-teal-400" />
+              </div>
+              <div className="text-xs font-semibold text-white">Water Supply Monitored</div>
+              <div className="text-[10px] text-white/40 mt-0.5">Ward 24 Daily Planned Supply</div>
+            </div>
+
+            <div className="p-4 rounded-xl bg-white/[0.02] border border-white/5">
+              <div className="flex items-center justify-between mb-1">
+                <span className="text-2xl font-bold font-mono text-cyan-400">45,230</span>
+                <Users className="h-4 w-4 text-cyan-400" />
+              </div>
+              <div className="text-xs font-semibold text-white">Participating Habitats</div>
+              <div className="text-[10px] text-white/40 mt-0.5">Simulated smart grid meters</div>
+            </div>
+
+            <div className="p-4 rounded-xl bg-white/[0.02] border border-white/5">
+              <div className="flex items-center justify-between mb-1">
+                <span className="text-2xl font-bold font-mono text-amber-400">842 MW</span>
+                <Zap className="h-4 w-4 text-amber-400" />
+              </div>
+              <div className="text-xs font-semibold text-white">City Grid Demand</div>
+              <div className="text-[10px] text-white/40 mt-0.5">Live Raichur telemetry feed</div>
+            </div>
           </div>
         </div>
       </section>
 
-      {/* ================= FOOTER / CTA ================= */}
-      <section className="py-32 relative overflow-hidden flex flex-col items-center border-t border-white/5">
-        <div className="absolute inset-0 bg-gradient-to-t from-emerald-900/20 to-transparent pointer-events-none" />
-        
-        <motion.div 
-          initial={{ opacity: 0, scale: 0.9 }}
-          whileInView={{ opacity: 1, scale: 1 }}
-          viewport={{ once: true }}
-          className="relative z-10 text-center px-4"
-        >
-          <h2 className="text-5xl md:text-7xl font-black font-display mb-8 tracking-tight text-white">
-            Ready to Optimize?
-          </h2>
-          <Link 
-            href="/auth" 
-            className="inline-flex items-center gap-3 px-12 py-5 rounded-full text-xl font-bold transition-all bg-emerald-500 text-black hover:bg-emerald-400 hover:scale-105 shadow-[0_0_40px_-10px_rgba(16,185,129,0.5)]"
-          >
-            Access Dashboard
-            <ArrowRight className="w-6 h-6" />
-          </Link>
-        </motion.div>
+      {/* The Closed Loop Section */}
+      <section className="py-20 border-t border-white/10 bg-[#070D0A]/60">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center max-w-3xl mx-auto mb-16">
+            <span className="text-xs font-mono uppercase tracking-wider text-emerald-400">Architecture</span>
+            <h2 className="text-3xl sm:text-4xl font-extrabold text-white mt-2">The Closed-Loop Intelligence Cycle</h2>
+            <p className="text-sm text-white/60 mt-3">
+              How household telemetry translates into community and city-scale conservation.
+            </p>
+          </div>
 
-        <div className="mt-24 text-sm text-white/30 font-mono tracking-widest uppercase">© 2026 Savera Protocol. Raichur, KA.</div>
+          <div className="grid grid-cols-1 md:grid-cols-6 gap-4">
+            {[
+              { step: "01", name: "Measure", desc: "Bills, smart scans & sensor telemetry", icon: BarChart3 },
+              { step: "02", name: "Analyse", desc: "Personalised baselines & anomaly detection", icon: Sparkles },
+              { step: "03", name: "Predict", desc: "Next-month kWh, costs & refill dates", icon: TrendingDown },
+              { step: "04", name: "Recommend", desc: "Ranked actions with projected ROI", icon: CheckCircle2 },
+              { step: "05", name: "Act", desc: "Simulation twin & demand response", icon: Cpu },
+              { step: "06", name: "Learn", desc: "Closed-loop feedback raises accuracy", icon: Repeat },
+            ].map((s) => {
+              const Icon = s.icon;
+              return (
+                <div key={s.step} className="p-5 rounded-2xl bg-white/[0.02] border border-white/5 hover:border-emerald-500/30 transition-all">
+                  <div className="flex items-center justify-between mb-4">
+                    <span className="text-xs font-mono font-bold text-emerald-400">{s.step}</span>
+                    <Icon className="h-4 w-4 text-white/40" />
+                  </div>
+                  <h3 className="text-sm font-bold text-white mb-1">{s.name}</h3>
+                  <p className="text-xs text-white/50 leading-relaxed">{s.desc}</p>
+                </div>
+              );
+            })}
+          </div>
+        </div>
       </section>
+
+      {/* The Three Portals */}
+      <section className="py-20 border-t border-white/10">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center max-w-3xl mx-auto mb-16">
+            <span className="text-xs font-mono uppercase tracking-wider text-emerald-400">Three Portals, One Data Loop</span>
+            <h2 className="text-3xl sm:text-4xl font-extrabold text-white mt-2">Tailored Workflows Across Every Tier</h2>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {/* Portal 1: Citizen */}
+            <div className="rounded-2xl border border-white/10 bg-gradient-to-b from-white/[0.04] to-transparent p-6 flex flex-col justify-between hover:border-emerald-500/40 transition-all">
+              <div>
+                <div className="h-10 w-10 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400 mb-5">
+                  <Zap className="h-5 w-5" />
+                </div>
+                <h3 className="text-lg font-bold text-white mb-2">Citizen Portal</h3>
+                <p className="text-xs text-white/60 leading-relaxed mb-6">
+                  Digitise your home, understand where power went, track LPG cylinders with refill forecasting, submit water supply experience, and earn your Green Score.
+                </p>
+                <ul className="space-y-2.5 text-xs text-white/70">
+                  <li className="flex items-center gap-2">
+                    <CheckCircle2 className="h-3.5 w-3.5 text-emerald-400" />
+                    <span>Appliance-level reconciliation & forecast</span>
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <CheckCircle2 className="h-3.5 w-3.5 text-emerald-400" />
+                    <span>LPG refill prediction & safety guidance</span>
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <CheckCircle2 className="h-3.5 w-3.5 text-emerald-400" />
+                    <span>Green Score #84/700 with peer ranking</span>
+                  </li>
+                </ul>
+              </div>
+              <div className="pt-8">
+                <Link href="/citizen">
+                  <Button className="w-full bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 text-xs">
+                    Access Citizen Portal
+                  </Button>
+                </Link>
+              </div>
+            </div>
+
+            {/* Portal 2: Supervisor */}
+            <div className="rounded-2xl border border-white/10 bg-gradient-to-b from-white/[0.04] to-transparent p-6 flex flex-col justify-between hover:border-teal-500/40 transition-all">
+              <div>
+                <div className="h-10 w-10 rounded-xl bg-teal-500/10 border border-teal-500/20 flex items-center justify-center text-teal-400 mb-5">
+                  <Users className="h-5 w-5" />
+                </div>
+                <h3 className="text-lg font-bold text-white mb-2">Area Supervisor / Councillor</h3>
+                <p className="text-xs text-white/60 leading-relaxed mb-6">
+                  Monitor your ward, review AI-grouped water supply alerts, dispatch field verifications with live GPS simulation, and coordinate with departments.
+                </p>
+                <ul className="space-y-2.5 text-xs text-white/70">
+                  <li className="flex items-center gap-2">
+                    <CheckCircle2 className="h-3.5 w-3.5 text-teal-400" />
+                    <span>Ward 24 AI alert grouping (XYZ Colony)</span>
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <CheckCircle2 className="h-3.5 w-3.5 text-teal-400" />
+                    <span>Field verification workflow & forward to board</span>
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <CheckCircle2 className="h-3.5 w-3.5 text-teal-400" />
+                    <span>Area LPG & electricity demand monitoring</span>
+                  </li>
+                </ul>
+              </div>
+              <div className="pt-8">
+                <Link href="/supervisor">
+                  <Button className="w-full bg-teal-500/10 hover:bg-teal-500/20 text-teal-300 border border-teal-500/30 text-xs">
+                    Access Supervisor Portal
+                  </Button>
+                </Link>
+              </div>
+            </div>
+
+            {/* Portal 3: Government */}
+            <div className="rounded-2xl border border-white/10 bg-gradient-to-b from-white/[0.04] to-transparent p-6 flex flex-col justify-between hover:border-cyan-500/40 transition-all">
+              <div>
+                <div className="h-10 w-10 rounded-xl bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center text-cyan-400 mb-5">
+                  <Globe className="h-5 w-5" />
+                </div>
+                <h3 className="text-lg font-bold text-white mb-2">Government Department</h3>
+                <p className="text-xs text-white/60 leading-relaxed mb-6">
+                  City-scale intelligence for Electricity, Water, and Gas. Manage Automated Demand Response (ADR), GIS heatmaps, and publish official alerts.
+                </p>
+                <ul className="space-y-2.5 text-xs text-white/70">
+                  <li className="flex items-center gap-2">
+                    <CheckCircle2 className="h-3.5 w-3.5 text-cyan-400" />
+                    <span>City grid 842 MW telemetry & ADR dispatch</span>
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <CheckCircle2 className="h-3.5 w-3.5 text-cyan-400" />
+                    <span>Water board 12.4M L forecast & scheduling</span>
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <CheckCircle2 className="h-3.5 w-3.5 text-cyan-400" />
+                    <span>Industrial environmental GIS & GHG accounting</span>
+                  </li>
+                </ul>
+              </div>
+              <div className="pt-8">
+                <Link href="/gov">
+                  <Button className="w-full bg-cyan-500/10 hover:bg-cyan-500/20 text-cyan-300 border border-cyan-500/30 text-xs">
+                    Access Government Portal
+                  </Button>
+                </Link>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Footer */}
+      <footer className="py-12 border-t border-white/10 bg-[#030604] text-xs text-white/50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4">
+          <div className="flex items-center gap-2">
+            <span className="font-bold text-white">SAVERA</span>
+            <span>·</span>
+            <span>Civic Resource Intelligence Architecture</span>
+            <span>·</span>
+            <span className="font-mono text-emerald-400">Raichur, Karnataka</span>
+          </div>
+
+          <div className="flex items-center gap-4">
+            <Link href="/auth" className="hover:text-white transition-colors">
+              Demo Accounts
+            </Link>
+            <Link href="/citizen/twin" className="hover:text-white transition-colors">
+              Digital Twin
+            </Link>
+            <Link href="/gov/heatmap" className="hover:text-white transition-colors">
+              City Heatmap
+            </Link>
+          </div>
+        </div>
+      </footer>
     </div>
   );
 }
