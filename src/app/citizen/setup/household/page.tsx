@@ -7,6 +7,7 @@ import { PageHeader } from "@/components/savera/PageHeader";
 import { SkipRow } from "@/components/savera/SkipRow";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { toast } from "sonner";
 import { useCurrentHousehold } from "@/lib/api/hooks";
 import { useDataStore } from "@/stores/data";
 import type { HomeType } from "@/types";
@@ -17,8 +18,18 @@ export default function HouseholdSetupPage() {
   const updateHousehold = useDataStore((s) => s.updateHousehold);
   const setSectionStatus = useDataStore((s) => s.setSectionStatus);
 
+  // Seed values from H-1024
+  const [name, setName] = useState("Priya Sharma");
+  const [mobile, setMobile] = useState("9000000001");
+  const [locationPin, setLocationPin] = useState("Raichur · 584101");
+  const [wardArea, setWardArea] = useState("Ward 24 · XYZ Colony");
+  const [provider, setProvider] = useState("Electricity Department (Raichur)");
+  const [consumerCategory, setConsumerCategory] = useState<"domestic" | "commercial" | "other">(
+    "domestic"
+  );
   const [people, setPeople] = useState(household?.people ?? 4);
-  const [homeType, setHomeType] = useState<HomeType>(household?.homeType ?? "3BHK");
+  const [homeType, setHomeType] = useState<HomeType>(household?.homeType ?? "2BHK");
+  const [homeSize, setHomeSize] = useState("850");
   const [renewable, setRenewable] = useState(household?.renewable ?? "none");
 
   const handleSave = () => {
@@ -30,13 +41,15 @@ export default function HouseholdSetupPage() {
       });
       setSectionStatus(household.id, "household", "complete");
     }
+    toast.success("Household details saved.");
     router.push("/citizen/setup/electricity");
   };
 
-  const handleSkip = () => {
+  const handleSkipAll = () => {
     if (household) {
       setSectionStatus(household.id, "household", "later");
     }
+    toast.info("Using default H-1024 Ward 24 configuration");
     router.push("/citizen/setup/electricity");
   };
 
@@ -51,19 +64,135 @@ export default function HouseholdSetupPage() {
         ]}
       />
 
-      <div className="rounded-2xl border border-white/10 bg-[#070D0A]/95 p-6 backdrop-blur-xl space-y-6">
-        {/* Occupancy */}
+      <div className="rounded-3xl border border-white/10 bg-[#070D0A]/95 p-6 sm:p-8 backdrop-blur-2xl space-y-6 shadow-2xl">
+        {/* Name and Mobile */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div>
+            <label className="block text-xs font-semibold text-white mb-1.5">Full Name</label>
+            <Input
+              type="text"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              className="bg-white/5 border-white/10 text-xs text-white h-10 rounded-xl"
+            />
+            <SkipRow
+              onSkip={() => setName("Priya Sharma")}
+              onLater={() => {}}
+              className="mt-1"
+            />
+          </div>
+
+          <div>
+            <label className="block text-xs font-semibold text-white mb-1.5">Mobile Number</label>
+            <Input
+              type="tel"
+              value={mobile}
+              onChange={(e) => setMobile(e.target.value)}
+              className="bg-white/5 border-white/10 text-xs text-white h-10 rounded-xl font-mono"
+            />
+            <SkipRow
+              onSkip={() => setMobile("9000000001")}
+              onLater={() => {}}
+              className="mt-1"
+            />
+          </div>
+        </div>
+
+        {/* Location / PIN and Ward / Area */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div>
+            <label className="block text-xs font-semibold text-white mb-1.5">Location / PIN</label>
+            <Input
+              type="text"
+              value={locationPin}
+              onChange={(e) => setLocationPin(e.target.value)}
+              className="bg-white/5 border-white/10 text-xs text-white h-10 rounded-xl"
+            />
+            <SkipRow
+              onSkip={() => setLocationPin("Raichur · 584101")}
+              onLater={() => {}}
+              className="mt-1"
+            />
+          </div>
+
+          <div>
+            <label className="block text-xs font-semibold text-white mb-1.5">Ward / Area</label>
+            <select
+              value={wardArea}
+              onChange={(e) => setWardArea(e.target.value)}
+              className="w-full bg-[#050B08] border border-white/10 text-xs text-white h-10 rounded-xl px-3 outline-none"
+            >
+              <option value="Ward 24 · XYZ Colony">Ward 24 · XYZ Colony</option>
+              <option value="Ward 24 · ABC Colony">Ward 24 · ABC Colony</option>
+              <option value="Ward 24 · DEF Colony">Ward 24 · DEF Colony</option>
+              <option value="Ward 24 · GHI Colony">Ward 24 · GHI Colony</option>
+            </select>
+            <SkipRow
+              onSkip={() => setWardArea("Ward 24 · XYZ Colony")}
+              onLater={() => {}}
+              className="mt-1"
+            />
+          </div>
+        </div>
+
+        {/* Electricity Provider */}
         <div>
-          <label className="block text-xs font-semibold text-white mb-2">
-            Number of Residents (Occupants)
-          </label>
+          <label className="block text-xs font-semibold text-white mb-1.5">Electricity Provider</label>
+          <select
+            value={provider}
+            onChange={(e) => setProvider(e.target.value)}
+            className="w-full bg-[#050B08] border border-white/10 text-xs text-white h-10 rounded-xl px-3 outline-none"
+          >
+            <option value="Electricity Department (Raichur)">
+              Electricity Department (Raichur) — GESCOM Grid
+            </option>
+            <option value="State Power Utility">State Power Utility</option>
+          </select>
+        </div>
+
+        {/* Consumer Category */}
+        <div>
+          <label className="block text-xs font-semibold text-white mb-2">Consumer Category</label>
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
+            {[
+              { id: "domestic", label: "Domestic (LT-2)" },
+              { id: "commercial", label: "Commercial" },
+              { id: "other", label: "Other" },
+            ].map((cat) => (
+              <button
+                key={cat.id}
+                type="button"
+                onClick={() => setConsumerCategory(cat.id as typeof consumerCategory)}
+                className={`p-3 rounded-xl text-xs font-medium text-left border transition-all ${
+                  consumerCategory === cat.id
+                    ? "bg-emerald-500/15 border-emerald-500/40 text-emerald-300 font-semibold"
+                    : "bg-white/5 border-white/10 text-white/70 hover:bg-white/10"
+                }`}
+              >
+                {cat.label}
+              </button>
+            ))}
+          </div>
+          <SkipRow
+            onSkip={() => setConsumerCategory("domestic")}
+            onLater={() => {}}
+            className="mt-1"
+          />
+        </div>
+
+        {/* Occupancy Stepper */}
+        <div>
+          <div className="flex items-center justify-between mb-2">
+            <label className="block text-xs font-semibold text-white">Number of People</label>
+            <span className="text-xs font-mono text-emerald-400 font-bold">{people} residents</span>
+          </div>
           <div className="flex gap-2">
-            {[1, 2, 3, 4, 5, 6].map((num) => (
+            {[1, 2, 3, 4, 5, 6, 7, 8].map((num) => (
               <button
                 key={num}
                 type="button"
                 onClick={() => setPeople(num)}
-                className={`h-10 w-12 rounded-xl text-xs font-mono font-bold transition-all ${
+                className={`h-10 w-11 rounded-xl text-xs font-mono font-bold transition-all ${
                   people === num
                     ? "bg-emerald-500 text-black shadow-lg shadow-emerald-500/20"
                     : "bg-white/5 border border-white/10 text-white/70 hover:bg-white/10"
@@ -73,17 +202,19 @@ export default function HouseholdSetupPage() {
               </button>
             ))}
           </div>
+          <SkipRow onSkip={() => setPeople(4)} onLater={() => {}} className="mt-1" />
         </div>
 
-        {/* Home Type */}
+        {/* Home Type and Size */}
         <div>
-          <label className="block text-xs font-semibold text-white mb-2">Habitat Type & Layout</label>
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
+          <label className="block text-xs font-semibold text-white mb-2">Home Type / Layout</label>
+          <div className="grid grid-cols-2 sm:grid-cols-5 gap-2.5">
             {[
-              { id: "1BHK" as const, label: "1 BHK Flat" },
-              { id: "2BHK" as const, label: "2 BHK Flat" },
-              { id: "3BHK" as const, label: "3 BHK Apartment" },
-              { id: "independent" as const, label: "Independent House" },
+              { id: "1BHK" as const, label: "1BHK" },
+              { id: "2BHK" as const, label: "2BHK (Primary)" },
+              { id: "3BHK" as const, label: "3BHK" },
+              { id: "independent" as const, label: "Independent" },
+              { id: "villa" as const, label: "Villa" },
             ].map((t) => (
               <button
                 key={t.id}
@@ -91,7 +222,7 @@ export default function HouseholdSetupPage() {
                 onClick={() => setHomeType(t.id)}
                 className={`p-3 rounded-xl text-xs font-medium text-left border transition-all ${
                   homeType === t.id
-                    ? "bg-emerald-500/15 border-emerald-500/40 text-emerald-300"
+                    ? "bg-emerald-500/15 border-emerald-500/40 text-emerald-300 font-semibold"
                     : "bg-white/5 border-white/10 text-white/70 hover:bg-white/10"
                 }`}
               >
@@ -99,34 +230,37 @@ export default function HouseholdSetupPage() {
               </button>
             ))}
           </div>
-        </div>
 
-        {/* Location / Utility Provider */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <div>
-            <label className="block text-xs font-semibold text-white mb-1.5">Municipality & Ward</label>
-            <Input
-              disabled
-              value="Ward 24 (XYZ Colony), Raichur"
-              className="bg-white/5 border-white/10 text-xs text-white/80"
-            />
+          <div className="mt-3 flex items-center gap-3">
+            <span className="text-xs text-white/70">Estimated Floor Size:</span>
+            <div className="flex items-center gap-1.5 w-32">
+              <Input
+                type="number"
+                value={homeSize}
+                onChange={(e) => setHomeSize(e.target.value)}
+                className="bg-white/5 border-white/10 text-xs text-white h-8 font-mono"
+              />
+              <span className="text-xs text-white/50 font-mono">sq ft</span>
+            </div>
           </div>
-          <div>
-            <label className="block text-xs font-semibold text-white mb-1.5">Electricity Provider</label>
-            <Input
-              disabled
-              value="Electricity Department (GESCOM Grid)"
-              className="bg-white/5 border-white/10 text-xs text-white/80"
-            />
-          </div>
+          <SkipRow
+            onSkip={() => {
+              setHomeType("2BHK");
+              setHomeSize("850");
+            }}
+            onLater={() => {}}
+            className="mt-1"
+          />
         </div>
 
         {/* Renewable Energy */}
         <div>
-          <label className="block text-xs font-semibold text-white mb-2">Renewable Energy Installation</label>
+          <label className="block text-xs font-semibold text-white mb-2">
+            Renewable Energy Opted
+          </label>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
             {[
-              { id: "none", label: "None / Grid Power Only" },
+              { id: "none", label: "None (Grid Only)" },
               { id: "rooftop_solar", label: "Rooftop Solar PV" },
               { id: "solar_water_heater", label: "Solar Water Heater" },
             ].map((r) => (
@@ -136,7 +270,7 @@ export default function HouseholdSetupPage() {
                 onClick={() => setRenewable(r.id as typeof renewable)}
                 className={`p-3 rounded-xl text-xs font-medium text-left border transition-all ${
                   renewable === r.id
-                    ? "bg-emerald-500/15 border-emerald-500/40 text-emerald-300"
+                    ? "bg-emerald-500/15 border-emerald-500/40 text-emerald-300 font-semibold"
                     : "bg-white/5 border-white/10 text-white/70 hover:bg-white/10"
                 }`}
               >
@@ -144,20 +278,22 @@ export default function HouseholdSetupPage() {
               </button>
             ))}
           </div>
+          <SkipRow onSkip={() => setRenewable("none")} onLater={() => {}} className="mt-1" />
         </div>
 
         {/* Actions */}
-        <div className="pt-4 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between gap-4">
+        <div className="pt-6 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between gap-4">
           <SkipRow
-            onSkip={handleSkip}
-            label="You can skip and SAVERA will apply default Ward 24 3BHK norms."
+            onSkip={handleSkipAll}
+            onLater={handleSkipAll}
+            label="You can skip and SAVERA will apply default Ward 24 2BHK norms."
           />
 
           <Button
             onClick={handleSave}
-            className="w-full sm:w-auto bg-emerald-500 text-black hover:bg-emerald-400 font-semibold text-xs h-9 px-6 gap-2"
+            className="w-full sm:w-auto bg-emerald-500 text-black hover:bg-emerald-400 font-bold text-xs h-10 px-6 gap-2 rounded-xl shadow-lg shadow-emerald-500/20"
           >
-            <span>Save & Proceed to Electricity</span>
+            <span>Continue to Home Energy Setup</span>
             <ArrowRight className="h-3.5 w-3.5" />
           </Button>
         </div>
