@@ -852,7 +852,7 @@ export default function AuthPage() {
                     }
                     className="w-full bg-muted border border-border text-foreground text-xs h-9 px-3 rounded-xl focus:outline-none focus:border-positive"
                   >
-                    <option value="electricity">Electricity Department (GESCOM / City Grid)</option>
+                    <option value="electricity">Electricity Department (City Grid)</option>
                     <option value="water">City Water Supply &amp; Sewerage Board</option>
                     <option value="gas">District LPG Distribution Cell</option>
                   </select>

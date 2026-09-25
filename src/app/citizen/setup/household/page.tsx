@@ -144,7 +144,7 @@ export default function HouseholdSetupPage() {
             className="w-full bg-background border border-border text-xs text-foreground h-10 rounded-xl px-3 outline-none"
           >
             <option value="Electricity Department (Raichur)">
-              Electricity Department (Raichur) — GESCOM Grid
+              Electricity Department (Raichur)
             </option>
             <option value="State Power Utility">State Power Utility</option>
           </select>

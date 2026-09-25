@@ -37,11 +37,11 @@ export function RoleSwitcher() {
         <Button
           variant="outline"
           size="sm"
-          className="h-10 gap-2 px-4 text-sm font-semibold"
+          className="h-10 gap-2 px-2.5 text-sm font-semibold has-[>svg]:px-2.5 sm:px-3 sm:has-[>svg]:px-3.5 md:px-4"
         >
           <UserCircle2 className="size-[1.1rem] text-positive" />
           <span className="hidden max-w-[160px] truncate md:inline">{currentAccount.label}</span>
-          <ChevronDown className="size-4 opacity-60" />
+          <ChevronDown className="hidden size-4 opacity-60 sm:block" />
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="w-80 bg-popover border-border-strong text-foreground">

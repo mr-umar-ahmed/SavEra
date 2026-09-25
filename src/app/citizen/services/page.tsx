@@ -58,7 +58,7 @@ export default function UtilityServicesHubPage() {
             <div className="flex items-center justify-between mb-4">
               <div className="flex items-center gap-2 text-amber-ink font-bold text-xs uppercase tracking-wider">
                 <Zap className="h-4 w-4" />
-                <span>GESCOM Electricity Bill</span>
+                <span>Electricity Department Bill</span>
               </div>
               <span className="text-xs font-mono text-muted-foreground">Sep 2026</span>
             </div>

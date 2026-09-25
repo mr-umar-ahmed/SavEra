@@ -181,17 +181,17 @@ export default function AreaWaterReportPage({
             <div className="space-y-2">
               <div className="h-4 w-full rounded-full bg-muted overflow-hidden flex p-0.5 gap-0.5">
                 <div
-                  className="bg-amber-400 rounded-l-full h-full transition-all"
+                  className="bg-tone-moderate rounded-l-full h-full transition-all"
                   style={{ width: `${(insufficientCount / totalReports) * 100}%` }}
                   title={`Insufficient: ${insufficientCount}`}
                 />
                 <div
-                  className="bg-teal-400 h-full transition-all"
+                  className="bg-stream-water h-full transition-all"
                   style={{ width: `${(lowPressureCount / totalReports) * 100}%` }}
                   title={`Low Pressure: ${lowPressureCount}`}
                 />
                 <div
-                  className="bg-rose-400 rounded-r-full h-full transition-all"
+                  className="bg-tone-critical rounded-r-full h-full transition-all"
                   style={{ width: `${(shortDurationCount / totalReports) * 100}%` }}
                   title={`Short Duration: ${shortDurationCount}`}
                 />
@@ -199,15 +199,15 @@ export default function AreaWaterReportPage({
 
               <div className="flex items-center justify-between text-xs text-muted-foreground pt-1 font-mono">
                 <span className="flex items-center gap-1.5">
-                  <span className="h-2 w-2 rounded-full bg-amber-400" />
+                  <span className="h-2 w-2 rounded-full bg-tone-moderate" />
                   Insufficient (61) · 78%
                 </span>
                 <span className="flex items-center gap-1.5">
-                  <span className="h-2 w-2 rounded-full bg-teal-400" />
+                  <span className="h-2 w-2 rounded-full bg-stream-water" />
                   Low Pressure (11) · 14%
                 </span>
                 <span className="flex items-center gap-1.5">
-                  <span className="h-2 w-2 rounded-full bg-rose-400" />
+                  <span className="h-2 w-2 rounded-full bg-tone-critical" />
                   Short Duration (6) · 8%
                 </span>
               </div>

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useCallback, useMemo, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import {
@@ -23,18 +23,24 @@ import {
   ShieldAlert,
   Sparkles,
   Tv,
-  UploadCloud,
   Zap,
 } from "lucide-react";
 import { PageHeader } from "@/components/savera/PageHeader";
 import { StatusBadge } from "@/components/savera/StatusBadge";
 import { EstimatedChip } from "@/components/savera/EstimatedChip";
+import { LabelChip } from "@/components/savera/LabelChip";
 import { SkipRow } from "@/components/savera/SkipRow";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { BillDropzone, type BillExtractionResult } from "@/components/features/bills";
 import { toast } from "sonner";
 import { useCurrentHousehold } from "@/lib/api/hooks";
 import { useDataStore } from "@/stores/data";
+import { useSessionStore } from "@/stores/session";
+import { computeBill } from "@/lib/engine/tariff";
+import { addMonths, currentMonth, monthLabel, previousMonth } from "@/lib/dates";
+import { formatINR, formatKwh } from "@/lib/format";
+import type { MonthKey } from "@/types";
 
 interface ChecklistItem {
   id: string;
@@ -44,12 +50,69 @@ interface ChecklistItem {
   selected: boolean;
 }
 
+/** One attached previous bill in Step 5 (a list row, not a store write). */
+interface PreviousBillRow {
+  month: MonthKey;
+  kwh: number;
+  amount: number;
+  /** File name when the row came from a picked file; `null` for instant imports. */
+  fileName: string | null;
+  source: "upload" | "import";
+}
+
+/**
+ * Spec display values for the four most recent previous months (02-electricity.md §3.5).
+ * Older months continue from the household's seeded bills in the data store.
+ */
+const SPEC_PREVIOUS_BILLS: ReadonlyArray<{ kwh: number; amount: number }> = [
+  { kwh: 350, amount: 2850 },
+  { kwh: 362, amount: 2940 },
+  { kwh: 378, amount: 3050 },
+  { kwh: 415, amount: 3380 },
+];
+
+const MAX_PREVIOUS_BILLS = 12;
+
 export default function ElectricitySetupWizard() {
   const router = useRouter();
   const { household } = useCurrentHousehold();
   const setSectionStatus = useDataStore((s) => s.setSectionStatus);
+  const bills = useDataStore((s) => s.bills);
+  const demoNow = useSessionStore((s) => s.demoNow);
+  const householdId = household?.id ?? "H-1024";
 
   const [step, setStep] = useState<1 | 2 | 3 | 4 | 5 | 6>(1);
+
+  /** This household's seeded bill history, newest first (the store is the source of truth). */
+  const seededBills = useMemo(
+    () =>
+      bills
+        .filter((b) => b.householdId === householdId)
+        .sort((a, b) => (a.month < b.month ? 1 : a.month > b.month ? -1 : 0)),
+    [bills, householdId]
+  );
+  const seededBillCount = seededBills.length;
+
+  /**
+   * Months a previous-bill upload can be attributed to, newest first: the four spec
+   * months, then older seeded months until 12 are available (never the current month).
+   */
+  const previousBillCandidates = useMemo<Array<Pick<PreviousBillRow, "month" | "kwh" | "amount">>>(() => {
+    const thisMonth = currentMonth(demoNow);
+    const prev = previousMonth(demoNow);
+    const rows = SPEC_PREVIOUS_BILLS.map((p, i) => ({
+      month: addMonths(prev, -i),
+      kwh: p.kwh,
+      amount: p.amount,
+    }));
+    for (const b of seededBills) {
+      if (rows.length >= MAX_PREVIOUS_BILLS) break;
+      if (b.month >= thisMonth) continue;
+      if (rows.some((r) => r.month === b.month)) continue;
+      rows.push({ month: b.month, kwh: b.kwh, amount: b.amount ?? computeBill(b.kwh).total });
+    }
+    return rows;
+  }, [demoNow, seededBills]);
 
   // Step 1: 9 Categories Inventory
   const [checklist, setChecklist] = useState<ChecklistItem[]>([
@@ -120,8 +183,7 @@ export default function ElectricitySetupWizard() {
   // Step 2 Progressive details state
   const [dontKnowNote, setDontKnowNote] = useState<string | null>(null);
 
-  // Step 4 Bill OCR state
-  const [ocrProcessing, setOcrProcessing] = useState(false);
+  // Step 4 Bill OCR state (filled by the BillDropzone's simulated extraction)
   const [ocrSaved, setOcrSaved] = useState(false);
   const [billUnits, setBillUnits] = useState("390");
   const [billingPeriod, setBillingPeriod] = useState("22 Aug – 21 Sep 2026");
@@ -131,8 +193,19 @@ export default function ElectricitySetupWizard() {
   const [billCategory, setBillCategory] = useState("Domestic (LT-2)");
   const [billAmount, setBillAmount] = useState("3120");
 
-  // Step 5 Previous bills months selection
+  // Step 5 Previous bills: quick-pick horizon + the attached rows.
+  // A ref mirrors the rows so the dropzone's per-file callback (captured once per
+  // batch) always appends to the latest list.
   const [previousMonthsCount, setPreviousMonthsCount] = useState<number>(12);
+  const [previousBills, setPreviousBills] = useState<PreviousBillRow[]>([]);
+  const previousBillsRef = useRef<PreviousBillRow[]>([]);
+  const skippedUploadsRef = useRef(0);
+  const importCount = Math.min(previousMonthsCount, previousBillCandidates.length);
+
+  const commitPreviousBills = (rows: PreviousBillRow[]) => {
+    previousBillsRef.current = rows;
+    setPreviousBills(rows);
+  };
 
   const toggleChecklistItem = (id: string) => {
     setChecklist((prev) =>
@@ -162,17 +235,62 @@ export default function ElectricitySetupWizard() {
     );
   };
 
-  const handleSimulateOcr = () => {
-    setOcrProcessing(true);
-    setTimeout(() => {
-      setOcrProcessing(false);
-      setOcrSaved(true);
-      toast.success("Bill added — 390 kWh for Sep 2026.");
-    }, 1400);
+  /** Step 4: the picked file finished its simulated OCR pass — fill the editable card. */
+  const handleBillExtracted = useCallback(({ extraction }: BillExtractionResult) => {
+    setOcrSaved(true);
+    setBillUnits(String(extraction.kwh));
+    setBillAmount(String(extraction.amount));
+    toast.success(`Bill read — ${extraction.kwh} kWh for Sep 2026 (Simulated OCR).`);
+  }, []);
+
+  /** Step 5: each extracted file is attributed to the next older month not yet attached. */
+  const handlePreviousBillExtracted = useCallback(
+    ({ file, index, total }: BillExtractionResult) => {
+      if (index === 0) skippedUploadsRef.current = 0;
+      const rows = previousBillsRef.current;
+      const next = previousBillCandidates.find((c) => !rows.some((r) => r.month === c.month));
+      if (next) {
+        previousBillsRef.current = [
+          ...rows,
+          { ...next, fileName: file.name, source: "upload" },
+        ];
+        setPreviousBills(previousBillsRef.current);
+      } else {
+        skippedUploadsRef.current += 1;
+      }
+      if (index === total - 1) {
+        const attached = total - skippedUploadsRef.current;
+        const onFile = previousBillsRef.current.length;
+        if (attached > 0) {
+          toast.success(
+            `${attached} bill${attached === 1 ? "" : "s"} attached — ${onFile} month${onFile === 1 ? "" : "s"} on file (Simulated OCR).`
+          );
+        }
+        if (skippedUploadsRef.current > 0) {
+          toast.message(
+            `${skippedUploadsRef.current} file${skippedUploadsRef.current === 1 ? "" : "s"} skipped — all ${previousBillCandidates.length} available months are already attached.`
+          );
+        }
+      }
+    },
+    [previousBillCandidates]
+  );
+
+  const handleImportSeededBills = () => {
+    const rows = previousBillCandidates
+      .slice(0, importCount)
+      .map((c) => ({ ...c, fileName: null, source: "import" as const }));
+    commitPreviousBills(rows);
+    toast.success(`${rows.length} month${rows.length === 1 ? "" : "s"} imported from seeded history (simulated).`);
+  };
+
+  const handleClearPreviousBills = () => {
+    commitPreviousBills([]);
+    toast.message("Attached bills cleared.");
   };
 
   const handleSaveBillAndContinue = () => {
-    toast.success("Bill added — 390 kWh for Sep 2026.");
+    toast.success(`Bill added — ${billUnits || "390"} kWh for Sep 2026.`);
     setStep(5);
   };
 
@@ -577,77 +695,134 @@ export default function ElectricitySetupWizard() {
           <div className="pb-4 border-b border-border">
             <h2 className="text-lg font-bold text-foreground">4. Connect Your Electricity History</h2>
             <p className="text-xs text-muted-foreground mt-0.5">
-              Upload your recent GESCOM power bill or enter reading parameters manually.
+              Upload or photograph your latest electricity bill, or enter the readings manually.
             </p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {/* Upload Box (Simulated OCR) */}
+            {/* Upload Box (real file picker → simulated OCR) */}
             <div className="space-y-3">
-              <span className="text-xs font-mono font-bold text-positive uppercase tracking-wider block">
-                Option A: Bill Upload (Simulated OCR)
-              </span>
-
-              <div
-                onClick={handleSimulateOcr}
-                className="border-2 border-dashed border-border-strong hover:border-positive/50 rounded-2xl p-6 text-center cursor-pointer bg-muted/60 hover:bg-positive/[0.02] transition-all"
-              >
-                {ocrProcessing ? (
-                  <div className="py-6 flex flex-col items-center">
-                    <div className="h-9 w-9 rounded-full border-2 border-primary border-t-transparent animate-spin mb-3" />
-                    <span className="text-xs font-bold text-foreground">Processing Simulated Bill OCR...</span>
-                    <span className="text-xs text-faint mt-1">Reading GESCOM LT-2 format</span>
-                  </div>
-                ) : (
-                  <div className="py-4 flex flex-col items-center">
-                    <div className="h-11 w-11 rounded-2xl bg-positive/10 border border-positive/20 flex items-center justify-center text-positive mb-3 shadow-inner">
-                      <UploadCloud className="h-5 w-5" />
-                    </div>
-                    <span className="text-xs font-bold text-foreground">
-                      Drop Electricity Bill (PDF / JPG / PNG)
-                    </span>
-                    <span className="text-xs text-muted-foreground mt-1">
-                      Simulates instant extraction of 390 kWh for September 2026
-                    </span>
-                  </div>
-                )}
+              <div className="flex flex-wrap items-center gap-2">
+                <span className="text-xs font-mono font-bold text-positive uppercase tracking-wider">
+                  Option A: Upload or photograph your bill
+                </span>
+                <LabelChip kind="simulated" label="Simulated OCR" size="sm" />
               </div>
+
+              <BillDropzone
+                stream="electricity"
+                scanDurationMs={2400}
+                onExtracted={handleBillExtracted}
+              />
 
               {ocrSaved && (
                 <div className="p-4 rounded-2xl bg-positive/10 border border-positive/30 space-y-3 text-xs animate-in fade-in">
-                  <div className="flex items-center justify-between">
+                  <div className="flex flex-wrap items-center justify-between gap-2">
                     <span className="font-bold text-positive flex items-center gap-1.5">
                       <CheckCircle2 className="h-4 w-4" />
                       <span>Extracted via Simulated OCR</span>
                     </span>
-                    <span className="text-2xs font-mono px-2 py-0.5 rounded bg-positive/20 text-positive">
-                      Measured
-                    </span>
+                    <LabelChip kind="measured" size="sm" />
                   </div>
+                  <p className="text-2xs text-muted-foreground">
+                    Check each field against your bill and edit anything that looks off before saving.
+                  </p>
 
-                  <div className="grid grid-cols-2 gap-2.5 font-mono text-xs">
+                  <div className="grid grid-cols-2 gap-2.5">
                     <div>
-                      <span className="text-faint block font-sans">Units Billed:</span>
-                      <span className="font-bold text-foreground text-sm">{billUnits} kWh</span>
+                      <label htmlFor="ocr-units" className="block text-2xs font-medium text-soft mb-1">
+                        Units billed (kWh)
+                      </label>
+                      <Input
+                        id="ocr-units"
+                        type="number"
+                        inputMode="numeric"
+                        value={billUnits}
+                        onChange={(e) => setBillUnits(e.target.value)}
+                        className="bg-card border-border text-xs text-foreground h-9 font-mono font-bold"
+                      />
                     </div>
                     <div>
-                      <span className="text-faint block font-sans">Bill Amount:</span>
-                      <span className="font-bold text-foreground text-sm">₹{billAmount}</span>
+                      <label htmlFor="ocr-amount" className="block text-2xs font-medium text-soft mb-1">
+                        Bill amount (₹)
+                      </label>
+                      <Input
+                        id="ocr-amount"
+                        type="number"
+                        inputMode="numeric"
+                        value={billAmount}
+                        onChange={(e) => setBillAmount(e.target.value)}
+                        className="bg-card border-border text-xs text-foreground h-9 font-mono font-bold"
+                      />
+                    </div>
+                    <div className="col-span-2">
+                      <label htmlFor="ocr-period" className="block text-2xs font-medium text-soft mb-1">
+                        Billing period
+                      </label>
+                      <Input
+                        id="ocr-period"
+                        type="text"
+                        value={billingPeriod}
+                        onChange={(e) => setBillingPeriod(e.target.value)}
+                        className="bg-card border-border text-xs text-foreground h-9"
+                      />
                     </div>
                     <div>
-                      <span className="text-faint block font-sans">Billing Period:</span>
-                      <span className="text-soft">{billingPeriod}</span>
+                      <label htmlFor="ocr-bill-date" className="block text-2xs font-medium text-soft mb-1">
+                        Bill date
+                      </label>
+                      <Input
+                        id="ocr-bill-date"
+                        type="text"
+                        value={billDate}
+                        onChange={(e) => setBillDate(e.target.value)}
+                        className="bg-card border-border text-xs text-foreground h-9"
+                      />
                     </div>
                     <div>
-                      <span className="text-faint block font-sans">Meter Readings:</span>
-                      <span className="text-soft">{meterStart} &rarr; {meterEnd}</span>
+                      <label htmlFor="ocr-category" className="block text-2xs font-medium text-soft mb-1">
+                        Consumer category
+                      </label>
+                      <Input
+                        id="ocr-category"
+                        type="text"
+                        value={billCategory}
+                        onChange={(e) => setBillCategory(e.target.value)}
+                        className="bg-card border-border text-xs text-foreground h-9"
+                      />
+                    </div>
+                    <div>
+                      <label htmlFor="ocr-meter-start" className="block text-2xs font-medium text-soft mb-1">
+                        Meter start
+                      </label>
+                      <Input
+                        id="ocr-meter-start"
+                        type="number"
+                        inputMode="numeric"
+                        value={meterStart}
+                        onChange={(e) => setMeterStart(e.target.value)}
+                        className="bg-card border-border text-xs text-foreground h-9 font-mono"
+                      />
+                    </div>
+                    <div>
+                      <label htmlFor="ocr-meter-end" className="block text-2xs font-medium text-soft mb-1">
+                        Meter end
+                      </label>
+                      <Input
+                        id="ocr-meter-end"
+                        type="number"
+                        inputMode="numeric"
+                        value={meterEnd}
+                        onChange={(e) => setMeterEnd(e.target.value)}
+                        className="bg-card border-border text-xs text-foreground h-9 font-mono"
+                      />
                     </div>
                   </div>
 
                   <Button
                     size="sm"
                     onClick={handleSaveBillAndContinue}
-                    className="w-full bg-primary text-primary-foreground hover:bg-primary-hover font-bold text-xs h-8 mt-1"
+                    className="w-full bg-primary text-primary-foreground hover:bg-primary-hover font-bold text-xs h-9 mt-1"
                   >
                     Looks right — Save bill
                   </Button>
@@ -713,7 +888,7 @@ export default function ElectricitySetupWizard() {
             <SkipRow
               onSkip={() => setStep(5)}
               onLater={() => setStep(5)}
-              label="Skip current bill and use 390 kWh demo fixture"
+              label="Skip current bill — keep the Sep 2026 demo bill (390 kWh)"
             />
             <Button
               onClick={() => setStep(5)}
@@ -737,14 +912,16 @@ export default function ElectricitySetupWizard() {
           </div>
 
           <div>
-            <label className="block text-xs font-semibold text-foreground mb-2">
+            <span id="history-horizon-label" className="block text-xs font-semibold text-foreground mb-2">
               Quick Pick History Horizon
-            </label>
-            <div className="flex gap-2">
+            </span>
+            <div className="flex flex-wrap gap-2" role="radiogroup" aria-labelledby="history-horizon-label">
               {[1, 2, 3, 6, 12].map((cnt) => (
                 <button
                   key={cnt}
                   type="button"
+                  role="radio"
+                  aria-checked={previousMonthsCount === cnt}
                   onClick={() => setPreviousMonthsCount(cnt)}
                   className={`py-2 px-4 rounded-xl text-xs font-mono font-bold transition-all ${
                     previousMonthsCount === cnt
@@ -758,28 +935,89 @@ export default function ElectricitySetupWizard() {
             </div>
           </div>
 
-          <div className="p-4 rounded-2xl bg-muted/60 border border-border space-y-2">
-            <span className="text-xs font-semibold text-foreground block">
-              Seeded Historical Records ({previousMonthsCount} months imported)
-            </span>
-            <div className="divide-y divide-border text-xs font-mono">
-              <div className="py-2 flex items-center justify-between">
-                <span className="text-soft">August 2026 (Previous Month)</span>
-                <span className="font-bold text-positive">350 kWh · ₹2,850</span>
-              </div>
-              <div className="py-2 flex items-center justify-between">
-                <span className="text-soft">July 2026</span>
-                <span className="text-soft">362 kWh · ₹2,940</span>
-              </div>
-              <div className="py-2 flex items-center justify-between">
-                <span className="text-soft">June 2026</span>
-                <span className="text-soft">378 kWh · ₹3,050</span>
-              </div>
-              <div className="py-2 flex items-center justify-between">
-                <span className="text-soft">May 2026 (Peak Summer)</span>
-                <span className="text-soft">415 kWh · ₹3,380</span>
+          <BillDropzone
+            multiple
+            maxFiles={MAX_PREVIOUS_BILLS}
+            stream="electricity"
+            scanDurationMs={1100}
+            allowSample={false}
+            title="Upload previous bills (select several)"
+            hint="Choose up to 12 PDFs or photos at once"
+            onExtracted={handlePreviousBillExtracted}
+          />
+
+          <div className="p-4 rounded-2xl bg-muted/60 border border-border space-y-3">
+            <div className="flex flex-wrap items-center justify-between gap-2">
+              <span className="text-xs font-semibold text-foreground" aria-live="polite">
+                {previousBills.length} month{previousBills.length === 1 ? "" : "s"} attached
+              </span>
+              <div className="flex flex-wrap items-center gap-2">
+                {previousBills.length > 0 && (
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    size="sm"
+                    onClick={handleClearPreviousBills}
+                    className="h-8 gap-1.5 px-3 text-xs text-muted-foreground hover:text-foreground"
+                  >
+                    <RotateCcw className="size-3.5" />
+                    Clear
+                  </Button>
+                )}
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  onClick={handleImportSeededBills}
+                  className="h-8 gap-1.5 px-3 text-xs"
+                >
+                  <Sparkles className="size-3.5 text-positive" />
+                  Import {importCount} month{importCount === 1 ? "" : "s"} instantly (simulated)
+                </Button>
               </div>
             </div>
+
+            {previousBills.length === 0 ? (
+              <p className="text-xs text-muted-foreground">
+                No previous bills attached yet. Pick files above, or import the seeded history for this
+                household instantly.
+              </p>
+            ) : (
+              <ul className="divide-y divide-border text-xs">
+                {previousBills.map((row) => (
+                  <li
+                    key={row.month}
+                    className="py-2 flex flex-wrap items-center justify-between gap-x-3 gap-y-1"
+                  >
+                    <div className="flex min-w-0 items-center gap-2">
+                      <FileText className="size-3.5 shrink-0 text-positive" />
+                      <span className="font-mono text-soft">{monthLabel(row.month)}</span>
+                      {row.fileName && (
+                        <span className="max-w-[9rem] truncate font-mono text-2xs text-faint sm:max-w-[14rem]">
+                          {row.fileName}
+                        </span>
+                      )}
+                    </div>
+                    <div className="flex flex-wrap items-center gap-2">
+                      <span className="font-mono font-bold text-foreground">
+                        {formatKwh(row.kwh)} · {formatINR(row.amount)}
+                      </span>
+                      {row.source === "upload" ? (
+                        <LabelChip kind="simulated" label="Simulated OCR" size="sm" />
+                      ) : (
+                        <LabelChip kind="measured" size="sm" />
+                      )}
+                    </div>
+                  </li>
+                ))}
+              </ul>
+            )}
+            {previousBillCandidates.length < MAX_PREVIOUS_BILLS && (
+              <p className="text-2xs text-faint">
+                {previousBillCandidates.length} previous months are on file for this household (plus the
+                current bill).
+              </p>
+            )}
           </div>
 
           <div className="pt-6 border-t border-border flex flex-col sm:flex-row items-center justify-between gap-4">
@@ -812,7 +1050,7 @@ export default function ElectricitySetupWizard() {
             <div>
               <h2 className="text-xl font-extrabold text-foreground">Your Baseline is Ready</h2>
               <p className="text-xs text-positive font-medium">
-                Personalised baseline established from 12 bills and disaggregated appliance profile.
+                Personalised baseline established from {seededBillCount} bills and disaggregated appliance profile.
               </p>
             </div>
           </div>
@@ -823,10 +1061,10 @@ export default function ElectricitySetupWizard() {
               <div>
                 <span className="text-xs text-muted-foreground uppercase font-mono block">Baseline Type</span>
                 <span className="text-base font-bold text-foreground">
-                  Personalised Seasonal Baseline (12 bills)
+                  Personalised Seasonal Baseline ({seededBillCount} bills)
                 </span>
               </div>
-              <EstimatedChip confidence="Medium" inputs={["12 bills", "78% appliance detail"]} />
+              <EstimatedChip confidence="Medium" inputs={[`${seededBillCount} bills`, "78% appliance detail"]} />
             </div>
 
             <div className="p-4 rounded-xl bg-muted/60 border border-border/60 grid grid-cols-1 sm:grid-cols-3 gap-4 text-center">
@@ -846,7 +1084,7 @@ export default function ElectricitySetupWizard() {
 
             <div className="text-xs text-muted-foreground space-y-1.5 pt-2">
               <span className="font-semibold text-foreground block">Inputs &amp; Calibrations:</span>
-              <p>• 12 historical bills analyzed with summer and winter seasonality adjustments</p>
+              <p>• {seededBillCount} historical bills analyzed with summer and winter seasonality adjustments</p>
               <p>• Appliance disaggregation estimate: ~365 kWh with 25 kWh unallocated margin</p>
               <p>• What would raise confidence: Complete geyser and washing machine details (confidence &rarr; High at &ge;80% detail)</p>
             </div>

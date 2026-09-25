@@ -111,7 +111,7 @@ export default function SupervisorElectricityPage() {
                   <span className="text-amber-ink font-mono">70% LOAD</span>
                 </div>
                 <div className="h-1.5 rounded-full bg-secondary overflow-hidden">
-                  <div className="h-full bg-amber-400 rounded-full" style={{ width: "70%" }} />
+                  <div className="h-full bg-tone-moderate rounded-full" style={{ width: "70%" }} />
                 </div>
                 <span className="text-2xs text-amber-ink font-medium block">Status: MODERATE</span>
               </div>
@@ -144,7 +144,7 @@ export default function SupervisorElectricityPage() {
                   <span className="text-cyan-ink font-mono">30% LOAD</span>
                 </div>
                 <div className="h-1.5 rounded-full bg-secondary overflow-hidden">
-                  <div className="h-full bg-cyan-400 rounded-full" style={{ width: "30%" }} />
+                  <div className="h-full bg-tone-optimal rounded-full" style={{ width: "30%" }} />
                 </div>
                 <span className="text-2xs text-cyan-ink font-medium block">Status: OPTIMAL</span>
               </div>

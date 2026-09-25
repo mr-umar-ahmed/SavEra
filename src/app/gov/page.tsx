@@ -181,7 +181,7 @@ export default function GovCommandCenterPage() {
               : "text-muted-foreground hover:text-foreground"
           }`}
         >
-          <Compass className="h-4 w-4 text-cyan-500" />
+          <Compass className="h-4 w-4 text-cyan-ink" />
           <span>Spatial GIS &amp; Water Pipeline Grid</span>
         </button>
 
@@ -193,7 +193,7 @@ export default function GovCommandCenterPage() {
               : "text-muted-foreground hover:text-foreground"
           }`}
         >
-          <BarChart3 className="h-4 w-4 text-amber-500" />
+          <BarChart3 className="h-4 w-4 text-amber-ink" />
           <span>Municipal Resource Intelligence</span>
         </button>
 
@@ -230,7 +230,7 @@ export default function GovCommandCenterPage() {
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-border">
             <div>
               <div className="flex items-center gap-2">
-                <span className="size-2 rounded-full bg-cyan-400 animate-pulse" />
+                <span aria-hidden="true" className="size-2 rounded-full bg-tone-optimal animate-pulse" />
                 <h3 className="text-base font-bold text-foreground">
                   Raichur City-Wide Spatial Infrastructure &amp; Hydraulic Pipeline Command Map
                 </h3>
@@ -241,8 +241,8 @@ export default function GovCommandCenterPage() {
             </div>
 
             <div className="flex items-center gap-2">
-              <span className="text-2xs font-mono px-2.5 py-1 rounded-full bg-cyan-500/10 text-cyan-500 font-bold border border-cyan-500/20">
-                Live SCADA Sync: 48 Nodes
+              <span className="text-2xs font-mono px-2.5 py-1 rounded-full bg-cyan-500/10 text-cyan-ink font-bold border border-cyan-500/20">
+                SCADA Sync (simulated): 48 Nodes
               </span>
             </div>
           </div>
@@ -406,7 +406,7 @@ export default function GovCommandCenterPage() {
                 </Link>
                 <Link href="/gov/heatmap">
                   <Button variant="outline" size="sm" className="w-full text-xs border-border bg-card h-8 gap-2">
-                    <Layers className="size-3.5 text-cyan-400" />
+                    <Layers className="size-3.5 text-cyan-ink" />
                     <span>Open Multi-Utility GIS Heatmap</span>
                   </Button>
                 </Link>
@@ -426,11 +426,11 @@ export default function GovCommandCenterPage() {
             <div className="rounded-3xl border border-amber-500/30 bg-card p-6 shadow-xl space-y-4">
               <div className="flex items-center justify-between pb-3 border-b border-border">
                 <div className="flex items-center gap-2">
-                  <div className="size-8 rounded-xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center text-amber-500">
+                  <div className="size-8 rounded-xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center text-amber-ink">
                     <Zap className="size-4" />
                   </div>
                   <div>
-                    <h4 className="text-sm font-bold text-foreground">Electricity Grid (GESCOM)</h4>
+                    <h4 className="text-sm font-bold text-foreground">Electricity Department (Raichur)</h4>
                     <span className="text-2xs text-muted-foreground font-mono">Telemetry: 842 MW</span>
                   </div>
                 </div>
@@ -453,7 +453,7 @@ export default function GovCommandCenterPage() {
               </div>
 
               <Link href="/gov/electricity">
-                <Button size="sm" variant="outline" className="w-full text-xs border-amber-500/30 hover:bg-amber-500/10 text-amber-500 h-8 gap-1.5">
+                <Button size="sm" variant="outline" className="w-full text-xs border-amber-500/30 hover:bg-amber-500/10 text-amber-ink h-8 gap-1.5">
                   <span>Open Electricity Command</span>
                   <ArrowRight className="size-3" />
                 </Button>
@@ -464,7 +464,7 @@ export default function GovCommandCenterPage() {
             <div className="rounded-3xl border border-teal-500/30 bg-card p-6 shadow-xl space-y-4">
               <div className="flex items-center justify-between pb-3 border-b border-border">
                 <div className="flex items-center gap-2">
-                  <div className="size-8 rounded-xl bg-teal-500/10 border border-teal-500/20 flex items-center justify-center text-teal-500">
+                  <div className="size-8 rounded-xl bg-teal-500/10 border border-teal-500/20 flex items-center justify-center text-teal-ink">
                     <Droplet className="size-4" />
                   </div>
                   <div>
@@ -486,12 +486,12 @@ export default function GovCommandCenterPage() {
                 </div>
                 <div className="flex items-center justify-between p-2 rounded bg-muted/60">
                   <span className="text-muted-foreground">Non-Revenue Water (Loss)</span>
-                  <span className="font-bold text-amber-500">14.2% (Target &lt; 15%)</span>
+                  <span className="font-bold text-amber-ink">14.2% (Target &lt; 15%)</span>
                 </div>
               </div>
 
               <Link href="/gov/water">
-                <Button size="sm" variant="outline" className="w-full text-xs border-teal-500/30 hover:bg-teal-500/10 text-teal-500 h-8 gap-1.5">
+                <Button size="sm" variant="outline" className="w-full text-xs border-teal-500/30 hover:bg-teal-500/10 text-teal-ink h-8 gap-1.5">
                   <span>Open Water Command</span>
                   <ArrowRight className="size-3" />
                 </Button>
@@ -502,7 +502,7 @@ export default function GovCommandCenterPage() {
             <div className="rounded-3xl border border-rose-500/30 bg-card p-6 shadow-xl space-y-4">
               <div className="flex items-center justify-between pb-3 border-b border-border">
                 <div className="flex items-center gap-2">
-                  <div className="size-8 rounded-xl bg-rose-500/10 border border-rose-500/20 flex items-center justify-center text-rose-500">
+                  <div className="size-8 rounded-xl bg-rose-500/10 border border-rose-500/20 flex items-center justify-center text-rose-ink">
                     <Flame className="size-4" />
                   </div>
                   <div>
@@ -529,7 +529,7 @@ export default function GovCommandCenterPage() {
               </div>
 
               <Link href="/gov/gas">
-                <Button size="sm" variant="outline" className="w-full text-xs border-rose-500/30 hover:bg-rose-500/10 text-rose-500 h-8 gap-1.5">
+                <Button size="sm" variant="outline" className="w-full text-xs border-rose-500/30 hover:bg-rose-500/10 text-rose-ink h-8 gap-1.5">
                   <span>Open LPG Command</span>
                   <ArrowRight className="size-3" />
                 </Button>
@@ -700,10 +700,10 @@ export default function GovCommandCenterPage() {
                 {/* Incident 2: Case GHI-001 */}
                 <div className="p-4 rounded-2xl bg-amber-500/10 border border-amber-500/30 space-y-2">
                   <div className="flex items-center justify-between">
-                    <span className="text-xs font-bold text-amber-500">
+                    <span className="text-xs font-bold text-amber-ink">
                       Case GHI-001: Sub-nominal Tail-end Flow
                     </span>
-                    <span className="text-2xs font-mono font-bold text-amber-500">56 Reports</span>
+                    <span className="text-2xs font-mono font-bold text-amber-ink">56 Reports</span>
                   </div>
                   <p className="text-2xs text-muted-foreground">
                     Flow measured at 1.1 bar on GHI Colony 4th Cross. Field Assistant Arif dispatched with portable bar gauge.
@@ -711,7 +711,7 @@ export default function GovCommandCenterPage() {
                   <div className="pt-2 flex items-center justify-between">
                     <span className="text-2xs font-mono text-muted-foreground">Status: Field Verification Active</span>
                     <Link href="/supervisor/water/cases/case-ghi-001">
-                      <Button size="sm" variant="outline" className="h-7 text-xs border-amber-500/30 text-amber-500">
+                      <Button size="sm" variant="outline" className="h-7 text-xs border-amber-500/30 text-amber-ink">
                         View Field Log
                       </Button>
                     </Link>
@@ -724,7 +724,7 @@ export default function GovCommandCenterPage() {
             <div className="rounded-3xl border border-border bg-card p-6 shadow-xl space-y-4">
               <div className="flex items-center justify-between pb-3 border-b border-border">
                 <div className="flex items-center gap-2">
-                  <Truck className="size-4 text-cyan-400" />
+                  <Truck className="size-4 text-cyan-ink" />
                   <h3 className="text-base font-bold text-foreground">Emergency Relief Tanker Fleet</h3>
                 </div>
                 <span className="text-2xs font-mono text-positive bg-positive/10 px-2 py-0.5 rounded">

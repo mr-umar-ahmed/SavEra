@@ -129,7 +129,7 @@ export default function SupervisorWaterDashboard() {
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-border">
           <div>
             <div className="flex items-center gap-2">
-              <span className="size-2 rounded-full bg-teal-400 animate-pulse" />
+              <span aria-hidden="true" className="size-2 rounded-full bg-stream-water animate-pulse" />
               <h3 className="text-base font-bold text-foreground">
                 Ward 24 Water Supply Pipeline Grid &amp; Pressure Telemetry Map
               </h3>

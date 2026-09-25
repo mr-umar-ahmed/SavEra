@@ -207,6 +207,8 @@ export function VoiceAssistant() {
                 className={`p-1.5 rounded-lg text-muted-foreground hover:text-foreground hover:bg-secondary transition-colors ${
                   speechEnabled ? "text-positive" : ""
                 }`}
+                aria-label={speechEnabled ? "Turn speech audio off" : "Turn speech audio on"}
+                aria-pressed={speechEnabled}
                 title={speechEnabled ? "Speech audio output on" : "Speech audio output off"}
               >
                 {speechEnabled ? <Volume2 className="h-4 w-4" /> : <VolumeX className="h-4 w-4" />}
@@ -260,9 +262,11 @@ export function VoiceAssistant() {
               onClick={toggleListening}
               className={`p-2 rounded-xl transition-all ${
                 isListening
-                  ? "bg-rose-500 text-white animate-pulse"
+                  ? "bg-destructive text-destructive-foreground animate-pulse"
                   : "bg-secondary hover:bg-secondary text-soft"
               }`}
+              aria-label={isListening ? "Stop listening" : "Speak command"}
+              aria-pressed={isListening}
               title={isListening ? "Listening... click to stop" : "Speak command"}
             >
               {isListening ? <MicOff className="h-4 w-4" /> : <Mic className="h-4 w-4" />}

@@ -122,10 +122,10 @@ export function WhatIfScenarios() {
         >
           <div>
             <div className="flex items-center justify-between mb-2">
-              <span className="text-xs font-bold text-foreground group-hover:text-amber-500 transition-colors">
+              <span className="text-xs font-bold text-foreground group-hover:text-amber-ink transition-colors">
                 ☀️ Solar Maximizer
               </span>
-              <span className="text-3xs font-mono text-amber-500 bg-amber-500/10 px-1.5 py-0.5 rounded">
+              <span className="text-3xs font-mono text-amber-ink bg-amber-500/10 px-1.5 py-0.5 rounded">
                 Self-Powered
               </span>
             </div>

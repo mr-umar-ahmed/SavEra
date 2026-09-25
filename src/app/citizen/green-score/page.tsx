@@ -87,7 +87,7 @@ export default function CitizenGreenScorePage() {
             <span className="font-mono font-bold text-sm text-foreground">42 / 50</span>
           </div>
           <div className="h-2 rounded-full bg-muted overflow-hidden">
-            <div className="h-full bg-amber-400 rounded-full" style={{ width: "84%" }} />
+            <div className="h-full bg-stream-electricity rounded-full" style={{ width: "84%" }} />
           </div>
           <p className="text-xs text-muted-foreground leading-relaxed">
             Evaluates kWh consumption per occupant against 3BHK summer-winter baseline bands.
@@ -103,7 +103,7 @@ export default function CitizenGreenScorePage() {
             <span className="font-mono font-bold text-sm text-foreground">26 / 30</span>
           </div>
           <div className="h-2 rounded-full bg-muted overflow-hidden">
-            <div className="h-full bg-teal-400 rounded-full" style={{ width: "86.6%" }} />
+            <div className="h-full bg-stream-water rounded-full" style={{ width: "86.6%" }} />
           </div>
           <p className="text-xs text-muted-foreground leading-relaxed">
             Reflects prompt community reporting and effective overhead storage utilization.
@@ -119,7 +119,7 @@ export default function CitizenGreenScorePage() {
             <span className="font-mono font-bold text-sm text-foreground">18 / 20</span>
           </div>
           <div className="h-2 rounded-full bg-muted overflow-hidden">
-            <div className="h-full bg-rose-400 rounded-full" style={{ width: "90%" }} />
+            <div className="h-full bg-stream-lpg rounded-full" style={{ width: "90%" }} />
           </div>
           <p className="text-xs text-muted-foreground leading-relaxed">
             Rewards steady burn rates (0.57 kg/day) without sudden leak-like surges.

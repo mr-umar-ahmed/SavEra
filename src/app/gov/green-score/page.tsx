@@ -9,9 +9,9 @@ import { ProgressRing } from "@/components/savera/ProgressRing";
 export default function GovGreenScorePage() {
   const brackets = [
     { range: "80 – 100 (Exemplary)", share: "38%", count: "17,180 homes", tone: "bg-positive" },
-    { range: "60 – 79 (Moderate Conservation)", share: "44%", count: "19,900 homes", tone: "bg-teal-400" },
-    { range: "40 – 59 (Baseline Normal)", share: "14%", count: "6,330 homes", tone: "bg-amber-400" },
-    { range: "< 40 (High Variance)", share: "4%", count: "1,820 homes", tone: "bg-rose-400" },
+    { range: "60 – 79 (Moderate Conservation)", share: "44%", count: "19,900 homes", tone: "bg-tone-optimal" },
+    { range: "40 – 59 (Baseline Normal)", share: "14%", count: "6,330 homes", tone: "bg-tone-moderate" },
+    { range: "< 40 (High Variance)", share: "4%", count: "1,820 homes", tone: "bg-tone-critical" },
   ];
 
   return (

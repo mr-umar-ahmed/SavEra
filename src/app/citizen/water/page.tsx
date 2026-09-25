@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import {
@@ -19,12 +19,16 @@ import {
   Send,
   Sparkles,
   Upload,
+  Video,
   Waves,
+  X,
 } from "lucide-react";
 import { PageHeader } from "@/components/savera/PageHeader";
 import { StatusBadge } from "@/components/savera/StatusBadge";
 import { EstimatedChip } from "@/components/savera/EstimatedChip";
+import { LabelChip } from "@/components/savera/LabelChip";
 import { Button } from "@/components/ui/button";
+import { formatFileSize } from "@/components/features/bills";
 import { useWaterHome } from "@/lib/api/hooks";
 import { useDataStore } from "@/stores/data";
 import { newId } from "@/lib/ids";
@@ -57,6 +61,47 @@ export default function CitizenWaterPortalPage() {
     "no"
   );
   const [uploadedEvidenceName, setUploadedEvidenceName] = useState<string | null>(null);
+  // Real file picker for evidence: the file stays on the device, the upload is simulated.
+  const [evidenceFile, setEvidenceFile] = useState<{
+    sizeBytes: number;
+    isVideo: boolean;
+    previewUrl: string | null;
+  } | null>(null);
+  const evidenceInputRef = useRef<HTMLInputElement>(null);
+  const evidencePreviewRef = useRef<string | null>(null);
+
+  const revokeEvidencePreview = () => {
+    if (evidencePreviewRef.current) {
+      URL.revokeObjectURL(evidencePreviewRef.current);
+      evidencePreviewRef.current = null;
+    }
+  };
+
+  // Release the preview object URL when the page unmounts.
+  useEffect(() => {
+    return () => {
+      if (evidencePreviewRef.current) URL.revokeObjectURL(evidencePreviewRef.current);
+    };
+  }, []);
+
+  const handleEvidenceChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    e.target.value = "";
+    if (!file) return;
+    revokeEvidencePreview();
+    const isVideo = file.type.startsWith("video/");
+    const previewUrl = !isVideo && file.type.startsWith("image/") ? URL.createObjectURL(file) : null;
+    evidencePreviewRef.current = previewUrl;
+    setUploadedEvidenceName(file.name);
+    setEvidenceFile({ sizeBytes: file.size, isVideo, previewUrl });
+    toast.success(isVideo ? "Video attached (Simulated upload)" : "Photo attached (Simulated upload)");
+  };
+
+  const handleRemoveEvidence = () => {
+    revokeEvidencePreview();
+    setUploadedEvidenceName(null);
+    setEvidenceFile(null);
+  };
 
   // Step 4 Submitted Report info
   const [submittedReportId, setSubmittedReportId] = useState("WR-24-0913");
@@ -401,23 +446,66 @@ export default function CitizenWaterPortalPage() {
               </div>
 
               <div>
-                <label className="block text-xs font-medium text-soft mb-1.5">
-                  Optional photo / video (Simulated upload)
+                <label htmlFor="water-evidence-input" className="block text-xs font-medium text-soft mb-1.5">
+                  Optional photo / video evidence
                 </label>
-                <div
-                  onClick={() => {
-                    setUploadedEvidenceName("pressure_gauge_0.8bar.jpg");
-                    toast.success("Photo attached (Simulated upload)");
-                  }}
-                  className="p-3 rounded-xl border border-dashed border-border-strong hover:border-teal-500/40 bg-muted/60 text-center cursor-pointer text-xs text-muted-foreground flex items-center justify-center gap-2"
-                >
-                  <Camera className="h-4 w-4 text-teal-ink" />
-                  <span>
-                    {uploadedEvidenceName
-                      ? `Attached: ${uploadedEvidenceName}`
-                      : "Click to simulate evidence upload (photo/video)"}
-                  </span>
-                </div>
+                <input
+                  ref={evidenceInputRef}
+                  id="water-evidence-input"
+                  type="file"
+                  accept="image/*,video/*"
+                  className="sr-only"
+                  aria-describedby="water-evidence-hint"
+                  onChange={handleEvidenceChange}
+                />
+                {evidenceFile && uploadedEvidenceName ? (
+                  <div className="flex items-center gap-3 rounded-xl border border-border bg-muted/60 p-3">
+                    {evidenceFile.previewUrl ? (
+                      // eslint-disable-next-line @next/next/no-img-element
+                      <img
+                        src={evidenceFile.previewUrl}
+                        alt={`Preview of ${uploadedEvidenceName}`}
+                        className="size-12 shrink-0 rounded-lg border border-border object-cover"
+                      />
+                    ) : (
+                      <div className="flex size-12 shrink-0 items-center justify-center rounded-lg border border-border bg-inset text-teal-ink">
+                        <Video className="size-5" aria-hidden="true" />
+                      </div>
+                    )}
+                    <div className="min-w-0 flex-1">
+                      <p className="truncate text-xs font-semibold text-foreground">{uploadedEvidenceName}</p>
+                      <div className="mt-1 flex flex-wrap items-center gap-2">
+                        <span className="font-mono text-2xs text-muted-foreground">
+                          {formatFileSize(evidenceFile.sizeBytes)}
+                        </span>
+                        <LabelChip kind="simulated" label="Simulated upload" size="sm" />
+                      </div>
+                    </div>
+                    <Button
+                      type="button"
+                      variant="ghost"
+                      size="sm"
+                      onClick={handleRemoveEvidence}
+                      aria-label="Remove attached evidence"
+                      className="h-8 shrink-0 gap-1 px-2 text-xs text-muted-foreground hover:text-foreground"
+                    >
+                      <X className="size-3.5" aria-hidden="true" />
+                      Remove
+                    </Button>
+                  </div>
+                ) : (
+                  <button
+                    type="button"
+                    onClick={() => evidenceInputRef.current?.click()}
+                    className="flex w-full items-center justify-center gap-2 rounded-xl border border-dashed border-border-strong bg-muted/60 p-3 text-center text-xs text-muted-foreground transition-colors hover:border-teal-500/40 hover:bg-teal-500/[0.04] focus-visible:ring-2 focus-visible:ring-ring/30 focus-visible:outline-none"
+                  >
+                    <Camera className="h-4 w-4 text-teal-ink" aria-hidden="true" />
+                    <span>Choose a photo or video from your device</span>
+                  </button>
+                )}
+                <p id="water-evidence-hint" className="mt-1.5 text-2xs text-faint">
+                  Files stay on your device — the upload is simulated for this demo.
+                </p>
               </div>
 
               <div className="pt-3 border-t border-border flex justify-between items-center">

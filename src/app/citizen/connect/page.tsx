@@ -52,7 +52,7 @@ export default function DataIntegrationPage() {
             <div className="h-10 w-10 rounded-xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center text-amber-ink mb-4">
               <Zap className="h-5 w-5" />
             </div>
-            <h3 className="text-base font-bold text-foreground mb-1">Electricity Board (GESCOM)</h3>
+            <h3 className="text-base font-bold text-foreground mb-1">Electricity Department (Raichur)</h3>
             <p className="text-xs text-muted-foreground mb-4">
               Imports 12-month billing history, meter serial number, and sanctioned load tier.
             </p>

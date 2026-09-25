@@ -30,7 +30,7 @@ export function PortalShell({ role, children }: PortalShellProps) {
         <div className="flex-1 flex flex-col min-w-0 lg:pl-68">
           <TopBar onOpenSidebar={() => setSidebarOpen(true)} />
 
-          <main className="flex-1 px-4 py-6 sm:px-6 lg:px-10 lg:py-8 max-w-[88rem] w-full mx-auto">
+          <main className="animate-fade-up flex-1 px-4 py-6 sm:px-6 lg:px-10 lg:py-8 max-w-[88rem] w-full mx-auto">
             {children}
           </main>
         </div>

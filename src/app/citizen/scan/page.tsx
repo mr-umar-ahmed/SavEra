@@ -272,7 +272,7 @@ export default function SmartScanPage() {
             </Link>
             <Link href="/citizen/electricity">
               <Button variant="outline" size="sm" className="h-8 gap-1.5 border-border bg-card text-xs text-foreground">
-                <Zap className="h-3.5 w-3.5 text-amber-500" />
+                <Zap className="h-3.5 w-3.5 text-stream-electricity" />
                 <span>Electricity Hub</span>
               </Button>
             </Link>
@@ -308,7 +308,7 @@ export default function SmartScanPage() {
               : "text-muted-foreground hover:text-foreground"
           }`}
         >
-          <FileUp className="h-4 w-4 text-cyan-500" />
+          <FileUp className="h-4 w-4 text-cyan-ink" />
           <span>Label / QR Photo Upload</span>
         </button>
 
@@ -323,7 +323,7 @@ export default function SmartScanPage() {
               : "text-muted-foreground hover:text-foreground"
           }`}
         >
-          <QrCode className="h-4 w-4 text-amber-500" />
+          <QrCode className="h-4 w-4 text-amber-ink" />
           <span>Interactive Barcodes &amp; QR</span>
         </button>
 
@@ -338,7 +338,7 @@ export default function SmartScanPage() {
               : "text-muted-foreground hover:text-foreground"
           }`}
         >
-          <Scan className="h-4 w-4 text-purple-500" />
+          <Scan className="h-4 w-4 text-purple-ink" />
           <span>Manual Code Lookup</span>
         </button>
       </div>
@@ -348,7 +348,7 @@ export default function SmartScanPage() {
         {/* Scanner Viewfinder / Input Column */}
         <div className="lg:col-span-7 space-y-4">
           {mode === "camera" && (
-            <div className="relative rounded-2xl border border-border bg-card overflow-hidden shadow-xl aspect-video flex flex-col items-center justify-center bg-black/90">
+            <div className="relative rounded-2xl border border-border bg-inset overflow-hidden shadow-xl aspect-video flex flex-col items-center justify-center">
               {/* Real Video Element */}
               <video
                 ref={videoRef}
@@ -363,32 +363,32 @@ export default function SmartScanPage() {
               {/* Viewfinder Overlay and Crosshairs */}
               <div className="absolute inset-0 pointer-events-none flex flex-col items-center justify-between p-6">
                 {/* Top Status */}
-                <div className="w-full flex items-center justify-between text-2xs font-mono text-white/80">
-                  <div className="flex items-center gap-2 px-2.5 py-1 rounded-full bg-black/60 backdrop-blur-md border border-white/20">
-                    <span className={`size-2 rounded-full ${isCameraActive ? "bg-emerald-400 animate-pulse" : "bg-amber-400"}`} />
+                <div className="w-full flex items-center justify-between text-2xs font-mono text-foreground">
+                  <div className="flex items-center gap-2 px-2.5 py-1 rounded-full bg-card/85 backdrop-blur-md border border-border">
+                    <span aria-hidden="true" className={`size-2 rounded-full ${isCameraActive ? "bg-tone-normal animate-pulse" : "bg-tone-moderate"}`} />
                     <span>{isCameraActive ? "OPTICAL SENSOR ACTIVE" : "CAMERA STANDBY"}</span>
                   </div>
-                  <div className="px-2.5 py-1 rounded-full bg-black/60 backdrop-blur-md border border-white/20">
+                  <div className="px-2.5 py-1 rounded-full bg-card/85 backdrop-blur-md border border-border">
                     {facingMode === "environment" ? "REAR CAMERA" : "FRONT CAMERA"}
                   </div>
                 </div>
 
                 {/* Laser Reticle Box */}
-                <div className="relative w-64 h-48 border-2 border-emerald-400/60 rounded-2xl flex items-center justify-center shadow-[0_0_20px_rgba(16,185,129,0.3)]">
+                <div className="relative w-64 h-48 border-2 border-positive/60 rounded-2xl flex items-center justify-center shadow-[0_0_20px_color-mix(in_srgb,var(--positive)_35%,transparent)]">
                   {/* Corner Brackets */}
-                  <div className="absolute -top-1 -left-1 w-5 h-5 border-t-4 border-l-4 border-emerald-400 rounded-tl-lg" />
-                  <div className="absolute -top-1 -right-1 w-5 h-5 border-t-4 border-r-4 border-emerald-400 rounded-tr-lg" />
-                  <div className="absolute -bottom-1 -left-1 w-5 h-5 border-b-4 border-l-4 border-emerald-400 rounded-bl-lg" />
-                  <div className="absolute -bottom-1 -right-1 w-5 h-5 border-b-4 border-r-4 border-emerald-400 rounded-br-lg" />
+                  <div className="absolute -top-1 -left-1 w-5 h-5 border-t-4 border-l-4 border-positive rounded-tl-lg" />
+                  <div className="absolute -top-1 -right-1 w-5 h-5 border-t-4 border-r-4 border-positive rounded-tr-lg" />
+                  <div className="absolute -bottom-1 -left-1 w-5 h-5 border-b-4 border-l-4 border-positive rounded-bl-lg" />
+                  <div className="absolute -bottom-1 -right-1 w-5 h-5 border-b-4 border-r-4 border-positive rounded-br-lg" />
 
                   {/* Animated Sweeping Laser Line */}
                   {isScanning && (
-                    <div className="absolute left-2 right-2 h-0.5 bg-gradient-to-r from-transparent via-emerald-400 to-transparent shadow-[0_0_12px_#34d399] animate-bounce" />
+                    <div className="absolute left-2 right-2 h-0.5 bg-gradient-to-r from-transparent via-positive to-transparent shadow-[0_0_12px_var(--positive)] animate-bounce" />
                   )}
 
-                  <div className="text-center px-4 py-2 bg-black/50 backdrop-blur-sm rounded-lg border border-white/10">
-                    <QrCode className="size-6 text-emerald-400 mx-auto mb-1 animate-pulse" />
-                    <span className="text-2xs font-mono text-white/90 font-medium block">
+                  <div className="text-center px-4 py-2 bg-card/85 backdrop-blur-sm rounded-lg border border-border">
+                    <QrCode className="size-6 text-positive mx-auto mb-1 animate-pulse" />
+                    <span className="text-2xs font-mono text-foreground font-medium block">
                       Align Barcode / QR / Star Label
                     </span>
                   </div>
@@ -396,7 +396,7 @@ export default function SmartScanPage() {
 
                 {/* Bottom Instructions */}
                 <div className="w-full text-center">
-                  <span className="text-2xs text-white/70 bg-black/60 px-3 py-1 rounded-full backdrop-blur-md border border-white/15">
+                  <span className="text-2xs text-soft bg-card/85 px-3 py-1 rounded-full backdrop-blur-md border border-border">
                     Position BEE Star Label or EAN Barcode inside reticle
                   </span>
                 </div>
@@ -410,7 +410,7 @@ export default function SmartScanPage() {
                       onClick={stopCamera}
                       size="sm"
                       variant="outline"
-                      className="h-8 gap-1.5 bg-black/70 border-white/20 text-white text-xs hover:bg-black/90"
+                      className="h-8 gap-1.5 bg-card/85 backdrop-blur-md text-xs"
                     >
                       <CameraOff className="size-3.5" />
                       <span>Stop Feed</span>
@@ -419,7 +419,8 @@ export default function SmartScanPage() {
                     <Button
                       onClick={startCamera}
                       size="sm"
-                      className="h-8 gap-1.5 bg-emerald-500 hover:bg-emerald-600 text-black font-semibold text-xs"
+                      variant="positive"
+                      className="h-8 gap-1.5 font-semibold text-xs"
                     >
                       <Camera className="size-3.5" />
                       <span>Start Camera</span>
@@ -430,7 +431,7 @@ export default function SmartScanPage() {
                     onClick={toggleFacingMode}
                     size="sm"
                     variant="outline"
-                    className="h-8 gap-1.5 bg-black/70 border-white/20 text-white text-xs hover:bg-black/90"
+                    className="h-8 gap-1.5 bg-card/85 backdrop-blur-md text-xs"
                   >
                     <SwitchCamera className="size-3.5" />
                     <span>Flip</span>
@@ -442,7 +443,9 @@ export default function SmartScanPage() {
                     onClick={() => setSoundEnabled(!soundEnabled)}
                     size="sm"
                     variant="outline"
-                    className="h-8 w-8 p-0 bg-black/70 border-white/20 text-white hover:bg-black/90"
+                    className="h-8 w-8 p-0 bg-card/85 backdrop-blur-md"
+                    aria-label={soundEnabled ? "Mute beep" : "Enable scan sound"}
+                    aria-pressed={soundEnabled}
                     title={soundEnabled ? "Mute beep" : "Enable scan sound"}
                   >
                     {soundEnabled ? <Volume2 className="size-3.5" /> : <VolumeX className="size-3.5 text-muted-foreground" />}
@@ -454,9 +457,9 @@ export default function SmartScanPage() {
                       triggerSuccessfulScan(next);
                     }}
                     size="sm"
-                    className="h-8 gap-1 bg-white/20 hover:bg-white/30 text-white text-xs border border-white/20"
+                    className="h-8 gap-1 text-xs"
                   >
-                    <Sparkles className="size-3.5 text-amber-300" />
+                    <Sparkles className="size-3.5" />
                     <span>Simulate Scan</span>
                   </Button>
                 </div>
@@ -465,7 +468,7 @@ export default function SmartScanPage() {
               {/* Camera Error Prompt */}
               {cameraError && !isCameraActive && (
                 <div className="absolute inset-4 rounded-xl bg-card/95 border border-border p-6 flex flex-col items-center justify-center text-center space-y-3 z-10">
-                  <AlertCircle className="size-8 text-amber-500" />
+                  <AlertCircle className="size-8 text-amber-ink" />
                   <p className="text-xs text-muted-foreground max-w-sm">{cameraError}</p>
                   <div className="flex items-center gap-2 pt-2">
                     <Button
@@ -491,7 +494,7 @@ export default function SmartScanPage() {
 
           {mode === "upload" && (
             <div className="rounded-2xl border border-dashed border-border bg-card/60 p-8 flex flex-col items-center justify-center text-center space-y-4">
-              <div className="size-16 rounded-2xl bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center text-cyan-500">
+              <div className="size-16 rounded-2xl bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center text-cyan-ink">
                 <FileUp className="size-8 animate-pulse" />
               </div>
 
@@ -511,7 +514,7 @@ export default function SmartScanPage() {
                 />
                 <Button
                   asChild
-                  className="bg-cyan-600 hover:bg-cyan-700 text-white font-semibold text-xs h-9 gap-2 cursor-pointer"
+                  className="font-semibold text-xs h-9 gap-2 cursor-pointer"
                 >
                   <div>
                     <FileUp className="size-4" />
@@ -521,9 +524,9 @@ export default function SmartScanPage() {
               </label>
 
               {isSimulatingOcr && (
-                <div className="flex items-center gap-2 text-xs text-cyan-400 font-mono animate-pulse">
+                <div role="status" className="flex items-center gap-2 text-xs text-cyan-ink font-mono animate-pulse">
                   <Sparkles className="size-3.5" />
-                  <span>Processing image with Computer Vision OCR engine...</span>
+                  <span>Simulated OCR — reading the label and barcode…</span>
                 </div>
               )}
             </div>
@@ -570,12 +573,12 @@ export default function SmartScanPage() {
 
                     {/* Realistic Barcode Stripes Graphic */}
                     <div className="pt-2 border-t border-border/60 flex items-center justify-between">
-                      <div className="flex items-end gap-[1.5px] h-6 px-1 bg-white/90 rounded border border-black/20">
+                      <div className="flex items-end gap-[1.5px] h-6 px-1 bg-card rounded border border-border-strong">
                         {[4, 2, 6, 3, 5, 2, 7, 4, 3, 6, 2, 5, 4, 7, 3, 2, 5, 6, 3, 4, 5, 2].map((h, i) => (
                           <div
                             key={i}
                             style={{ height: `${h * 3}px`, width: i % 3 === 0 ? "2.5px" : "1.5px" }}
-                            className="bg-black"
+                            className="bg-foreground"
                           />
                         ))}
                       </div>
@@ -677,15 +680,15 @@ export default function SmartScanPage() {
             {/* BEE Star Rating Visual */}
             <div className="p-3.5 rounded-xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-between">
               <div>
-                <span className="text-xs font-bold text-amber-500 block">BEE Energy Star Rating</span>
+                <span className="text-xs font-bold text-amber-ink block">BEE Energy Star Rating</span>
                 <span className="text-2xs text-muted-foreground">Bureau of Energy Efficiency (India)</span>
               </div>
-              <div className="flex items-center gap-1 text-amber-500">
+              <div className="flex items-center gap-1 text-amber-ink">
                 {[1, 2, 3, 4, 5].map((s) => (
                   <span
                     key={s}
                     className={`text-base font-bold ${
-                      s <= (matched.star ?? 3) ? "text-amber-400" : "text-amber-500/20"
+                      s <= (matched.star ?? 3) ? "text-amber-ink" : "text-amber-ink/25"
                     }`}
                   >
                     ★

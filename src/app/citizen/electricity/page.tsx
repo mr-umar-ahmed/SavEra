@@ -39,10 +39,15 @@ import { computeBill } from "@/lib/engine/tariff";
 import { Input } from "@/components/ui/input";
 import { Edit3, PlusCircle } from "lucide-react";
 import { toast } from "sonner";
+import { Camera, PenLine } from "lucide-react";
+import { BillDropzone } from "@/components/features/bills";
+import { LabelChip } from "@/components/savera/LabelChip";
 
 import { consumptionStatusLabel, consumptionStatusTone } from "@/types/common";
+import { useFirstRunGate } from "@/components/features/onboarding/useFirstRunGate";
 
 export default function CitizenElectricityDashboard() {
+  const gate = useFirstRunGate();
   const user = useSessionStore((s) => s.user);
   const { household } = useCurrentHousehold();
   const currentHouseholdId = household?.id || user?.householdId || "H-1024";
@@ -58,8 +63,11 @@ export default function CitizenElectricityDashboard() {
   const [showBillModal, setShowBillModal] = useState(false);
   const [billKwhInput, setBillKwhInput] = useState("");
   const [billAmountInput, setBillAmountInput] = useState("");
+  // How the bill is being logged (segmented control) and where the saved values came from.
+  const [billEntryMode, setBillEntryMode] = useState<"upload" | "manual">("upload");
+  const [billSource, setBillSource] = useState<"manual" | "upload">("manual");
 
-  if (!analysis) {
+  if (!gate.ready || !analysis) {
     return (
       <div className="flex h-64 items-center justify-center">
         <div className="h-6 w-6 rounded-full border-2 border-primary border-t-transparent animate-spin" />
@@ -134,7 +142,7 @@ export default function CitizenElectricityDashboard() {
       meterCurr: 2400 + kwh,
       consumerCategory: "domestic",
       tariffName: "Demo Domestic LT-1",
-      source: "manual",
+      source: billSource,
     });
 
     setShowBillModal(false);
@@ -172,6 +180,8 @@ export default function CitizenElectricityDashboard() {
               onClick={() => {
                 setBillKwhInput(measuredKwh.toString());
                 setBillAmountInput(currentBillAmount.toString());
+                setBillSource("manual");
+                setBillEntryMode("upload");
                 setShowBillModal(true);
               }}
               className="h-10 gap-2 px-4 text-xs font-semibold rounded-xl border-border bg-muted hover:bg-secondary text-foreground"
@@ -215,6 +225,62 @@ export default function CitizenElectricityDashboard() {
               ✕ Close
             </button>
           </div>
+
+          {/* Entry mode: real file picker (simulated OCR) or manual form */}
+          <div
+            role="radiogroup"
+            aria-label="How would you like to log this bill?"
+            className="inline-flex w-full sm:w-auto rounded-full border border-border bg-muted p-1"
+          >
+            {(
+              [
+                { id: "upload", label: "Upload bill photo", Icon: Camera },
+                { id: "manual", label: "Enter manually", Icon: PenLine },
+              ] as const
+            ).map((opt) => {
+              const selected = billEntryMode === opt.id;
+              return (
+                <button
+                  key={opt.id}
+                  type="button"
+                  role="radio"
+                  aria-checked={selected}
+                  onClick={() => setBillEntryMode(opt.id)}
+                  className={`flex flex-1 items-center justify-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-semibold transition-colors sm:flex-none sm:px-4 ${
+                    selected
+                      ? "bg-card text-foreground shadow-sm border border-border"
+                      : "text-muted-foreground hover:text-foreground"
+                  }`}
+                >
+                  <opt.Icon className={`size-3.5 ${selected ? "text-positive" : ""}`} />
+                  <span>{opt.label}</span>
+                </button>
+              );
+            })}
+          </div>
+
+          {billEntryMode === "upload" && (
+            <div className="space-y-2">
+              <BillDropzone
+                compact
+                stream="electricity"
+                scanDurationMs={2000}
+                onExtracted={(r) => {
+                  setBillKwhInput(String(r.extraction.kwh));
+                  setBillAmountInput(String(r.extraction.amount));
+                  setBillSource("upload");
+                  toast.success("Bill read — fields filled (Simulated OCR). Review and save.");
+                }}
+              />
+              {billSource === "upload" && (
+                <p className="flex flex-wrap items-center gap-2 text-2xs text-muted-foreground">
+                  <LabelChip kind="simulated" label="Simulated OCR" size="sm" />
+                  <span>The fields below were filled from your bill — check them before saving.</span>
+                </p>
+              )}
+            </div>
+          )}
+
           <form onSubmit={handleSaveBill} className="grid grid-cols-1 sm:grid-cols-3 gap-3">
             <div>
               <label className="block text-xs font-medium text-soft mb-1">
@@ -885,7 +951,7 @@ export default function CitizenElectricityDashboard() {
               <div className="p-4 rounded-xl bg-muted/60 border border-border/60">
                 <span className="text-2xs text-faint uppercase block font-sans">Billed Amount</span>
                 <span className="text-xl font-bold text-foreground">₹{currentBillAmount.toLocaleString("en-IN")}</span>
-                <span className="text-2xs text-faint block mt-0.5 font-sans">GESCOM LT-1/LT-2</span>
+                <span className="text-2xs text-faint block mt-0.5 font-sans">Domestic LT-2 · Demo tariff</span>
               </div>
               <div className="p-4 rounded-xl bg-muted/60 border border-border/60">
                 <span className="text-2xs text-faint uppercase block font-sans">vs Last Month</span>

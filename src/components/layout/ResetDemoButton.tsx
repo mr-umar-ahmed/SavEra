@@ -6,6 +6,7 @@ import { toast } from "sonner";
 import { useDataStore } from "@/stores/data";
 import { useSessionStore } from "@/stores/session";
 import { useLpgOpsStore } from "@/stores/lpgOps";
+import { useOnboardingStore } from "@/stores/onboarding";
 import { Button } from "@/components/ui/button";
 
 export function ResetDemoButton() {
@@ -18,8 +19,9 @@ export function ResetDemoButton() {
     try {
       resetDemo(demoNow);
       useLpgOpsStore.getState().reset();
+      useOnboardingStore.getState().reset();
       toast.success("Demo database reset", {
-        description: `All households, utility logs, and cases re-anchored to ${demoNow}.`,
+        description: `All households, utility logs, and cases re-anchored to ${demoNow}. First-run setup will show again.`,
       });
     } finally {
       setLoading(false);
@@ -31,7 +33,7 @@ export function ResetDemoButton() {
       size="sm"
       onClick={handleReset}
       disabled={loading}
-      className="h-10 gap-2 px-4 text-sm"
+      className="h-10 gap-2 px-2.5 text-sm has-[>svg]:px-2.5 sm:px-4 sm:has-[>svg]:px-3.5"
       title="Reset mock database to default seeded state"
     >
       <RotateCcw className={`size-4 ${loading ? "animate-spin" : ""}`} />

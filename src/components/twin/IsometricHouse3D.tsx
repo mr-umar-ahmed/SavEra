@@ -141,7 +141,7 @@ export function IsometricHouse3D() {
                   : "text-muted-foreground hover:text-foreground"
               }`}
             >
-              <Sun className="h-3.5 w-3.5 text-amber-500" />
+              <Sun className="h-3.5 w-3.5 text-amber-ink" />
               <span>Day (Sun)</span>
             </button>
             <button
@@ -155,7 +155,7 @@ export function IsometricHouse3D() {
                   : "text-muted-foreground hover:text-foreground"
               }`}
             >
-              <Sparkles className="h-3.5 w-3.5 text-rose-400" />
+              <Sparkles className="h-3.5 w-3.5 text-rose-ink" />
               <span>Evening</span>
             </button>
             <button
@@ -165,11 +165,11 @@ export function IsometricHouse3D() {
               }}
               className={`flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-medium transition-all ${
                 timeOfDay === "night"
-                  ? "bg-indigo-500/20 text-indigo-400 font-bold shadow-sm"
+                  ? "bg-indigo-500/20 text-indigo-ink font-bold shadow-sm"
                   : "text-muted-foreground hover:text-foreground"
               }`}
             >
-              <Moon className="h-3.5 w-3.5 text-indigo-400" />
+              <Moon className="h-3.5 w-3.5 text-indigo-ink" />
               <span>Night Peak</span>
             </button>
           </div>
@@ -183,7 +183,7 @@ export function IsometricHouse3D() {
           {/* Rooftop Solar Bar */}
           <div className="p-3.5 rounded-2xl border border-border/80 bg-muted/50 backdrop-blur-md flex flex-wrap items-center justify-between gap-3 shadow-inner">
             <div className="flex items-center gap-2.5">
-              <div className="h-7 w-7 rounded-lg bg-amber-500/15 border border-amber-500/30 flex items-center justify-center text-amber-500">
+              <div className="h-7 w-7 rounded-lg bg-amber-500/15 border border-amber-500/30 flex items-center justify-center text-amber-ink">
                 <Sun className="h-4 w-4" />
               </div>
               <div>
@@ -192,7 +192,7 @@ export function IsometricHouse3D() {
                 </span>
                 <span className="text-2xs text-muted-foreground block">
                   Solar Generating:{" "}
-                  <strong className="text-amber-500 font-mono">{solarGenerationKw.toFixed(1)} kW</strong>
+                  <strong className="text-amber-ink font-mono">{solarGenerationKw.toFixed(1)} kW</strong>
                 </span>
               </div>
             </div>
@@ -462,7 +462,7 @@ export function IsometricHouse3D() {
             </div>
             <div className="flex items-center justify-between text-soft">
               <span>Solar Supply:</span>
-              <span className="font-bold text-amber-500">-{solarGenerationKw.toFixed(1)} kW</span>
+              <span className="font-bold text-amber-ink">-{solarGenerationKw.toFixed(1)} kW</span>
             </div>
             <div className="pt-2 border-t border-border flex items-center justify-between">
               <span className="font-bold text-foreground">Net Grid Draw:</span>

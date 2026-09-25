@@ -456,7 +456,7 @@ export default function SupervisorCaseWorkspacePage({
               value={notes}
               onChange={(e) => setNotes(e.target.value)}
               placeholder="e.g. Inspect main valve manifold at Sector 2 and verify junction pressure at Street B."
-              className="w-full p-3 rounded-xl bg-inset border border-border text-xs text-foreground placeholder-white/30 focus:outline-none focus:border-teal-500/50"
+              className="w-full p-3 rounded-xl bg-inset border border-border text-xs text-foreground placeholder:text-faint focus:outline-none focus:border-teal-500/50"
             />
           </div>
 
@@ -528,7 +528,7 @@ export default function SupervisorCaseWorkspacePage({
         <div className="p-6 rounded-2xl border border-amber-500/30 bg-amber-500/[0.03] backdrop-blur-xl space-y-6">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2.5">
-              <div className="h-3 w-3 rounded-full bg-amber-400 animate-ping" />
+              <div aria-hidden="true" className="h-3 w-3 rounded-full bg-tone-moderate animate-ping" />
               <h3 className="text-sm font-bold text-amber-ink font-mono uppercase tracking-wider">
                 Live Field Verification In Progress
               </h3>

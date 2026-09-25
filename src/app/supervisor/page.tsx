@@ -152,7 +152,7 @@ export default function SupervisorHomePage() {
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-border">
           <div>
             <div className="flex items-center gap-2">
-              <span className="h-2 w-2 rounded-full bg-emerald-400 animate-pulse" />
+              <span aria-hidden="true" className="h-2 w-2 rounded-full bg-tone-normal animate-pulse" />
               <h3 className="text-base font-bold text-foreground">
                 Ward 24 Geographic Infrastructure &amp; Supply Pipeline Network
               </h3>
@@ -249,7 +249,7 @@ export default function SupervisorHomePage() {
               >
                 <div className="flex items-center justify-between mb-1">
                   <span className="text-xs font-bold text-foreground flex items-center gap-1.5">
-                    <Droplet className="size-3.5 text-cyan-400" />
+                    <Droplet className="size-3.5 text-cyan-ink" />
                     <span>Ward 24 Reservoir (OHT Gandhi Nagar)</span>
                   </span>
                   <span className="text-2xs font-mono font-bold text-positive">72% Full</span>
@@ -270,10 +270,10 @@ export default function SupervisorHomePage() {
               >
                 <div className="flex items-center justify-between mb-1">
                   <span className="text-xs font-bold text-foreground flex items-center gap-1.5">
-                    <MapPin className="size-3.5 text-amber-500" />
+                    <MapPin className="size-3.5 text-amber-ink" />
                     <span>Field Team: Assistant Arif</span>
                   </span>
-                  <span className="text-2xs font-mono text-amber-500 bg-amber-500/10 px-1.5 py-0.5 rounded">
+                  <span className="text-2xs font-mono text-amber-ink bg-amber-500/10 px-1.5 py-0.5 rounded">
                     GPS Active
                   </span>
                 </div>

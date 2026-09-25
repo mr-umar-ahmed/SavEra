@@ -31,7 +31,7 @@ export function TopBar({ onOpenSidebar }: TopBarProps) {
   const currentTitle = sectionTitle(pathname);
 
   return (
-    <header className="bg-background/90 border-border sticky top-0 z-30 flex h-20 w-full items-center justify-between border-b px-4 backdrop-blur-md lg:px-10">
+    <header className="bg-background/90 border-border sticky top-0 z-30 flex h-20 w-full items-center justify-between border-b px-3 backdrop-blur-md sm:px-4 lg:px-10">
       {/* Left: mobile menu + breadcrumb */}
       <div className="flex items-center gap-3">
         {onOpenSidebar && (
@@ -49,17 +49,17 @@ export function TopBar({ onOpenSidebar }: TopBarProps) {
         <nav aria-label="Breadcrumb" className="flex items-center gap-2 text-base">
           <span className="text-foreground hidden font-bold tracking-wide sm:inline-block">SAVERA</span>
           <span className="text-faint hidden sm:inline-block">/</span>
-          <span className="text-primary font-semibold">{currentTitle}</span>
+          <span className="text-primary max-w-[7.5rem] truncate font-semibold sm:max-w-none">{currentTitle}</span>
         </nav>
       </div>
 
       {/* Right: global controls */}
-      <div className="flex items-center gap-2 sm:gap-3">
+      <div className="flex items-center gap-1.5 sm:gap-3">
         <Button
           variant="outline"
           size="sm"
           onClick={toggleNotifications}
-          className="relative h-10 gap-2 px-3 text-sm font-semibold sm:px-4"
+          className="relative h-10 gap-2 px-2.5 text-sm font-semibold has-[>svg]:px-2.5 sm:px-4 sm:has-[>svg]:px-3.5"
           aria-label={`Alerts${unreadCount > 0 ? `, ${unreadCount} unread` : ""}`}
         >
           <Bell className="size-[1.1rem]" />
