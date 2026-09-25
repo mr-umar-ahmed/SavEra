@@ -20,6 +20,7 @@ import { LpgSkeleton } from "@/components/features/lpg/LpgSkeleton";
 import { RefillPredictionCard } from "@/components/features/lpg/RefillPredictionCard";
 import { useLpgHousehold } from "@/lib/api/hooks/lpg";
 import { lpgApi } from "@/lib/api/lpg";
+import { GasSupplyAnomalySimulator } from "@/components/gas/GasSupplyAnomalySimulator";
 import { formatDate, formatDayMonth, formatDays, formatKg } from "@/lib/format";
 
 const rate = (n?: number) => (n === undefined ? "—" : `${n.toFixed(2)} kg/day`);
@@ -36,6 +37,8 @@ export default function CitizenLpgDashboard() {
     }
   }, [mounted, analysis.status, analysis.deltaPct, householdId]);
 
+  const [viewMode, setViewMode] = React.useState<"smart_twin" | "tracker">("smart_twin");
+
   if (!mounted) return <LpgSkeleton />;
 
   const current = analysis.current;
@@ -44,9 +47,9 @@ export default function CitizenLpgDashboard() {
   return (
     <div className="space-y-6">
       <PageHeader
-        eyebrow="LPG"
-        title="Your LPG"
-        description="Track your cylinder, understand your consumption, get alerted when usage changes and predict your next refill."
+        eyebrow="LPG & Piped Gas"
+        title="Your Gas Supply & Smart Metering"
+        description="Monitor smart ultrasonic gas telemetry, track cylinder refills, prevent pipeline leak risks, and inspect live 3D meter-to-meter distribution."
         chips={
           <>
             <EstimatedChip confidence={analysis.confidence} inputs={analysis.inputs} />
@@ -75,7 +78,39 @@ export default function CitizenLpgDashboard() {
         }
       />
 
-      {view.officialAlert ? <AlertBanner alert={view.officialAlert} /> : null}
+      {/* View Switcher: Smart 3D Gas Twin vs Traditional Cylinder Tracker */}
+      <div className="flex items-center p-1 rounded-2xl bg-muted/80 border border-border w-fit shadow-sm">
+        <button
+          type="button"
+          onClick={() => setViewMode("smart_twin")}
+          className={`px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-2 ${
+            viewMode === "smart_twin"
+              ? "bg-card text-foreground shadow-sm"
+              : "text-muted-foreground hover:text-foreground"
+          }`}
+        >
+          <Flame className="size-3.5 text-amber-500" />
+          <span>Smart Gas Meter & 3D Network Twin</span>
+        </button>
+        <button
+          type="button"
+          onClick={() => setViewMode("tracker")}
+          className={`px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-2 ${
+            viewMode === "tracker"
+              ? "bg-card text-foreground shadow-sm"
+              : "text-muted-foreground hover:text-foreground"
+          }`}
+        >
+          <Cylinder className="size-3.5 text-soft" />
+          <span>Cylinder & Refill Tracker</span>
+        </button>
+      </div>
+
+      {viewMode === "smart_twin" ? (
+        <GasSupplyAnomalySimulator mode="citizen" />
+      ) : (
+        <>
+          {view.officialAlert ? <AlertBanner alert={view.officialAlert} /> : null}
 
       {!openCylinder && analysis.cycles.length === 0 ? (
         <EmptyState
@@ -192,6 +227,8 @@ export default function CitizenLpgDashboard() {
               inUseSince={openCylinder?.startDate}
             />
           </div>
+        </>
+      )}
         </>
       )}
     </div>

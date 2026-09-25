@@ -3,8 +3,22 @@
 import { useEffect, useRef, useState } from "react";
 import * as THREE from "three";
 import { useTheme } from "next-themes";
+import Link from "next/link";
 import { useReducedMotion } from "@/components/hooks/useReducedMotion";
-import { Box, Droplet, Flame, Zap } from "lucide-react";
+import {
+  ArrowRight,
+  Box,
+  CheckCircle2,
+  Cpu,
+  Droplet,
+  Flame,
+  Gauge,
+  Sparkles,
+  Sun,
+  X,
+  Zap,
+} from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 /** Scene palette per theme ("Earth" light / "Espresso" dark). */
 const HERO_PALETTE = {
@@ -52,6 +66,93 @@ const HERO_PALETTE = {
   },
 } as const;
 
+export interface ClickableHeroItem {
+  id: "house" | "solar" | "tank" | "electricity" | "water" | "gas";
+  title: string;
+  category: "Micro-Grid Habitat" | "Solar Photovoltaic" | "Hydraulic Storage" | "Electricity" | "Potable Water" | "Gas / LPG";
+  telemetry: string;
+  metricLabel: string;
+  metricValue: string;
+  status: string;
+  twinUrl: string;
+  description: string;
+}
+
+const HERO_CLICKABLE_ITEMS: Record<string, ClickableHeroItem> = {
+  house: {
+    id: "house",
+    title: "Connected Household Habitat",
+    category: "Micro-Grid Habitat",
+    telemetry: "Real-time Multi-Utility Sync",
+    metricLabel: "Active Domestic Load",
+    metricValue: "1.15 kW · 240V",
+    status: "Optimal Efficiency",
+    twinUrl: "/citizen/twin",
+    description:
+      "Integrated micro-grid balancing active HVAC setpoints, appliance duty cycles, solar self-consumption, and municipal utility inputs.",
+  },
+  solar: {
+    id: "solar",
+    title: "Rooftop Solar PV Array",
+    category: "Solar Photovoltaic",
+    telemetry: "Monocrystalline Bifacial (3.2 kWp)",
+    metricLabel: "Current Generation",
+    metricValue: "2.8 kW (87.5% Yield)",
+    status: "Exporting 1.65 kW to Grid",
+    twinUrl: "/citizen/twin",
+    description:
+      "Rooftop solar system providing daytime peak power, charging household storage, and offsetting thermal compressor workloads.",
+  },
+  tank: {
+    id: "tank",
+    title: "Overhead Potable Water Tank",
+    category: "Hydraulic Storage",
+    telemetry: "1,000 L HDPE Food-Grade Tank",
+    metricLabel: "Storage Level",
+    metricValue: "850 L (85% Capacity)",
+    status: "Pressure Head: 2.4 bar",
+    twinUrl: "/citizen/twin?tab=water",
+    description:
+      "Roof-mounted storage buffer supplied by municipal DMA feeder, ensuring uninterrupted domestic gravity feed during intermittent supply hours.",
+  },
+  electricity: {
+    id: "electricity",
+    title: "Smart Electricity Grid Inflow",
+    category: "Electricity",
+    telemetry: "Bi-directional Smart Net Meter",
+    metricLabel: "Net Grid Draw",
+    metricValue: "0.00 kW (100% Solar Self-Powered)",
+    status: "OpenADR 2.0b Ready",
+    twinUrl: "/citizen/twin",
+    description:
+      "Automated time-of-day peak shifting preventing dynamic tariff penalties during high-demand evening hours.",
+  },
+  water: {
+    id: "water",
+    title: "Municipal Water Supply Stream",
+    category: "Potable Water",
+    telemetry: "Zone Bulk & Household Smart Ultrasonic",
+    metricLabel: "Supply Inflow Rate",
+    metricValue: "42.5 m³/h · 3.4 bar",
+    status: "Normal Water Balance",
+    twinUrl: "/citizen/twin?tab=water",
+    description:
+      "Meter-to-meter hydraulic distribution with non-revenue water (NRW) loss detection comparing supplier inflow to household meters.",
+  },
+  gas: {
+    id: "gas",
+    title: "City Gas (PNG) & Smart LPG Stream",
+    category: "Gas / LPG",
+    telemetry: "Ultrasonic Gas Meter & Smart Tare Scale",
+    metricLabel: "Gas Flow & Pressure",
+    metricValue: "0.28 SCMH · 21.0 mbar",
+    status: "Solenoid Latch OPEN",
+    twinUrl: "/citizen/twin?tab=gas",
+    description:
+      "Real-time pipeline pressure monitoring with automated 250ms emergency solenoid cut-off and 30-second pressure integrity verification.",
+  },
+};
+
 export function Hero3D() {
   const containerRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -59,6 +160,9 @@ export function Hero3D() {
   const [webGlSupported, setWebGlSupported] = useState(true);
   const { resolvedTheme } = useTheme();
   const palette = resolvedTheme === "dark" ? HERO_PALETTE.dark : HERO_PALETTE.light;
+
+  const [activeItem, setActiveItem] = useState<ClickableHeroItem | null>(null);
+  const [hoveredTitle, setHoveredTitle] = useState<string | null>(null);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -142,11 +246,19 @@ export function Hero3D() {
     });
     const edgeMat = new THREE.LineBasicMaterial({ color: palette.edge, transparent: true, opacity: 0.7 });
 
+    // Clickable Mesh Registry
+    const clickableMeshes: { mesh: THREE.Object3D; key: string }[] = [];
+    const registerClickable = (mesh: THREE.Object3D, key: string) => {
+      mesh.userData = { key };
+      clickableMeshes.push({ mesh, key });
+    };
+
     // Main living cube
     const mainCubeGeo = new THREE.BoxGeometry(3.6, 2.4, 3.2);
     const mainCube = new THREE.Mesh(mainCubeGeo, glassMat);
     mainCube.position.set(0, 1.2, 0);
     mainGroup.add(mainCube);
+    registerClickable(mainCube, "house");
 
     const mainEdges = new THREE.LineSegments(new THREE.EdgesGeometry(mainCubeGeo), edgeMat);
     mainCube.add(mainEdges);
@@ -156,6 +268,7 @@ export function Hero3D() {
     const upper = new THREE.Mesh(upperGeo, glassMat);
     upper.position.set(-0.4, 3.2, -0.2);
     mainGroup.add(upper);
+    registerClickable(upper, "house");
 
     const upperEdges = new THREE.LineSegments(new THREE.EdgesGeometry(upperGeo), edgeMat);
     upper.add(upperEdges);
@@ -171,6 +284,7 @@ export function Hero3D() {
     solar.position.set(-0.4, 4.05, -0.2);
     solar.rotation.x = -0.15;
     mainGroup.add(solar);
+    registerClickable(solar, "solar");
 
     // Rooftop Water Tank (Cylinder)
     const tankGeo = new THREE.CylinderGeometry(0.5, 0.5, 1.0, 16);
@@ -184,6 +298,7 @@ export function Hero3D() {
     const tank = new THREE.Mesh(tankGeo, tankMat);
     tank.position.set(1.2, 2.9, 1.0);
     mainGroup.add(tank);
+    registerClickable(tank, "tank");
 
     // 3. Flowing Resource Particle Streams
     // Electricity Curve (Gold/Amber)
@@ -247,13 +362,46 @@ export function Hero3D() {
     mainGroup.add(waterStream.points);
     mainGroup.add(lpgStream.points);
 
-    // Mouse tracking for parallax rotation
-    let mouseX = 0;
-    let mouseY = 0;
-    let targetRotationX = 0;
-    let targetRotationY = 0;
+    // 4. Physical 3D Smart Meters on Base
+    const elMeterGeo = new THREE.BoxGeometry(0.35, 0.45, 0.25);
+    const elMeterMat = new THREE.MeshStandardMaterial({ color: 0xd97706, roughness: 0.3 });
+    const elMeter = new THREE.Mesh(elMeterGeo, elMeterMat);
+    elMeter.position.set(4.4, 0.3, 4.4);
+    mainGroup.add(elMeter);
+    registerClickable(elMeter, "electricity");
 
-    const handleMouseMove = (e: MouseEvent) => {
+    const waterMeterGeo = new THREE.CylinderGeometry(0.2, 0.2, 0.3, 16);
+    const waterMeterMat = new THREE.MeshStandardMaterial({ color: 0x0284c7, roughness: 0.3 });
+    const waterMeter = new THREE.Mesh(waterMeterGeo, waterMeterMat);
+    waterMeter.position.set(-4.4, 0.25, 3.4);
+    mainGroup.add(waterMeter);
+    registerClickable(waterMeter, "water");
+
+    const gasCylinderGeo = new THREE.CylinderGeometry(0.22, 0.22, 0.65, 16);
+    const gasCylinderMat = new THREE.MeshStandardMaterial({ color: 0xbe123c, roughness: 0.4 });
+    const gasCylinder = new THREE.Mesh(gasCylinderGeo, gasCylinderMat);
+    gasCylinder.position.set(3.4, 0.38, -3.4);
+    mainGroup.add(gasCylinder);
+    registerClickable(gasCylinder, "gas");
+
+    // Clickable hitboxes along the particle streams
+    const createStreamHitbox = (curve: THREE.CatmullRomCurve3, key: string) => {
+      const hitTube = new THREE.TubeGeometry(curve, 20, 0.4, 8, false);
+      const hitMat = new THREE.MeshBasicMaterial({ visible: false });
+      const hitMesh = new THREE.Mesh(hitTube, hitMat);
+      mainGroup.add(hitMesh);
+      registerClickable(hitMesh, key);
+    };
+
+    createStreamHitbox(elCurve, "electricity");
+    createStreamHitbox(waterCurve, "water");
+    createStreamHitbox(lpgCurve, "gas");
+
+    // Raycasting for clickability and hover feedback
+    const raycaster = new THREE.Raycaster();
+    const mouse = new THREE.Vector2();
+
+    const handlePointerMove = (e: MouseEvent) => {
       const rect = container.getBoundingClientRect();
       const x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
       const y = -(((e.clientY - rect.top) / rect.height) * 2 - 1);
@@ -261,9 +409,63 @@ export function Hero3D() {
       mouseY = y;
       targetRotationY = mouseX * 0.45;
       targetRotationX = mouseY * 0.25;
+
+      mouse.x = x;
+      mouse.y = y;
+      raycaster.setFromCamera(mouse, camera);
+      const intersects = raycaster.intersectObjects(clickableMeshes.map((c) => c.mesh), true);
+
+      if (intersects.length > 0) {
+        const hit = intersects[0];
+        let obj: THREE.Object3D | null = hit.object;
+        while (obj && !obj.userData?.key) {
+          obj = obj.parent;
+        }
+        if (obj?.userData?.key) {
+          const item = HERO_CLICKABLE_ITEMS[obj.userData.key];
+          if (item) {
+            setHoveredTitle(item.title);
+            container.style.cursor = "pointer";
+            return;
+          }
+        }
+      }
+
+      setHoveredTitle(null);
+      container.style.cursor = "grab";
     };
 
-    container.addEventListener("mousemove", handleMouseMove);
+    const handlePointerClick = (e: MouseEvent) => {
+      const rect = container.getBoundingClientRect();
+      mouse.x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
+      mouse.y = -(((e.clientY - rect.top) / rect.height) * 2 - 1);
+
+      raycaster.setFromCamera(mouse, camera);
+      const intersects = raycaster.intersectObjects(clickableMeshes.map((c) => c.mesh), true);
+
+      if (intersects.length > 0) {
+        const hit = intersects[0];
+        let obj: THREE.Object3D | null = hit.object;
+        while (obj && !obj.userData?.key) {
+          obj = obj.parent;
+        }
+        if (obj?.userData?.key) {
+          const item = HERO_CLICKABLE_ITEMS[obj.userData.key];
+          if (item) {
+            setActiveItem(item);
+          }
+        }
+      }
+    };
+
+    container.addEventListener("mousemove", handlePointerMove);
+    container.addEventListener("click", handlePointerClick);
+
+    // Mouse tracking for parallax rotation
+    let mouseX = 0;
+    let mouseY = 0;
+    let targetRotationX = 0;
+    let targetRotationY = 0;
 
     // Resize handler
     const handleResize = () => {
@@ -325,7 +527,8 @@ export function Hero3D() {
     return () => {
       cancelAnimationFrame(animId);
       window.removeEventListener("resize", handleResize);
-      container.removeEventListener("mousemove", handleMouseMove);
+      container.removeEventListener("mousemove", handlePointerMove);
+      container.removeEventListener("click", handlePointerClick);
 
       renderer?.dispose();
       baseGeo.dispose();
@@ -361,15 +564,23 @@ export function Hero3D() {
       <canvas ref={canvasRef} className="w-full h-full cursor-grab active:cursor-grabbing" />
 
       {/* Floating HUD Badges on 3D viewport */}
-      <div className="absolute top-4 left-4 flex flex-col gap-2 pointer-events-none">
-        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-card/90 border border-positive/30 text-positive text-xs font-mono">
+      <div className="absolute top-4 left-4 right-4 flex items-center justify-between pointer-events-none">
+        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-card/90 border border-positive/30 text-positive text-xs font-mono shadow-sm backdrop-blur-md">
           <span className="h-1.5 w-1.5 rounded-full bg-positive animate-pulse" />
           <span>Interactive 3D Habitat Model · 60 FPS</span>
         </div>
+
+        {hoveredTitle && !activeItem && (
+          <div className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-card/95 border border-border text-xs font-mono text-foreground shadow-md backdrop-blur-md animate-in fade-in">
+            <Sparkles className="size-3.5 text-amber-500" />
+            <span>Click to inspect: <strong>{hoveredTitle}</strong></span>
+          </div>
+        )}
       </div>
 
+      {/* Bottom Resource Stream Indicators */}
       <div className="absolute bottom-4 inset-x-4 flex items-center justify-center gap-3 pointer-events-none">
-        <div className="flex items-center gap-3 px-3 py-1.5 rounded-xl bg-card/90 border border-border text-xs font-mono text-soft">
+        <div className="flex flex-wrap items-center justify-center gap-3 px-3 py-1.5 rounded-xl bg-card/90 border border-border text-xs font-mono text-soft backdrop-blur-md shadow-md">
           <div className="flex items-center gap-1 text-amber-ink">
             <Zap className="h-3 w-3" />
             <span>Electricity Flow</span>
@@ -380,10 +591,60 @@ export function Hero3D() {
           </div>
           <div className="flex items-center gap-1 text-rose-ink">
             <Flame className="h-3 w-3" />
-            <span>LPG Burn</span>
+            <span>LPG / PNG Burn</span>
           </div>
         </div>
       </div>
+
+      {/* Interactive 3D Click Inspection Overlay Card */}
+      {activeItem && (
+        <div className="absolute top-4 right-4 max-w-sm w-full z-40 bg-card/95 border border-border shadow-2xl rounded-2xl p-4 backdrop-blur-xl animate-in zoom-in-95 duration-200">
+          <div className="flex items-start justify-between gap-3 border-b border-border/80 pb-2.5">
+            <div>
+              <span className="text-2xs font-mono font-bold uppercase text-positive">
+                {activeItem.category}
+              </span>
+              <h4 className="text-sm font-bold text-foreground mt-0.5">
+                {activeItem.title}
+              </h4>
+            </div>
+            <button
+              onClick={() => setActiveItem(null)}
+              className="p-1 rounded-lg text-muted-foreground hover:text-foreground hover:bg-muted"
+            >
+              <X className="size-4" />
+            </button>
+          </div>
+
+          <div className="py-3 space-y-2 text-xs font-mono">
+            <div className="p-2.5 rounded-xl bg-muted/60 border border-border/70 flex items-center justify-between">
+              <span className="text-muted-foreground">{activeItem.metricLabel}</span>
+              <strong className="text-foreground">{activeItem.metricValue}</strong>
+            </div>
+
+            <div className="flex items-center justify-between text-2xs text-muted-foreground px-1">
+              <span>Status:</span>
+              <span className="text-positive font-bold flex items-center gap-1">
+                <CheckCircle2 className="size-3" />
+                <span>{activeItem.status}</span>
+              </span>
+            </div>
+
+            <p className="text-2xs font-sans text-muted-foreground leading-relaxed pt-1">
+              {activeItem.description}
+            </p>
+          </div>
+
+          <div className="pt-2 border-t border-border flex items-center justify-end">
+            <Button asChild size="sm" className="h-8 text-xs font-bold gap-1 w-full">
+              <Link href={activeItem.twinUrl}>
+                <span>Simulate in Digital Twin</span>
+                <ArrowRight className="size-3.5" />
+              </Link>
+            </Button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

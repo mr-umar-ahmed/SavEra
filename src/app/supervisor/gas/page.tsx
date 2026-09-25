@@ -42,6 +42,7 @@ import { LpgForecastPanel } from "@/components/features/lpg/LpgForecastPanel";
 import { LpgSkeleton } from "@/components/features/lpg/LpgSkeleton";
 import { LpgTrendsPanel } from "@/components/features/lpg/LpgTrendsPanel";
 import { SectionRail, type RailItem } from "@/components/features/lpg/SectionRail";
+import { GasSupplyAnomalySimulator } from "@/components/gas/GasSupplyAnomalySimulator";
 import { useNotifications } from "@/lib/api/hooks";
 import { useCityLpgIntel, useWardLpgIntel } from "@/lib/api/hooks/lpg";
 import { lpgApi } from "@/lib/api/lpg";
@@ -82,6 +83,8 @@ export default function SupervisorLpgPage() {
   const [selectedId, setSelectedId] = React.useState<string | null>(null);
   const [sharing, setSharing] = React.useState(false);
 
+  const [superView, setSuperView] = React.useState<"scada_3d" | "operations">("scada_3d");
+
   if (!mounted) return <LpgSkeleton tiles={8} />;
 
   const { totals, rows, forecast } = ward;
@@ -107,9 +110,9 @@ export default function SupervisorLpgPage() {
   return (
     <div className="space-y-6">
       <PageHeader
-        eyebrow={`LPG · ${ward.wardName}`}
-        title={`${ward.wardName} LPG Intelligence`}
-        description="Aggregated cylinder consumption, AI-grouped alerts, demand forecast and requirement planning for your ward. Counts and totals only — no household data."
+        eyebrow={`LPG & City Gas · ${ward.wardName}`}
+        title={`${ward.wardName} Gas Distribution & SCADA Intelligence`}
+        description="Monitor meter-to-meter City Gas Distribution (CGD), PE-100 pipeline pressure, smart gas meters, and ward-wide requirement planning."
         chips={
           <>
             <StatusBadge tone={aggStatusTone(totals.status)} label={`Ward status: ${aggStatusLabel(totals.status, "lpg")}`} />
@@ -128,7 +131,39 @@ export default function SupervisorLpgPage() {
         }
       />
 
-      {lpgAlert ? <AlertBanner alert={lpgAlert} /> : null}
+      {/* Supervisor View Switcher: SCADA 3D Network vs Operations Table */}
+      <div className="flex items-center p-1 rounded-2xl bg-muted/80 border border-border w-fit shadow-sm">
+        <button
+          type="button"
+          onClick={() => setSuperView("scada_3d")}
+          className={`px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-2 ${
+            superView === "scada_3d"
+              ? "bg-card text-foreground shadow-sm"
+              : "text-muted-foreground hover:text-foreground"
+          }`}
+        >
+          <Flame className="size-3.5 text-amber-500" />
+          <span>District Gas SCADA & 3D Loss Intelligence</span>
+        </button>
+        <button
+          type="button"
+          onClick={() => setSuperView("operations")}
+          className={`px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-2 ${
+            superView === "operations"
+              ? "bg-card text-foreground shadow-sm"
+              : "text-muted-foreground hover:text-foreground"
+          }`}
+        >
+          <Table2 className="size-3.5 text-soft" />
+          <span>Ward Area Aggregates & Planning</span>
+        </button>
+      </div>
+
+      {superView === "scada_3d" ? (
+        <GasSupplyAnomalySimulator mode="supervisor" />
+      ) : (
+        <>
+          {lpgAlert ? <AlertBanner alert={lpgAlert} /> : null}
 
       <div className="grid grid-cols-1 gap-8 xl:grid-cols-[15rem_minmax(0,1fr)]">
         <SectionRail items={RAIL} />
@@ -449,6 +484,8 @@ export default function SupervisorLpgPage() {
           </SectionCard>
         </div>
       </div>
+        </>
+      )}
     </div>
   );
 }

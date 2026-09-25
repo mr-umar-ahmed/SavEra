@@ -44,7 +44,7 @@ const ROOMS: RoomMeta[] = [
     name: "Kitchen & Dining",
     icon: "🍳",
     gridArea: "col-span-1 row-span-1",
-    devices: ["fridge", "lights"],
+    devices: ["fridge", "lights", "water_pump"],
     ambientTemp: 29,
   },
   {
@@ -60,8 +60,16 @@ const ROOMS: RoomMeta[] = [
     name: "Bath & Utility",
     icon: "🚿",
     gridArea: "col-span-1 row-span-1",
-    devices: ["geyser"],
+    devices: ["geyser", "washing_machine"],
     ambientTemp: 28,
+  },
+  {
+    id: "porch",
+    name: "Garage & EV Nook",
+    icon: "🚗",
+    gridArea: "col-span-1 md:col-span-3 row-span-1",
+    devices: ["ev_charger"],
+    ambientTemp: 31,
   },
 ];
 

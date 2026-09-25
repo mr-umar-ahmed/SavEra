@@ -1,14 +1,18 @@
 "use client";
 
+import * as React from "react";
 import Link from "next/link";
-import { ArrowRight, Flame, Layers, TrendingUp, Users } from "lucide-react";
+import { ArrowRight, Flame, Layers, Table2, TrendingUp, Users } from "lucide-react";
 import { PageHeader } from "@/components/savera/PageHeader";
 import { KpiCard } from "@/components/savera/KpiCard";
 import { StatusBadge } from "@/components/savera/StatusBadge";
 import { EstimatedChip } from "@/components/savera/EstimatedChip";
 import { Button } from "@/components/ui/button";
+import { GasSupplyAnomalySimulator } from "@/components/gas/GasSupplyAnomalySimulator";
 
 export default function GovGasPage() {
+  const [govView, setGovView] = React.useState<"scada_3d" | "planning">("scada_3d");
+
   const trend = [
     { month: "Jan 2026", demand: "50,000 kg", cylinders: 3521 },
     { month: "Feb 2026", demand: "53,000 kg", cylinders: 3732 },
@@ -20,8 +24,8 @@ export default function GovGasPage() {
   return (
     <div className="space-y-6">
       <PageHeader
-        title="City LPG Distribution & Demand Forecasting"
-        subtitle="Bottled gas distribution monitoring, distributor quota allocations, and cylinder buffer logistics."
+        title="City Gas & LPG Distribution Intelligence"
+        subtitle="City Gate Station telemetry, PE-100 distribution network integrity, and cylinder buffer allocations."
         badge={
           <div className="flex items-center gap-2">
             <StatusBadge status="normal" label="Distribution Nominal" />
@@ -29,6 +33,39 @@ export default function GovGasPage() {
           </div>
         }
       />
+
+      {/* View Switcher: 3D SCADA vs Planning */}
+      <div className="flex items-center p-1 rounded-2xl bg-muted/80 border border-border w-fit shadow-sm">
+        <button
+          type="button"
+          onClick={() => setGovView("scada_3d")}
+          className={`px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-2 ${
+            govView === "scada_3d"
+              ? "bg-card text-foreground shadow-sm"
+              : "text-muted-foreground hover:text-foreground"
+          }`}
+        >
+          <Flame className="size-3.5 text-amber-500" />
+          <span>City Gas SCADA & 3D Loss Intelligence</span>
+        </button>
+        <button
+          type="button"
+          onClick={() => setGovView("planning")}
+          className={`px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-2 ${
+            govView === "planning"
+              ? "bg-card text-foreground shadow-sm"
+              : "text-muted-foreground hover:text-foreground"
+          }`}
+        >
+          <Table2 className="size-3.5 text-soft" />
+          <span>LPG Quotas & Multi-Month Planning</span>
+        </button>
+      </div>
+
+      {govView === "scada_3d" ? (
+        <GasSupplyAnomalySimulator mode="gov" />
+      ) : (
+        <>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         <KpiCard
@@ -73,6 +110,8 @@ export default function GovGasPage() {
           ))}
         </div>
       </div>
+        </>
+      )}
     </div>
   );
 }
