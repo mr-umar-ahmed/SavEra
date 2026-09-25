@@ -96,6 +96,7 @@ export interface Reminder {
 }
 
 export type TwinDeviceId = "ac" | "fan" | "lights" | "fridge" | "geyser" | "tv";
+export type TwinRoomId = "living_room" | "bedroom" | "kitchen" | "bathroom" | "utility";
 
 /** A device in the "My Home" digital twin (Simulation — Digital Twin Prototype). */
 export interface TwinDevice {
@@ -112,6 +113,7 @@ export interface TwinDevice {
   flexible: boolean;
   /** lucide-react icon name. */
   icon: string;
+  room?: TwinRoomId;
 }
 
 export const OFFICIAL_ALERT_TYPE_LABEL: Record<OfficialAlertType, string> = {

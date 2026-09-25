@@ -1,13 +1,18 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
-import type { User } from "@/types";
-import { DEMO_OTP, DEMO_PASSWORD, findAccount, findAccountByUserId } from "@/lib/auth/accounts";
+import type { DemoAccount, User } from "@/types";
+import { DEMO_OTP, DEMO_PASSWORD, findAccount, findAccountByUserId, DEMO_ACCOUNTS } from "@/lib/auth/accounts";
 import { SEED_USERS } from "@/data/seed/users";
+import { useDataStore } from "./data";
+import { createDynamicUserData, type SignUpInput } from "@/lib/auth/signUpHelper";
 
 export interface SessionState {
   user: User | null;
   pendingUserId: string | null;
   demoNow: string;
+  registeredUsers: User[];
+  registeredAccounts: DemoAccount[];
+  signUp(data: SignUpInput): { ok: boolean; user?: User; error?: string };
   login(identifier: string, password: string): { ok: boolean; error?: string };
   verifyOtp(code: string): { ok: boolean; error?: string };
   logout(): void;
@@ -24,13 +29,62 @@ export const useSessionStore = create<SessionState>()(
       user: SEED_USERS[0], // Defaults to primary citizen (Priya Sharma, H-1024)
       pendingUserId: null,
       demoNow: DEFAULT_DEMO_NOW,
+      registeredUsers: [],
+      registeredAccounts: [],
+
+      signUp(data) {
+        const emailClean = data.email.trim().toLowerCase();
+        const mobileClean = data.mobile.trim();
+
+        const { registeredAccounts } = get();
+        const existingInRegistered = registeredAccounts.some(
+          (a) => a.email.toLowerCase() === emailClean || (a.mobile && a.mobile === mobileClean),
+        );
+        const existingInDemo = DEMO_ACCOUNTS.some(
+          (a) => a.email.toLowerCase() === emailClean || (a.mobile && a.mobile === mobileClean),
+        );
+
+        if (existingInRegistered || existingInDemo) {
+          return { ok: false, error: "An account already exists with this email or mobile." };
+        }
+
+        const now = get().demoNow;
+        const result = createDynamicUserData(data, now);
+
+        // Populate data store with household, starter appliances, and 12-month billing history
+        const dataStore = useDataStore.getState();
+        if (result.household) {
+          dataStore.addHousehold(result.household);
+        }
+        if (result.appliances.length > 0) {
+          dataStore.addAppliances(result.appliances);
+        }
+        if (result.bills.length > 0) {
+          dataStore.addBills(result.bills);
+        }
+
+        set((state) => ({
+          registeredUsers: [...state.registeredUsers, result.user],
+          registeredAccounts: [...state.registeredAccounts, result.account],
+          pendingUserId: result.user.id,
+        }));
+
+        return { ok: true, user: result.user };
+      },
 
       login(identifier, password) {
-        const account = findAccount(identifier);
+        const clean = identifier.trim().toLowerCase();
+        const { registeredAccounts } = get();
+
+        const registeredAcc = registeredAccounts.find(
+          (a) => a.email.toLowerCase() === clean || (a.mobile && a.mobile === clean),
+        );
+        const account = registeredAcc || findAccount(identifier);
+
         if (!account) {
           return { ok: false, error: "Account not found with this email or mobile" };
         }
-        if (password !== DEMO_PASSWORD) {
+        if (password !== account.password && password !== DEMO_PASSWORD) {
           return { ok: false, error: "Incorrect password. Demo password is 'savera'" };
         }
         set({ pendingUserId: account.userId });
@@ -38,14 +92,15 @@ export const useSessionStore = create<SessionState>()(
       },
 
       verifyOtp(code) {
-        const { pendingUserId } = get();
+        const { pendingUserId, registeredUsers } = get();
         if (!pendingUserId) {
           return { ok: false, error: "No pending login found" };
         }
         if (code !== DEMO_OTP) {
           return { ok: false, error: "Invalid OTP. Demo OTP is '123456'" };
         }
-        const foundUser = SEED_USERS.find((u) => u.id === pendingUserId);
+        const allUsers = [...registeredUsers, ...SEED_USERS];
+        const foundUser = allUsers.find((u) => u.id === pendingUserId);
         if (!foundUser) {
           return { ok: false, error: "User profile not found" };
         }
@@ -58,9 +113,13 @@ export const useSessionStore = create<SessionState>()(
       },
 
       switchAccount(userId) {
-        const account = findAccountByUserId(userId);
+        const { registeredAccounts, registeredUsers } = get();
+        const allAccounts = [...registeredAccounts, ...DEMO_ACCOUNTS];
+        const account = allAccounts.find((a) => a.userId === userId);
         if (!account) return;
-        const foundUser = SEED_USERS.find((u) => u.id === userId);
+
+        const allUsers = [...registeredUsers, ...SEED_USERS];
+        const foundUser = allUsers.find((u) => u.id === userId);
         if (foundUser) {
           set({ user: foundUser, pendingUserId: null });
         }

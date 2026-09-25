@@ -38,15 +38,31 @@ const loginSchema = z.object({
   password: z.string().min(1, "Please enter your password"),
 });
 
+const signUpSchema = z.object({
+  name: z.string().trim().min(2, "Name must be at least 2 characters"),
+  email: z.string().trim().email("Please enter a valid email address"),
+  mobile: z.string().trim().min(10, "Please enter a valid 10-digit mobile number"),
+  password: z.string().min(4, "Password must be at least 4 characters"),
+  role: z.enum(["citizen", "supervisor", "gov"]),
+  department: z.enum(["electricity", "water", "gas"]).optional(),
+  areaId: z.string().optional(),
+  wardId: z.string().optional(),
+  homeType: z.enum(["1BHK", "2BHK", "3BHK", "independent"]).optional(),
+  people: z.number().min(1).max(12).optional(),
+  consumerNumber: z.string().optional(),
+});
+
 type SelectedRoleCategory = "citizen" | "supervisor" | "gov";
 
 export default function AuthPage() {
   const router = useRouter();
   const currentUser = useSessionStore((s) => s.user);
   const login = useSessionStore((s) => s.login);
+  const signUp = useSessionStore((s) => s.signUp);
   const verifyOtp = useSessionStore((s) => s.verifyOtp);
   const switchAccount = useSessionStore((s) => s.switchAccount);
 
+  const [authMode, setAuthMode] = useState<"login" | "signup">("login");
   const [step, setStep] = useState<"login" | "otp">("login");
   const [selectedRole, setSelectedRole] = useState<SelectedRoleCategory>("citizen");
   const [govDept, setGovDept] = useState<"electricity" | "water" | "gas">("electricity");
@@ -54,6 +70,18 @@ export default function AuthPage() {
 
   const [identifier, setIdentifier] = useState(DEMO_ACCOUNTS[0].email);
   const [password, setPassword] = useState(DEMO_PASSWORD);
+
+  // Sign-Up form state
+  const [signUpName, setSignUpName] = useState("");
+  const [signUpEmail, setSignUpEmail] = useState("");
+  const [signUpMobile, setSignUpMobile] = useState("");
+  const [signUpPassword, setSignUpPassword] = useState("");
+  const [signUpRole, setSignUpRole] = useState<Role>("citizen");
+  const [signUpDept, setSignUpDept] = useState<"electricity" | "water" | "gas">("electricity");
+  const [signUpArea, setSignUpArea] = useState("area-xyz");
+  const [signUpHomeType, setSignUpHomeType] = useState<"1BHK" | "2BHK" | "3BHK" | "independent">("2BHK");
+  const [signUpPeople, setSignUpPeople] = useState(3);
+  const [signUpConsumerNumber, setSignUpConsumerNumber] = useState("");
 
   // 6-box OTP state
   const [otpDigits, setOtpDigits] = useState<string[]>(["1", "2", "3", "4", "5", "6"]);
@@ -73,16 +101,19 @@ export default function AuthPage() {
       const acc = citizenVariant === "abnormal" ? DEMO_ACCOUNTS[1] : DEMO_ACCOUNTS[0];
       setIdentifier(acc.email);
       setPassword(DEMO_PASSWORD);
+      setSignUpRole("citizen");
     } else if (role === "supervisor") {
       const acc = DEMO_ACCOUNTS[2];
       setIdentifier(acc.email);
       setPassword(DEMO_PASSWORD);
+      setSignUpRole("supervisor");
     } else if (role === "gov") {
       let acc = DEMO_ACCOUNTS[3];
       if (govDept === "water") acc = DEMO_ACCOUNTS[4];
       if (govDept === "gas") acc = DEMO_ACCOUNTS[5];
       setIdentifier(acc.email);
       setPassword(DEMO_PASSWORD);
+      setSignUpRole("gov");
     }
   };
 
@@ -120,6 +151,55 @@ export default function AuthPage() {
     }
   };
 
+  const handleSignUpSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    setError(null);
+
+    const validation = signUpSchema.safeParse({
+      name: signUpName,
+      email: signUpEmail,
+      mobile: signUpMobile,
+      password: signUpPassword,
+      role: signUpRole,
+      department: signUpRole === "gov" ? signUpDept : undefined,
+      areaId: signUpArea,
+      wardId: "ward-24",
+      homeType: signUpHomeType,
+      people: Number(signUpPeople),
+      consumerNumber: signUpConsumerNumber,
+    });
+
+    if (!validation.success) {
+      setError(validation.error.issues[0]?.message || "Please check registration details");
+      return;
+    }
+
+    setLoading(true);
+    const res = signUp({
+      name: signUpName,
+      email: signUpEmail,
+      mobile: signUpMobile,
+      password: signUpPassword,
+      role: signUpRole,
+      department: signUpRole === "gov" ? signUpDept : undefined,
+      areaId: signUpArea,
+      wardId: "ward-24",
+      homeType: signUpHomeType,
+      people: Number(signUpPeople),
+      consumerNumber: signUpConsumerNumber,
+    });
+    setLoading(false);
+
+    if (!res.ok) {
+      setError(res.error || "Failed to create account");
+      return;
+    }
+
+    toast.success(`Account registered! Demo verification code is 123456`);
+    setStep("otp");
+    setOtpDigits(["1", "2", "3", "4", "5", "6"]);
+  };
+
   const handleLoginSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
@@ -139,7 +219,7 @@ export default function AuthPage() {
         res.error?.toLowerCase().includes("not found") ||
         res.error?.toLowerCase().includes("account")
       ) {
-        setError("We couldn't find that account. Use one of the demo accounts below.");
+        setError("We couldn't find that account. Use demo accounts or Sign Up for a new profile.");
       } else if (res.error?.toLowerCase().includes("password")) {
         setError("Incorrect password. Demo password is savera.");
       } else {
@@ -494,32 +574,70 @@ export default function AuthPage() {
         )}
 
         {/* Main Authentication Card */}
-        <div className="max-w-md mx-auto rounded-3xl border border-border-strong bg-card p-6 sm:p-8 backdrop-blur-2xl shadow-2xl relative overflow-hidden">
+        <div className={`mx-auto rounded-3xl border border-border-strong bg-card p-6 sm:p-8 backdrop-blur-2xl shadow-2xl relative overflow-hidden transition-all duration-300 ${
+          authMode === "signup" && step !== "otp" ? "max-w-xl" : "max-w-md"
+        }`}>
           {/* Subtle accent line */}
           <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-primary via-positive to-primary" />
 
-          {/* Credentials Chip Banner */}
-          <div className="mb-6 p-2.5 rounded-xl bg-muted/60 border border-border flex items-center justify-between text-xs font-mono">
-            <div className="flex items-center gap-2 truncate pr-2">
-              <span className="px-1.5 py-0.5 rounded bg-positive/20 text-positive text-2xs font-bold uppercase">
-                Demo
-              </span>
-              <span className="text-soft truncate">{identifier}</span>
-              <span className="text-faint">/</span>
-              <span className="text-positive font-bold">{DEMO_PASSWORD}</span>
+          {/* Mode Switcher Tabs */}
+          {step !== "otp" && (
+            <div className="mb-6 grid grid-cols-2 p-1 rounded-2xl bg-muted/80 border border-border">
+              <button
+                type="button"
+                onClick={() => {
+                  setAuthMode("login");
+                  setError(null);
+                }}
+                className={`py-2 px-3 rounded-xl text-xs font-bold transition-all ${
+                  authMode === "login"
+                    ? "bg-primary text-primary-foreground shadow-md shadow-primary/10"
+                    : "text-muted-foreground hover:text-foreground"
+                }`}
+              >
+                Sign In
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  setAuthMode("signup");
+                  setError(null);
+                }}
+                className={`py-2 px-3 rounded-xl text-xs font-bold transition-all ${
+                  authMode === "signup"
+                    ? "bg-primary text-primary-foreground shadow-md shadow-primary/10"
+                    : "text-muted-foreground hover:text-foreground"
+                }`}
+              >
+                Create Account (Sign Up)
+              </button>
             </div>
-            <button
-              type="button"
-              onClick={() => {
-                navigator.clipboard.writeText(`${identifier} / ${DEMO_PASSWORD}`);
-                toast.success("Credentials copied");
-              }}
-              title="Copy credentials"
-              className="text-faint hover:text-foreground shrink-0 p-1"
-            >
-              <Copy className="h-3.5 w-3.5" />
-            </button>
-          </div>
+          )}
+
+          {/* Credentials Chip Banner (Login mode only) */}
+          {authMode === "login" && step !== "otp" && (
+            <div className="mb-6 p-2.5 rounded-xl bg-muted/60 border border-border flex items-center justify-between text-xs font-mono">
+              <div className="flex items-center gap-2 truncate pr-2">
+                <span className="px-1.5 py-0.5 rounded bg-positive/20 text-positive text-2xs font-bold uppercase">
+                  Demo
+                </span>
+                <span className="text-soft truncate">{identifier}</span>
+                <span className="text-faint">/</span>
+                <span className="text-positive font-bold">{DEMO_PASSWORD}</span>
+              </div>
+              <button
+                type="button"
+                onClick={() => {
+                  navigator.clipboard.writeText(`${identifier} / ${DEMO_PASSWORD}`);
+                  toast.success("Credentials copied");
+                }}
+                title="Copy credentials"
+                className="text-faint hover:text-foreground shrink-0 p-1"
+              >
+                <Copy className="h-3.5 w-3.5" />
+              </button>
+            </div>
+          )}
 
           {/* Error Banner */}
           {error && (
@@ -529,7 +647,240 @@ export default function AuthPage() {
             </div>
           )}
 
-          {step === "login" ? (
+          {step === "otp" ? (
+            /* 4.3 Demo 2FA OTP Form */
+            <form onSubmit={handleOtpSubmit} className="space-y-5">
+              <div className="text-center">
+                <div className="h-11 w-11 rounded-2xl bg-positive/15 border border-positive/30 flex items-center justify-center text-positive mx-auto mb-3 shadow-inner">
+                  <KeyRound className="h-5 w-5" />
+                </div>
+                <h3 className="text-base font-bold text-foreground">Two-Factor Authentication</h3>
+                <p className="text-xs text-soft mt-1 leading-relaxed">
+                  Enter the 6-digit verification code sent to your mobile.
+                </p>
+                <div className="mt-2 inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-positive/15 border border-positive/25 text-positive text-xs font-mono font-medium">
+                  <span>Demo Code: 123456</span>
+                </div>
+              </div>
+
+              {/* 6 Individual Box Inputs */}
+              <div>
+                <label className="block text-xs font-medium text-muted-foreground mb-2 text-center">
+                  Verification Code
+                </label>
+                <div className="flex items-center justify-center gap-2 sm:gap-2.5" onPaste={handleOtpPaste}>
+                  {otpDigits.map((digit, idx) => (
+                    <input
+                      key={idx}
+                      ref={(el) => {
+                        otpInputsRef.current[idx] = el;
+                      }}
+                      type="text"
+                      inputMode="numeric"
+                      maxLength={1}
+                      value={digit}
+                      onChange={(e) => handleOtpBoxChange(idx, e.target.value)}
+                      onKeyDown={(e) => handleOtpKeyDown(idx, e)}
+                      className="w-10 sm:w-11 h-12 rounded-xl bg-muted border border-border-strong text-foreground font-mono text-center text-lg font-bold focus:border-positive focus:ring-1 focus:ring-positive outline-none transition-all shadow-inner"
+                    />
+                  ))}
+                </div>
+              </div>
+
+              <Button
+                type="submit"
+                disabled={loading}
+                className="w-full bg-primary text-primary-foreground hover:bg-primary-hover font-bold text-xs h-10 rounded-xl shadow-lg shadow-primary/10"
+              >
+                <span>Verify &amp; Continue</span>
+                <CheckCircle2 className="h-3.5 w-3.5 ml-1.5" />
+              </Button>
+
+              <div className="flex items-center justify-between pt-1 text-xs">
+                <button
+                  type="button"
+                  onClick={handleResendOtp}
+                  className="text-muted-foreground hover:text-positive transition-colors flex items-center gap-1.5"
+                >
+                  <RefreshCw className="h-3 w-3" />
+                  <span>Resend code (demo)</span>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => {
+                    setStep("login");
+                    setError(null);
+                  }}
+                  className="text-muted-foreground hover:text-foreground transition-colors"
+                >
+                  &larr; Back to sign in
+                </button>
+              </div>
+            </form>
+          ) : authMode === "signup" ? (
+            /* New User Sign-Up Form */
+            <form onSubmit={handleSignUpSubmit} className="space-y-4 animate-in fade-in">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div>
+                  <label className="block text-xs font-medium text-soft mb-1">Full Name</label>
+                  <Input
+                    type="text"
+                    value={signUpName}
+                    onChange={(e) => setSignUpName(e.target.value)}
+                    placeholder="e.g. Ramesh Patil"
+                    className="bg-muted border-border text-foreground text-xs h-9 rounded-xl focus:border-positive"
+                    required
+                  />
+                </div>
+                <div>
+                  <label className="block text-xs font-medium text-soft mb-1">Account Role</label>
+                  <select
+                    value={signUpRole}
+                    onChange={(e) => setSignUpRole(e.target.value as Role)}
+                    className="w-full bg-muted border border-border text-foreground text-xs h-9 px-3 rounded-xl focus:outline-none focus:border-positive"
+                  >
+                    <option value="citizen">Citizen Resident</option>
+                    <option value="supervisor">Ward Supervisor / Councillor</option>
+                    <option value="gov">Municipal Authority Officer</option>
+                  </select>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div>
+                  <label className="block text-xs font-medium text-soft mb-1">Email Address</label>
+                  <Input
+                    type="email"
+                    value={signUpEmail}
+                    onChange={(e) => setSignUpEmail(e.target.value)}
+                    placeholder="name@example.com"
+                    className="bg-muted border-border text-foreground text-xs h-9 rounded-xl focus:border-positive"
+                    required
+                  />
+                </div>
+                <div>
+                  <label className="block text-xs font-medium text-soft mb-1">Mobile Number</label>
+                  <Input
+                    type="tel"
+                    value={signUpMobile}
+                    onChange={(e) => setSignUpMobile(e.target.value)}
+                    placeholder="10-digit mobile"
+                    className="bg-muted border-border text-foreground text-xs h-9 rounded-xl focus:border-positive"
+                    required
+                  />
+                </div>
+              </div>
+
+              {signUpRole === "citizen" && (
+                <div className="p-3.5 rounded-2xl bg-muted/40 border border-border/80 space-y-3">
+                  <div className="flex items-center gap-2 text-2xs font-mono text-positive font-bold uppercase">
+                    <Zap className="h-3.5 w-3.5" />
+                    <span>Household &amp; Utility Connection</span>
+                  </div>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div>
+                      <label className="block text-xs font-medium text-soft mb-1">Locality / Colony</label>
+                      <select
+                        value={signUpArea}
+                        onChange={(e) => setSignUpArea(e.target.value)}
+                        className="w-full bg-background border border-border text-foreground text-xs h-9 px-3 rounded-xl focus:outline-none focus:border-positive"
+                      >
+                        <option value="area-xyz">XYZ Colony (Gandhi Nagar · Ward 24)</option>
+                        <option value="area-abc">ABC Colony (Ward 24)</option>
+                        <option value="area-def">DEF Colony (Ward 24)</option>
+                        <option value="area-ghi">GHI Colony (Ward 24)</option>
+                      </select>
+                    </div>
+
+                    <div>
+                      <label className="block text-xs font-medium text-soft mb-1">
+                        Meter RR / Consumer No.
+                      </label>
+                      <Input
+                        type="text"
+                        value={signUpConsumerNumber}
+                        onChange={(e) => setSignUpConsumerNumber(e.target.value)}
+                        placeholder="e.g. RR-584101-9214"
+                        className="bg-background border-border text-foreground text-xs h-9 rounded-xl focus:border-positive"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-3">
+                    <div>
+                      <label className="block text-xs font-medium text-soft mb-1">Home Type</label>
+                      <select
+                        value={signUpHomeType}
+                        onChange={(e) =>
+                          setSignUpHomeType(
+                            e.target.value as "1BHK" | "2BHK" | "3BHK" | "independent"
+                          )
+                        }
+                        className="w-full bg-background border border-border text-foreground text-xs h-9 px-2 rounded-xl focus:outline-none focus:border-positive"
+                      >
+                        <option value="1BHK">1 BHK (600 sq ft)</option>
+                        <option value="2BHK">2 BHK (950 sq ft)</option>
+                        <option value="3BHK">3 BHK (1400 sq ft)</option>
+                        <option value="independent">Independent House</option>
+                      </select>
+                    </div>
+
+                    <div>
+                      <label className="block text-xs font-medium text-soft mb-1">Family Members</label>
+                      <input
+                        type="number"
+                        min={1}
+                        max={10}
+                        value={signUpPeople}
+                        onChange={(e) => setSignUpPeople(Number(e.target.value))}
+                        className="w-full bg-background border border-border text-foreground text-xs h-9 px-3 rounded-xl focus:outline-none focus:border-positive"
+                      />
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {signUpRole === "gov" && (
+                <div>
+                  <label className="block text-xs font-medium text-soft mb-1">Government Department</label>
+                  <select
+                    value={signUpDept}
+                    onChange={(e) =>
+                      setSignUpDept(e.target.value as "electricity" | "water" | "gas")
+                    }
+                    className="w-full bg-muted border border-border text-foreground text-xs h-9 px-3 rounded-xl focus:outline-none focus:border-positive"
+                  >
+                    <option value="electricity">Electricity Department (GESCOM / City Grid)</option>
+                    <option value="water">City Water Supply &amp; Sewerage Board</option>
+                    <option value="gas">District LPG Distribution Cell</option>
+                  </select>
+                </div>
+              )}
+
+              <div>
+                <label className="block text-xs font-medium text-soft mb-1">Create Password</label>
+                <Input
+                  type="password"
+                  value={signUpPassword}
+                  onChange={(e) => setSignUpPassword(e.target.value)}
+                  placeholder="Min 4 characters (e.g. savera)"
+                  className="bg-muted border-border text-foreground text-xs h-9 rounded-xl focus:border-positive"
+                  required
+                />
+              </div>
+
+              <Button
+                type="submit"
+                disabled={loading}
+                className="w-full bg-primary text-primary-foreground hover:bg-primary-hover font-bold text-xs h-10 rounded-xl mt-3 shadow-lg shadow-primary/10 gap-2"
+              >
+                <span>Create Account &amp; Verify</span>
+                <ArrowRight className="h-3.5 w-3.5" />
+              </Button>
+            </form>
+          ) : (
             /* 4.2 Login Form */
             <form onSubmit={handleLoginSubmit} className="space-y-4">
               <div>
@@ -569,80 +920,9 @@ export default function AuthPage() {
                 disabled={loading}
                 className="w-full bg-primary text-primary-foreground hover:bg-primary-hover font-bold text-xs h-10 rounded-xl mt-3 shadow-lg shadow-primary/10"
               >
-                <span>Continue</span>
+                <span>Continue to Verification</span>
                 <ArrowRight className="h-3.5 w-3.5 ml-1.5" />
               </Button>
-            </form>
-          ) : (
-            /* 4.3 Demo 2FA OTP Form */
-            <form onSubmit={handleOtpSubmit} className="space-y-5">
-              <div className="text-center">
-                <div className="h-11 w-11 rounded-2xl bg-positive/15 border border-positive/30 flex items-center justify-center text-positive mx-auto mb-3 shadow-inner">
-                  <KeyRound className="h-5 w-5" />
-                </div>
-                <h3 className="text-base font-bold text-foreground">Two-Factor Authentication</h3>
-                <p className="text-xs text-soft mt-1 leading-relaxed">
-                  Enter the 6-digit code sent to your registered mobile.
-                </p>
-                <div className="mt-2 inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-positive/15 border border-positive/25 text-positive text-xs font-mono font-medium">
-                  <span>Demo · code 123456</span>
-                </div>
-              </div>
-
-              {/* 6 Individual Box Inputs */}
-              <div>
-                <label className="block text-xs font-medium text-muted-foreground mb-2 text-center">
-                  Verification Code
-                </label>
-                <div className="flex items-center justify-center gap-2 sm:gap-2.5" onPaste={handleOtpPaste}>
-                  {otpDigits.map((digit, idx) => (
-                    <input
-                      key={idx}
-                      ref={(el) => {
-                        otpInputsRef.current[idx] = el;
-                      }}
-                      type="text"
-                      inputMode="numeric"
-                      maxLength={1}
-                      value={digit}
-                      onChange={(e) => handleOtpBoxChange(idx, e.target.value)}
-                      onKeyDown={(e) => handleOtpKeyDown(idx, e)}
-                      className="w-10 sm:w-11 h-12 rounded-xl bg-muted border border-border-strong text-foreground font-mono text-center text-lg font-bold focus:border-positive focus:ring-1 focus:ring-positive outline-none transition-all shadow-inner"
-                    />
-                  ))}
-                </div>
-              </div>
-
-              <Button
-                type="submit"
-                disabled={loading}
-                className="w-full bg-primary text-primary-foreground hover:bg-primary-hover font-bold text-xs h-10 rounded-xl shadow-lg shadow-primary/10"
-              >
-                <span>Verify</span>
-                <CheckCircle2 className="h-3.5 w-3.5 ml-1.5" />
-              </Button>
-
-              <div className="flex items-center justify-between pt-1 text-xs">
-                <button
-                  type="button"
-                  onClick={handleResendOtp}
-                  className="text-muted-foreground hover:text-positive transition-colors flex items-center gap-1.5"
-                >
-                  <RefreshCw className="h-3 w-3" />
-                  <span>Resend code (demo)</span>
-                </button>
-
-                <button
-                  type="button"
-                  onClick={() => {
-                    setStep("login");
-                    setError(null);
-                  }}
-                  className="text-muted-foreground hover:text-foreground transition-colors"
-                >
-                  &larr; Back to login
-                </button>
-              </div>
             </form>
           )}
 
