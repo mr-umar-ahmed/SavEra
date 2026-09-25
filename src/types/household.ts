@@ -183,7 +183,7 @@ export interface HouseholdWater {
   source: WaterSource;
 }
 
-export type GasKind = "lpg" | "piped";
+export type GasKind = "lpg" | "piped" | "both";
 export type LpgCylinderSize = 5 | 14.2 | 19;
 
 /** Household gas setup. */
@@ -192,6 +192,12 @@ export interface HouseholdGas {
   cylinderSizeKg: LpgCylinderSize;
   /** Generic provider label, never a real brand. */
   provider: string;
+  /** Cylinders connected at the same time (usually 1). */
+  cylindersInUse?: number;
+  /** Piped gas (PNG): last monthly meter reading in SCM — measured, entered by the citizen. */
+  pngMonthlyScm?: number;
+  /** Piped gas (PNG): last monthly bill in ₹ — measured, entered by the citizen. */
+  pngMonthlyBill?: number;
 }
 
 /** A citizen household — the root entity of the citizen portal. */

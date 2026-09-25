@@ -197,6 +197,9 @@ export function compactNumber(n: number): string {
   if (abs >= 1e9) return `${sign}${trimDecimals((abs / 1e9).toFixed(1))}B`;
   if (abs >= 1e6) return `${sign}${trimDecimals((abs / 1e6).toFixed(1))}M`;
   if (abs >= 1e3) return `${sign}${trimDecimals((abs / 1e3).toFixed(1))}k`;
+  // Small fractional values (e.g. 0.57 kg/day axis ticks) keep up to two decimals.
+  if (abs < 10 && !Number.isInteger(abs)) return `${sign}${trimDecimals(abs.toFixed(2))}`;
+  if (abs < 100 && !Number.isInteger(abs)) return `${sign}${trimDecimals(abs.toFixed(1))}`;
   return `${sign}${formatIN(abs)}`;
 }
 

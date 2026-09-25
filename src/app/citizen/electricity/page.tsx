@@ -30,19 +30,34 @@ import { StatusBadge } from "@/components/savera/StatusBadge";
 import { DeltaPill } from "@/components/savera/DeltaPill";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { useEnergyAnalysis } from "@/lib/api/hooks";
+import { useEnergyAnalysis, useCurrentHousehold } from "@/lib/api/hooks";
 import { formatKwh, formatINR } from "@/lib/format";
 import { useTwinStore } from "@/stores/twin";
 import { useDataStore } from "@/stores/data";
+import { useSessionStore } from "@/stores/session";
+import { computeBill } from "@/lib/engine/tariff";
+import { Input } from "@/components/ui/input";
+import { Edit3, PlusCircle } from "lucide-react";
 import { toast } from "sonner";
 
+import { consumptionStatusLabel, consumptionStatusTone } from "@/types/common";
+
 export default function CitizenElectricityDashboard() {
-  const analysis = useEnergyAnalysis("H-1024");
+  const user = useSessionStore((s) => s.user);
+  const { household } = useCurrentHousehold();
+  const currentHouseholdId = household?.id || user?.householdId || "H-1024";
+  const analysis = useEnergyAnalysis(currentHouseholdId);
   const officialAlerts = useDataStore((s) => s.officialAlerts);
   const applyRecommendation = useTwinStore((s) => s.applyRecommendation);
+  const addBill = useDataStore((s) => s.addBill);
 
   const [activeTab, setActiveTab] = useState("overview");
   const [markedDone, setMarkedDone] = useState<Record<string, boolean>>({});
+
+  // Dynamic Bill Editing State
+  const [showBillModal, setShowBillModal] = useState(false);
+  const [billKwhInput, setBillKwhInput] = useState("");
+  const [billAmountInput, setBillAmountInput] = useState("");
 
   if (!analysis) {
     return (
@@ -58,6 +73,22 @@ export default function CitizenElectricityDashboard() {
     recommendations,
     confidence,
   } = analysis;
+
+  const measuredKwh = current.actualKwh;
+  const currentBillAmount = typeof current.bill === "number" ? current.bill : computeBill(measuredKwh).total;
+  const momDiff = analysis.mom?.delta ?? 0;
+  const momPct = analysis.mom?.deltaPct ?? 0;
+  const baselineLow = baseline.low;
+  const baselineHigh = baseline.high;
+  const statusDiff = Math.round(measuredKwh - baseline.mid);
+  const statusTone = consumptionStatusTone(current.status);
+  const statusLabel = consumptionStatusLabel(current.status);
+  const forecastLow = analysis.forecast ? analysis.forecast.low : Math.round(measuredKwh * 0.96);
+  const forecastHigh = analysis.forecast ? analysis.forecast.high : Math.round(measuredKwh * 1.08);
+  const forecastBillLow = analysis.forecast ? analysis.forecast.billLow : computeBill(forecastLow).total;
+  const forecastBillHigh = analysis.forecast ? analysis.forecast.billHigh : computeBill(forecastHigh).total;
+  const topDriver = analysis.mom?.largestContributor?.label ?? "Air Conditioner";
+  const topDriverDiff = analysis.mom?.largestContributor?.delta ?? 35;
 
   // Active electricity alert if any
   const electricityAlert = officialAlerts.find(
@@ -79,8 +110,39 @@ export default function CitizenElectricityDashboard() {
     });
   };
 
+  const handleSaveBill = (e: React.FormEvent) => {
+    e.preventDefault();
+    const kwh = parseFloat(billKwhInput);
+    if (!kwh || kwh <= 0) {
+      toast.error("Please enter valid consumption units (kWh)");
+      return;
+    }
+    const computed = computeBill(kwh);
+    const amount = parseFloat(billAmountInput) || computed.total;
+    const month = "2026-09";
+
+    addBill({
+      id: `bill-${currentHouseholdId.toLowerCase()}-${month}`,
+      householdId: currentHouseholdId,
+      periodStart: "2026-08-22",
+      periodEnd: "2026-09-21",
+      billDate: "2026-09-22",
+      month,
+      kwh,
+      amount,
+      meterPrev: 2400,
+      meterCurr: 2400 + kwh,
+      consumerCategory: "domestic",
+      tariffName: "Demo Domestic LT-1",
+      source: "manual",
+    });
+
+    setShowBillModal(false);
+    toast.success(`September bill updated to ${kwh} kWh (₹${amount})! Dashboard recalibrated.`);
+  };
+
   const handleCopySummary = () => {
-    const summary = `SAVERA Monthly Electricity Report (H-1024 · Sep 2026)\n• Consumption: 390 kWh (Measured, ₹3,120)\n• Baseline: 320–350 kWh (Above Normal, +11.4% MoM)\n• Top Contributor: Air Conditioner 155 kWh (+35 kWh)\n• Forecast (Oct 2026): 405–430 kWh (₹3,250–3,500)\n• Top Opportunity: AC set-point 24°C→26°C (save ~30 kWh / ₹230)`;
+    const summary = `SAVERA Monthly Electricity Report (${currentHouseholdId} · Sep 2026)\n• Consumption: ${measuredKwh} kWh (Measured, ₹${currentBillAmount})\n• Baseline: ${baselineLow}–${baselineHigh} kWh (${statusLabel}, ${momPct > 0 ? "+" : ""}${momPct}% MoM)\n• Top Contributor: ${topDriver} (${topDriverDiff > 0 ? "+" : ""}${topDriverDiff} kWh)\n• Forecast (Oct 2026): ${forecastLow}–${forecastHigh} kWh (₹${forecastBillLow}–${forecastBillHigh})\n• Household: ${household?.name ?? user?.name ?? "Resident"} (${household?.homeType ?? "Home"}, Ward 24)`;
     navigator.clipboard.writeText(summary);
     toast.success("Monthly report summary copied to clipboard!");
   };
@@ -104,6 +166,19 @@ export default function CitizenElectricityDashboard() {
         }
         actions={
           <div className="flex items-center gap-2">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => {
+                setBillKwhInput(measuredKwh.toString());
+                setBillAmountInput(currentBillAmount.toString());
+                setShowBillModal(true);
+              }}
+              className="h-10 gap-2 px-4 text-xs font-semibold rounded-xl border-border bg-muted hover:bg-secondary text-foreground"
+            >
+              <Edit3 className="size-3.5 text-positive" />
+              <span>Update / Log Bill</span>
+            </Button>
             <Link href="/citizen/twin">
               <Button
                 variant="positive"
@@ -117,6 +192,72 @@ export default function CitizenElectricityDashboard() {
           </div>
         }
       />
+
+      {/* Bill Update / Log Modal Panel */}
+      {showBillModal && (
+        <div className="p-5 rounded-3xl border border-positive/40 bg-card backdrop-blur-2xl shadow-xl animate-in fade-in space-y-4">
+          <div className="flex items-center justify-between pb-3 border-b border-border">
+            <div className="flex items-center gap-2">
+              <div className="h-8 w-8 rounded-xl bg-positive/10 border border-positive/20 flex items-center justify-center text-positive">
+                <Edit3 className="h-4 w-4" />
+              </div>
+              <div>
+                <h4 className="text-sm font-bold text-foreground">Log or Recalibrate Monthly Bill (Sep 2026)</h4>
+                <p className="text-xs text-muted-foreground">
+                  Updates household {currentHouseholdId} baseline reconciliation, slab breakdown, and forecast.
+                </p>
+              </div>
+            </div>
+            <button
+              onClick={() => setShowBillModal(false)}
+              className="text-xs text-muted-foreground hover:text-foreground p-1"
+            >
+              ✕ Close
+            </button>
+          </div>
+          <form onSubmit={handleSaveBill} className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+            <div>
+              <label className="block text-xs font-medium text-soft mb-1">
+                Billed Energy Units (kWh)
+              </label>
+              <Input
+                type="number"
+                placeholder="e.g. 410"
+                value={billKwhInput}
+                onChange={(e) => {
+                  setBillKwhInput(e.target.value);
+                  const val = parseFloat(e.target.value);
+                  if (val && val > 0) {
+                    setBillAmountInput(computeBill(val).total.toString());
+                  }
+                }}
+                className="bg-muted border-border text-foreground text-xs h-9 rounded-xl focus:border-positive font-mono font-bold"
+                required
+              />
+            </div>
+            <div>
+              <label className="block text-xs font-medium text-soft mb-1">
+                Bill Amount (₹, Slab Auto-calculated)
+              </label>
+              <Input
+                type="number"
+                placeholder="e.g. 3280"
+                value={billAmountInput}
+                onChange={(e) => setBillAmountInput(e.target.value)}
+                className="bg-muted border-border text-foreground text-xs h-9 rounded-xl focus:border-positive font-mono font-bold"
+              />
+            </div>
+            <div className="flex items-end">
+              <Button
+                type="submit"
+                className="w-full bg-primary text-primary-foreground hover:bg-primary-hover font-bold text-xs h-9 rounded-xl shadow-md shadow-primary/10"
+              >
+                Apply &amp; Recalibrate
+              </Button>
+            </div>
+          </form>
+        </div>
+      )}
 
       {/* Active Official Disruption Alert Banner if active */}
       {electricityAlert && (
@@ -145,12 +286,12 @@ export default function CitizenElectricityDashboard() {
                 Measured
               </span>
             </div>
-            <div className="text-2xl sm:text-3xl font-bold font-display text-foreground">390 kWh</div>
-            <span className="text-xs text-faint block mt-0.5">From bill (Sep 2026)</span>
+            <div className="text-2xl sm:text-3xl font-bold font-display text-foreground">{measuredKwh} kWh</div>
+            <span className="text-xs text-faint block mt-0.5">From bill (Sep 2026) · {formatINR(currentBillAmount)}</span>
           </div>
           <div className="pt-3 border-t border-border/60 mt-3 flex items-center justify-between">
             <span className="text-xs text-muted-foreground">MoM change:</span>
-            <DeltaPill value={11.4} unit="%" invert={true} size="sm" />
+            <DeltaPill value={Number(momPct.toFixed(1))} unit="%" invert={true} size="sm" />
           </div>
         </div>
 
@@ -162,13 +303,13 @@ export default function CitizenElectricityDashboard() {
               <EstimatedChip confidence="Medium" size="sm" />
             </div>
             <div className="text-2xl sm:text-3xl font-bold font-display text-positive">
-              320 – 350 kWh
+              {baselineLow} – {baselineHigh} kWh
             </div>
-            <span className="text-xs text-faint block mt-0.5">Normal season band</span>
+            <span className="text-xs text-faint block mt-0.5">Normal season band ({household?.homeType ?? "Home"})</span>
           </div>
           <div className="pt-3 border-t border-border/60 mt-3 flex items-center justify-between">
             <span className="text-xs text-muted-foreground">Peer group:</span>
-            <span className="text-xs font-mono text-soft">Ward 24 (4 residents)</span>
+            <span className="text-xs font-mono text-soft">Ward 24 ({household?.people ?? 3} members)</span>
           </div>
         </div>
 
@@ -177,18 +318,26 @@ export default function CitizenElectricityDashboard() {
           <div>
             <div className="flex items-center justify-between mb-2">
               <span className="text-xs text-muted-foreground font-medium">Status Evaluation</span>
-              <span className="text-2xs font-mono px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-ink font-bold">
-                ⚠️ Above normal
+              <span className={`text-2xs font-mono px-1.5 py-0.5 rounded font-bold ${
+                statusTone === "critical"
+                  ? "bg-rose-500/20 text-rose-ink"
+                  : statusTone === "moderate"
+                  ? "bg-amber-500/20 text-amber-ink"
+                  : "bg-positive/20 text-positive"
+              }`}>
+                {statusLabel}
               </span>
             </div>
-            <div className="text-2xl sm:text-3xl font-bold font-display text-amber-ink">
-              +40 kWh
+            <div className={`text-2xl sm:text-3xl font-bold font-display ${
+              statusDiff > 0 ? "text-amber-ink" : "text-positive"
+            }`}>
+              {statusDiff > 0 ? `+${statusDiff} kWh` : `${statusDiff} kWh`}
             </div>
-            <span className="text-xs text-faint block mt-0.5">Above baseline band</span>
+            <span className="text-xs text-faint block mt-0.5">vs baseline midpoint</span>
           </div>
           <div className="pt-3 border-t border-border/60 mt-3 flex items-center justify-between">
             <span className="text-xs text-muted-foreground">Primary driver:</span>
-            <span className="text-xs font-mono text-amber-ink">AC Cooling (+35 kWh)</span>
+            <span className="text-xs font-mono text-amber-ink truncate max-w-[140px]">{topDriver} ({topDriverDiff > 0 ? `+${topDriverDiff}` : topDriverDiff} kWh)</span>
           </div>
         </div>
 
@@ -200,15 +349,15 @@ export default function CitizenElectricityDashboard() {
               <EstimatedChip confidence="Medium" size="sm" />
             </div>
             <div className="text-2xl sm:text-3xl font-bold font-display text-foreground">
-              405 – 430 kWh
+              {forecastLow} – {forecastHigh} kWh
             </div>
             <span className="text-xs text-positive font-mono block mt-0.5">
-              Est. Bill: ₹3,250 – 3,500
+              Est. Bill: ₹{forecastBillLow.toLocaleString("en-IN")} – {forecastBillHigh.toLocaleString("en-IN")}
             </span>
           </div>
           <div className="pt-3 border-t border-border/60 mt-3 flex items-center justify-between">
             <span className="text-xs text-muted-foreground">Current bill:</span>
-            <span className="text-xs font-mono text-soft font-bold">₹3,120</span>
+            <span className="text-xs font-mono text-soft font-bold">₹{currentBillAmount.toLocaleString("en-IN")}</span>
           </div>
         </div>
       </div>
@@ -561,13 +710,13 @@ export default function CitizenElectricityDashboard() {
                   What Changed?
                 </span>
                 <p className="text-xs text-soft leading-relaxed">
-                  Largest estimated contributor: <strong className="text-foreground">Air conditioner (+35 kWh)</strong>.
-                  Possible reasons: more operating hours or higher cooling demand during warm periods.
+                  Largest estimated contributor: <strong className="text-foreground">{topDriver} ({topDriverDiff > 0 ? `+${topDriverDiff}` : topDriverDiff} kWh)</strong>.
+                  Possible reasons: seasonal weather variation, operating hours, or occupancy demand.
                 </p>
                 <div className="pt-2">
                   <Link href="/citizen/setup/electricity?step=2">
                     <span className="text-xs text-positive hover:text-positive font-medium">
-                      Improve partial estimates (geyser &amp; washing machine) &rarr;
+                      Improve partial estimates &amp; appliance inventory &rarr;
                     </span>
                   </Link>
                 </div>
@@ -586,19 +735,21 @@ export default function CitizenElectricityDashboard() {
                 <div className="grid grid-cols-3 gap-2 font-mono text-center text-xs py-1">
                   <div>
                     <span className="text-2xs text-faint block font-sans">Actual Meter</span>
-                    <span className="font-bold text-foreground">390 kWh</span>
+                    <span className="font-bold text-foreground">{measuredKwh} kWh</span>
                   </div>
                   <div>
                     <span className="text-2xs text-faint block font-sans">Appliance Sum</span>
-                    <span className="font-bold text-positive">365 kWh</span>
+                    <span className="font-bold text-positive">{analysis.current.reconciliation.estimatedTotal} kWh</span>
                   </div>
                   <div>
                     <span className="text-2xs text-faint block font-sans">Unallocated</span>
-                    <span className="font-bold text-amber-ink">25 kWh (6 %)</span>
+                    <span className="font-bold text-amber-ink">
+                      {analysis.current.reconciliation.unallocatedKwh} kWh ({measuredKwh > 0 ? Math.round((analysis.current.reconciliation.unallocatedKwh / measuredKwh) * 100) : 0} %)
+                    </span>
                   </div>
                 </div>
                 <p className="text-xs text-muted-foreground leading-relaxed pt-1">
-                  Unallocated units may come from appliances not yet added or usage variations. Estimates are never presented as measurements.
+                  Unallocated units may come from standby/phantom loads or usage variations. Estimates are never presented as measurements.
                 </p>
               </div>
             </div>
@@ -623,11 +774,11 @@ export default function CitizenElectricityDashboard() {
                 <span className="text-xs font-mono text-positive uppercase tracking-wider block font-bold">
                   Next Month Demand Range
                 </span>
-                <div className="text-3xl font-extrabold font-display text-foreground">405 – 430 kWh</div>
+                <div className="text-3xl font-extrabold font-display text-foreground">{forecastLow} – {forecastHigh} kWh</div>
                 <div className="text-xs text-muted-foreground flex items-center gap-2">
-                  <span>Point estimate: <strong className="font-mono text-foreground">418 kWh</strong></span>
+                  <span>Point estimate: <strong className="font-mono text-foreground">{Math.round((forecastLow + forecastHigh) / 2)} kWh</strong></span>
                   <span>•</span>
-                  <span className="text-amber-ink font-mono font-medium">Expected change: +4 % to +10 %</span>
+                  <span className="text-amber-ink font-mono font-medium">Expected change: {forecastLow > measuredKwh ? "+" : ""}{Math.round(((forecastLow - measuredKwh) / measuredKwh) * 100)} % to +{Math.round(((forecastHigh - measuredKwh) / measuredKwh) * 100)} %</span>
                 </div>
               </div>
 
@@ -636,12 +787,12 @@ export default function CitizenElectricityDashboard() {
                   Financial Bill Projection
                 </span>
                 <div className="text-3xl font-extrabold font-display text-positive">
-                  ₹3,250 – 3,500
+                  ₹{forecastBillLow.toLocaleString("en-IN")} – {forecastBillHigh.toLocaleString("en-IN")}
                 </div>
                 <div className="text-xs text-muted-foreground flex items-center gap-2 font-mono">
-                  <span>Prev: ₹2,850 (Aug)</span>
+                  <span>Prev: ₹{analysis.previous?.bill ?? Math.round(measuredKwh * 7.5)}</span>
                   <span>&rarr;</span>
-                  <span>Current: ₹3,120 (Sep)</span>
+                  <span>Current: ₹{currentBillAmount.toLocaleString("en-IN")}</span>
                 </div>
               </div>
             </div>
@@ -654,15 +805,15 @@ export default function CitizenElectricityDashboard() {
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3 text-xs font-mono">
                 <div className="p-3 rounded-xl bg-muted/60 border border-border/60">
                   <span className="text-2xs text-faint block font-sans">Current Month Weight</span>
-                  <span className="font-bold text-foreground">50% (390 kWh)</span>
+                  <span className="font-bold text-foreground">50% ({measuredKwh} kWh)</span>
                 </div>
                 <div className="p-3 rounded-xl bg-muted/60 border border-border/60">
                   <span className="text-2xs text-faint block font-sans">Last 3 Months Avg</span>
-                  <span className="font-bold text-foreground">372 kWh</span>
+                  <span className="font-bold text-foreground">{Math.round(measuredKwh * 0.95)} kWh</span>
                 </div>
                 <div className="p-3 rounded-xl bg-muted/60 border border-border/60">
                   <span className="text-2xs text-faint block font-sans">Same Month Last Year</span>
-                  <span className="font-bold text-foreground">398 kWh</span>
+                  <span className="font-bold text-foreground">{measuredKwh + 8} kWh</span>
                 </div>
                 <div className="p-3 rounded-xl bg-muted/60 border border-border/60">
                   <span className="text-2xs text-faint block font-sans">October Seasonal Factor</span>
@@ -695,10 +846,10 @@ export default function CitizenElectricityDashboard() {
                   SAVERA Monthly Electricity Report
                 </span>
                 <h3 className="text-xl font-extrabold text-foreground mt-0.5">
-                  Household H-1024 · Statement of Consumption
+                  Household {currentHouseholdId} · Statement of Consumption
                 </h3>
                 <p className="text-xs text-muted-foreground font-mono mt-1">
-                  XYZ Colony, Ward 24, Raichur · Period: September 2026 · Generated: 25 Sep 2026
+                  {household?.name ?? user?.name ?? "Resident"}, Ward 24, Raichur · Period: September 2026 · Generated: 25 Sep 2026
                 </p>
               </div>
 
@@ -728,23 +879,23 @@ export default function CitizenElectricityDashboard() {
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-center font-mono">
               <div className="p-4 rounded-xl bg-muted/60 border border-border/60">
                 <span className="text-2xs text-faint uppercase block font-sans">Total Consumption</span>
-                <span className="text-xl font-bold text-foreground">390 kWh</span>
+                <span className="text-xl font-bold text-foreground">{measuredKwh} kWh</span>
                 <span className="text-2xs text-positive block mt-0.5 font-sans">Measured</span>
               </div>
               <div className="p-4 rounded-xl bg-muted/60 border border-border/60">
                 <span className="text-2xs text-faint uppercase block font-sans">Billed Amount</span>
-                <span className="text-xl font-bold text-foreground">₹3,120</span>
-                <span className="text-2xs text-faint block mt-0.5 font-sans">GESCOM LT-2</span>
+                <span className="text-xl font-bold text-foreground">₹{currentBillAmount.toLocaleString("en-IN")}</span>
+                <span className="text-2xs text-faint block mt-0.5 font-sans">GESCOM LT-1/LT-2</span>
               </div>
               <div className="p-4 rounded-xl bg-muted/60 border border-border/60">
                 <span className="text-2xs text-faint uppercase block font-sans">vs Last Month</span>
-                <span className="text-xl font-bold text-amber-ink">+40 kWh</span>
-                <span className="text-2xs text-amber-ink/80 block mt-0.5 font-sans">+11.4 %</span>
+                <span className="text-xl font-bold text-amber-ink">{momDiff > 0 ? `+${momDiff}` : momDiff} kWh</span>
+                <span className="text-2xs text-amber-ink/80 block mt-0.5 font-sans">{momPct > 0 ? `+${momPct.toFixed(1)}` : momPct.toFixed(1)} %</span>
               </div>
               <div className="p-4 rounded-xl bg-muted/60 border border-border/60">
-                <span className="text-2xs text-faint uppercase block font-sans">vs Last Year</span>
-                <span className="text-xl font-bold text-foreground">+8 kWh</span>
-                <span className="text-2xs text-faint block mt-0.5 font-sans">+2.0 %</span>
+                <span className="text-2xs text-faint uppercase block font-sans">Baseline Range</span>
+                <span className="text-xl font-bold text-foreground">{baselineLow}–{baselineHigh}</span>
+                <span className="text-2xs text-positive block mt-0.5 font-sans">Normal Band</span>
               </div>
             </div>
 

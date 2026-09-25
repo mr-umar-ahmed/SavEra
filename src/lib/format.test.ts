@@ -160,6 +160,9 @@ describe("ordinal and compact", () => {
     expect(compactNumber(45000)).toBe("45k");
     expect(compactNumber(1247)).toBe("1.2k");
     expect(compactNumber(842)).toBe("842");
+    expect(compactNumber(0.57)).toBe("0.57");
+    expect(compactNumber(0.6)).toBe("0.6");
+    expect(compactNumber(12.25)).toBe("12.3");
     expect(compactNumber(1500000)).toBe("1.5M");
     expect(compactNumber(-2300)).toBe("-2.3k");
   });

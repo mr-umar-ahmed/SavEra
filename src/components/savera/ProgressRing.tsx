@@ -3,7 +3,6 @@ import * as React from "react";
 import { cn } from "@/lib/utils";
 import type { Tone } from "@/types/common";
 
-import { TONE_CLASSES } from "./tone";
 
 export interface ProgressRingProps extends Omit<React.ComponentProps<"div">, "children"> {
   /** 0–100. */
@@ -23,6 +22,15 @@ export interface ProgressRingProps extends Omit<React.ComponentProps<"div">, "ch
 }
 
 /** SVG ring for completeness / progress percentages. */
+/** Literal stroke classes per tone (Tailwind only generates classes it can see in source). */
+const TONE_STROKE: Record<Tone, string> = {
+  optimal: "stroke-tone-optimal",
+  normal: "stroke-tone-normal",
+  moderate: "stroke-tone-moderate",
+  critical: "stroke-tone-critical",
+  unknown: "stroke-tone-unknown",
+};
+
 export function ProgressRing({
   value,
   progress,
@@ -40,7 +48,6 @@ export function ProgressRing({
   const radius = (size - strokeWidth) / 2;
   const circumference = 2 * Math.PI * radius;
   const offset = circumference * (1 - clamped / 100);
-  const t = TONE_CLASSES[tone];
   const rounded = Math.round(clamped);
 
   return (
@@ -71,7 +78,7 @@ export function ProgressRing({
           strokeDasharray={circumference}
           strokeDashoffset={offset}
           strokeLinecap="round"
-          className={cn("fill-none transition-[stroke-dashoffset] duration-500", t.bg.replace("bg-", "stroke-"))}
+          className={cn("fill-none transition-[stroke-dashoffset] duration-500", TONE_STROKE[tone])}
         />
       </svg>
       <div className="absolute inset-0 flex flex-col items-center justify-center text-center">

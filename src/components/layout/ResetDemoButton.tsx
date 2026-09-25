@@ -5,6 +5,7 @@ import { RotateCcw } from "lucide-react";
 import { toast } from "sonner";
 import { useDataStore } from "@/stores/data";
 import { useSessionStore } from "@/stores/session";
+import { useLpgOpsStore } from "@/stores/lpgOps";
 import { Button } from "@/components/ui/button";
 
 export function ResetDemoButton() {
@@ -16,6 +17,7 @@ export function ResetDemoButton() {
     setLoading(true);
     try {
       resetDemo(demoNow);
+      useLpgOpsStore.getState().reset();
       toast.success("Demo database reset", {
         description: `All households, utility logs, and cases re-anchored to ${demoNow}.`,
       });
