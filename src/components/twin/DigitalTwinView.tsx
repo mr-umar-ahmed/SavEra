@@ -30,6 +30,7 @@ import {
 } from "lucide-react";
 import { useTwinStore } from "@/stores/twinStore";
 import { useUiStore } from "@/stores/ui";
+import { ElectricityNetwork3D } from "./ElectricityNetwork3D";
 import { IsometricHouse3D } from "./IsometricHouse3D";
 import { Twin2DFallback } from "./Twin2DFallback";
 import { EstimatedChip, SimulationPrototypeBadge } from "@/components/ui/Chips";
@@ -237,7 +238,7 @@ export default function DigitalTwinView() {
             <SimulationPrototypeBadge />
           </div>
           <p className="text-xs text-muted-foreground mt-0.5">
-            Real-time physical telemetry sync · Household H-1024 · 3D Isometric View
+            Real-time physical telemetry sync · Household H-1024 · 3D Physical Micro-Grid SCADA
           </p>
         </div>
 
@@ -251,7 +252,7 @@ export default function DigitalTwinView() {
             {twinMode === "3d" ? (
               <>
                 <Box className="size-4 text-positive" />
-                <span>3D Isometric Floorplan</span>
+                <span>3D Physical SCADA Twin</span>
               </>
             ) : (
               <>
@@ -276,7 +277,7 @@ export default function DigitalTwinView() {
 
       {/* Main 3D / 2D View Stage */}
       <div className="rounded-3xl border border-border bg-card/60 overflow-hidden shadow-lg">
-        {twinMode === "3d" ? <IsometricHouse3D /> : <Twin2DFallback />}
+        {twinMode === "3d" ? <ElectricityNetwork3D /> : <Twin2DFallback />}
       </div>
 
       {/* Real-Time Micro-Grid Live Telemetry HUD */}

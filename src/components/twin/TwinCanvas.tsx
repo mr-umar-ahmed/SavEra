@@ -3,6 +3,7 @@
 import { Box, Layers, Sparkles } from "lucide-react";
 import { useUiStore } from "@/stores/ui";
 import { Twin2DFallback } from "./Twin2DFallback";
+import { ElectricityNetwork3D } from "./ElectricityNetwork3D";
 import { IsometricHouse3D } from "./IsometricHouse3D";
 import { WhatIfScenarios } from "./WhatIfScenarios";
 import { StatusBadge } from "@/components/savera/StatusBadge";
@@ -46,7 +47,7 @@ export function TwinCanvas({
             {twinMode === "3d" ? (
               <>
                 <Box className="h-4 w-4 text-positive" />
-                <span>View: 3D Isometric Floorplan</span>
+                <span>View: 3D SCADA Twin</span>
               </>
             ) : (
               <>
@@ -59,7 +60,7 @@ export function TwinCanvas({
       </div>
 
       {/* Main Visualizer Area */}
-      {twinMode === "3d" ? <IsometricHouse3D /> : <Twin2DFallback />}
+      {twinMode === "3d" ? <ElectricityNetwork3D /> : <Twin2DFallback />}
 
       {/* Interactive What-If Scenarios Suite */}
       <WhatIfScenarios />
