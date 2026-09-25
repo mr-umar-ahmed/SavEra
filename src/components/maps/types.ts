@@ -20,6 +20,25 @@ export interface AreaMapMarker {
   tone: Tone;
   label: string;
   value?: string;
+  type?: "facility" | "sensor" | "personnel" | "incident" | "oht" | "wtp" | "mbr" | "pump";
+  facilityType?: string;
+  details?: string;
+  radius?: number;
+}
+
+export interface AreaMapPolyline {
+  id: string;
+  name: string;
+  positions: LatLng[];
+  tone: Tone;
+  label: string;
+  value?: string;
+  status?: "optimal" | "normal" | "moderate" | "critical" | "warning";
+  diameterMm?: number;
+  flowMld?: number;
+  pressureBar?: number;
+  dashArray?: string;
+  weight?: number;
 }
 
 export interface MapLegendItem {
@@ -28,7 +47,7 @@ export interface MapLegendItem {
 }
 
 export interface AreaMapProps {
-  features: ReadonlyArray<AreaMapFeature>;
+  features?: ReadonlyArray<AreaMapFeature>;
   center?: LatLng;
   /** Default 13. */
   zoom?: number;
@@ -38,9 +57,12 @@ export interface AreaMapProps {
   selectedId?: string | null;
   legend?: ReadonlyArray<MapLegendItem>;
   markers?: ReadonlyArray<AreaMapMarker>;
+  polylines?: ReadonlyArray<AreaMapPolyline>;
   /** Disable wheel zoom (default: wheel zoom off so pages scroll normally). */
   scrollWheelZoom?: boolean;
   className?: string;
   /** Accessible name for the map region. */
   ariaLabel?: string;
+  showLayerToggle?: boolean;
 }
+

@@ -19,6 +19,9 @@ import { PageHeader } from "@/components/savera/PageHeader";
 import { KpiCard } from "@/components/savera/KpiCard";
 import { StatusBadge } from "@/components/savera/StatusBadge";
 import { Button } from "@/components/ui/button";
+import { AreaMap } from "@/components/maps";
+import { AREAS } from "@/data/geo/raichur";
+import { getWaterPipelinePolylines, getWaterInfrastructureMarkers } from "@/data/geo/waterPipelines";
 
 export default function SupervisorWaterDashboard() {
   const areas = [
@@ -119,6 +122,72 @@ export default function SupervisorWaterDashboard() {
           subtitle="Validated on ground"
           badge={<StatusBadge status="complete" label="Verified" />}
         />
+      </div>
+
+      {/* Ward 24 Real Water Pipeline & SCADA Map Visualizer */}
+      <div className="rounded-3xl border border-border bg-card p-6 backdrop-blur-xl shadow-xl space-y-4">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-border">
+          <div>
+            <div className="flex items-center gap-2">
+              <span className="size-2 rounded-full bg-teal-400 animate-pulse" />
+              <h3 className="text-base font-bold text-foreground">
+                Ward 24 Water Supply Pipeline Grid &amp; Pressure Telemetry Map
+              </h3>
+            </div>
+            <p className="text-xs text-muted-foreground mt-0.5">
+              Live geographic visualization: Feeders 4A–4D from OHT Gandhi Nagar (2.2 ML) to local distribution mains.
+            </p>
+          </div>
+
+          <div className="flex items-center gap-2">
+            <span className="text-2xs font-mono px-2.5 py-1 rounded-full bg-destructive/15 text-destructive font-bold border border-destructive/30 flex items-center gap-1.5 animate-pulse">
+              <AlertTriangle className="size-3" />
+              <span>DM-4B: 0.4 bar Incident Active</span>
+            </span>
+          </div>
+        </div>
+
+        <div className="rounded-2xl overflow-hidden border border-border shadow-inner">
+          <AreaMap
+            features={AREAS.filter((a) => a.wardId === "ward-24").map((a) => ({
+              id: a.id,
+              name: a.name,
+              polygon: a.polygon,
+              tone: a.id === "area-xyz" ? "critical" : a.id === "area-ghi" ? "moderate" : "normal",
+              label:
+                a.id === "area-xyz"
+                  ? "78 Reports · Depressurized Line"
+                  : a.id === "area-ghi"
+                  ? "56 Reports · Field Verification Active"
+                  : "Normal Supply Window",
+              value: a.id === "area-xyz" ? "0.4 bar" : a.id === "area-ghi" ? "1.1 bar" : "2.1 bar",
+              href: `/supervisor/water/areas/${a.id}`,
+            }))}
+            polylines={getWaterPipelinePolylines(true)}
+            markers={[
+              ...getWaterInfrastructureMarkers(true),
+              {
+                id: "fa-arif-pos",
+                position: [16.166, 77.381],
+                tone: "moderate",
+                label: "Field Assistant Arif (GPS On)",
+                value: "GHI Colony 4th Cross",
+                details: "Inspecting distribution valve & pressure gauge.",
+                radius: 7,
+              },
+            ]}
+            center={[16.173, 77.376]}
+            zoom={14}
+            height={380}
+            showLayerToggle
+            legend={[
+              { tone: "critical", label: "Critical Depressurization: Line 4B / Case XYZ-001 (0.4 bar)" },
+              { tone: "moderate", label: "Moderate Drop: Line 4D / Case GHI-001 (1.1 bar)" },
+              { tone: "normal", label: "Normal Delivery Pressure (2.0–2.4 bar)" },
+              { tone: "optimal", label: "Optimal Delivery Head (2.5+ bar)" },
+            ]}
+          />
+        </div>
       </div>
 
       {/* Area Table matching §6.1 */}
