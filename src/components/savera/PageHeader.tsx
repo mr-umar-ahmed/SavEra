@@ -59,7 +59,7 @@ export function PageHeader({
           <nav className="mb-3 flex items-center gap-1.5 text-xs text-muted-foreground">
             {breadcrumbs.map((b, i) => (
               <React.Fragment key={i}>
-                {i > 0 && <ChevronRight className="size-3 text-white/30" />}
+                {i > 0 && <ChevronRight className="size-3 text-faint" />}
                 {b.href ? (
                   <Link href={b.href} className="hover:text-foreground transition-colors">
                     {b.label}
@@ -79,14 +79,12 @@ export function PageHeader({
             {backLabel}
           </Link>
         ) : null}
-        {eyebrow ? <p className="eyebrow mb-1.5">{eyebrow}</p> : null}
-        <Heading className="font-display text-foreground text-2xl leading-tight font-black tracking-tight sm:text-3xl">
+        {eyebrow ? <p className="eyebrow mb-2">{eyebrow}</p> : null}
+        <Heading className="font-display text-foreground text-3xl leading-tight font-extrabold tracking-tight sm:text-4xl">
           {title}
         </Heading>
         {desc ? (
-          <p className="text-muted-foreground mt-2 max-w-2xl text-sm leading-relaxed sm:text-base">
-            {desc}
-          </p>
+          <p className="text-soft mt-2 max-w-3xl text-base leading-relaxed">{desc}</p>
         ) : null}
         {chipContent ? (
           <div className="mt-3 flex flex-wrap items-center gap-2">{chipContent}</div>

@@ -14,38 +14,45 @@ Commands: `npm run dev` · `npm run typecheck` · `npm run lint` · `npm run tes
 
 ---
 
-## 2. Visual theme (inherited from the previous SavEra app — keep it)
+## 2. Visual theme — "Savera Earth" (Phase T, supersedes the inherited dark-emerald theme)
 
-- **Base:** page background `#050B08` (near-black with a green cast), card surface `#0A0F0D`, borders `rgba(255,255,255,0.10)`, muted text `rgba(255,255,255,0.50)`, faint text `rgba(255,255,255,0.30)`.
-- **Primary accent:** emerald `#10B981` (hover `#34D399`). Primary buttons are **pills**: `rounded-full bg-emerald-500 text-black font-bold` with glow `shadow-[0_0_40px_-5px_rgba(16,185,129,0.4)]`.
-- **Secondary accent:** blue `#3B82F6` (authority / government), teal `#14B8A6`.
-- **Fonts:** `Outfit` for display (`font-display`, headlines `font-black tracking-tight`), `Inter` for body (`font-sans`), monospace for meta (`font-mono text-xs uppercase tracking-widest`).
-- **Surfaces:** glass cards `bg-[#0A0F0D]/80 backdrop-blur-xl border border-white/10 rounded-[2rem]` (large) / `rounded-2xl` (medium) / `rounded-xl` (small). Section eyebrow labels: `text-xs font-bold uppercase tracking-widest text-emerald-500`.
-- **Motion:** framer-motion fade/slide on mount; hover `hover:border-white/20`; spotlight radial hover on feature cards; blurred colour blobs (`blur-[120px]`) and a faint 60px grid on hero backgrounds. Respect `prefers-reduced-motion`.
-- **Sidebar:** 256px, `bg-[#0A0F0D] border-r border-white/10`; active item `bg-emerald-500 text-black shadow-lg shadow-emerald-500/20 rounded-xl`; inactive `text-white/50 hover:bg-white/5`.
-- **Charts:** gradient fills, grid `rgba(255,255,255,0.05)` dashed, axis ticks `rgba(255,255,255,0.4)` 12px Inter, tooltip `#050B08` bg with `border-white/10`, `rounded-2xl`.
-- **Light theme:** provided via `next-themes` class strategy; tokens flip (`#F6F8F7` background, white cards, `#E5E7EB` borders, emerald-600 primary). Default theme is **dark**. The landing page is always dark.
+Reference: the user-supplied screenshot of the electricity dashboard (cream surfaces, chocolate primary, forest-green accent, mono labels). Full rationale and codemod mapping: `docs/CONTINUATION_PLAN.md` Phase T.
+
+- **Themes:** light "Earth" is the **default**; dark "Espresso" is the companion. Both are driven by the same CSS tokens in `src/app/globals.css` (`:root` = light, `.dark` = dark), so every screen flips with the theme toggle. `next-themes` class strategy, `storageKey="savera-theme-v2"`. The landing page follows the theme too.
+- **Surfaces (light / dark):** page `--background #F3ECE1 / #15100C`, sidebar `#EEE5D6 / #1A140F`, card `#FBF7F0 / #201913`, wells `--muted #F0E8DB`, `--inset #EAE1D2`, borders `--border #E3D7C5`, `--border-strong #CDBCA4`.
+- **Ink:** `text-foreground` (#231A12), `text-soft` (#4A3D30), `text-muted-foreground` (#665849), `text-faint` (#75665A) — all >= 4.5:1 on page and card in both themes. Never use `text-white/NN`, `border-white/NN` or `bg-[#hex]` surfaces: use the tokens.
+- **Primary:** chocolate `--primary #6B3D1C` (hover `--primary-hover`, cream foreground) — active nav pill, primary buttons, active tab, voice FAB, Reset Demo. Dark: caramel `#D49A62`.
+- **Positive / brand green:** `--positive #2E6B4A` (`text-positive`, `bg-positive-soft`, `Button variant="positive"`) — good values, logo mark, secondary CTA ("Open Digital Twin").
+- **Hue text:** bright palette text classes are replaced by theme-aware ink tokens `text-{amber|teal|rose|cyan|sky|red|blue|violet|indigo|purple|orange|yellow|lime|green|pink}-ink` (deep in light, bright in dark). Tints (`bg-amber-500/10`) and borders keep the Tailwind palette.
+- **Fonts:** Plus Jakarta Sans (`font-sans`, `font-display`, 400–800) and JetBrains Mono (`font-mono`) for eyebrows, chips, meta and small figures. Large figures use the sans.
+- **Type scale (larger, Phase T):** `text-2xs` 12 px (new) · `text-xs` 13 · `text-sm` 15 · `text-base` 17 · `text-lg` 19 · `text-xl` 22 · `text-2xl` 26 · `text-3xl` 32 · `text-4xl` 40. Page titles `text-3xl sm:text-4xl font-extrabold`; eyebrows use `.eyebrow` (mono, copper, 0.14em tracking).
+- **Shape:** `--radius 0.75rem` (lg 12 · xl 15 · 2xl 18 · 3xl 24 px); cards `glass` = `bg-card border shadow-sm`; buttons and tabs are pills; warm low shadows.
+- **Chrome:** sidebar 272 px (`w-68`) with brand block (green round logo, `v2.0` mono chip, portal name), mono `NAVIGATION` label, brown active pill, mono `NEW`/`BETA` tags and an Active Context card; 80 px top bar with breadcrumb (`SAVERA / Section`, section in primary), Alerts pill with red count, persona pill, brown Reset Demo, round theme toggle.
+- **Charts:** `useChartTheme()` returns `CHART_LIGHT` (default and before mount) or `CHART` (dark) — warm grid/axis, cream tooltip, tone/stream maps per theme, 13 px ticks. Maps: warm sepia OSM tiles (inverted and warmed in dark); polygon tones from `useChartTheme().tone`.
+- **Motion:** framer-motion fade/slide on mount; respect `prefers-reduced-motion`.
 
 ### Status palette (use everywhere; always pair colour with label/icon)
 
-| Tone | Meaning | Hex | Tailwind |
+Hues are fixed; shades are deepened on cream. Use `bg-tone-*` / `text-tone-*` utilities (they follow the theme).
+
+| Tone | Meaning | Light | Dark |
 |---|---|---|---|
-| `optimal` | Optimal / Below normal | `#22D3EE` | cyan-400 |
-| `normal` | Normal / Stable / Verified / Resolved | `#10B981` | emerald-500 |
-| `moderate` | Moderate / Higher than baseline / Increasing / Pending / Elevated | `#F59E0B` | amber-500 |
-| `critical` | Critical / Abnormally high / High increase / Exceedance | `#EF4444` | red-500 |
-| `unknown` | Unknown / not tracked | `#6B7280` | gray-500 |
+| `optimal` | Optimal / Below normal | `#0E6F86` (cyan) | `#4FCBDB` |
+| `normal` | Normal / Stable / Verified / Resolved | `#2E7550` (green) | `#5FC48D` |
+| `moderate` | Moderate / Higher than baseline / Increasing / Pending / Elevated | `#9A5A0B` (amber) | `#EDAA45` |
+| `critical` | Critical / Abnormally high / High increase / Exceedance | `#B0372A` (red) | `#F07868` |
+| `unknown` | Unknown / not tracked | `#6B6259` (grey) | `#A09585` |
 
 ### Stream colours
 
-| Stream | Hex | Tailwind |
-|---|---|---|
-| electricity | `#F59E0B` | amber-500 |
-| water | `#38BDF8` | sky-400 |
-| lpg | `#F43F5E` | rose-500 |
-| carbon / green | `#10B981` | emerald-500 |
+| Stream | Light | Dark | Utility |
+|---|---|---|---|
+| electricity | `#95570A` | `#EDAA45` | `stream-electricity` |
+| water | `#1D6C9C` | `#62B9E6` | `stream-water` |
+| lpg | `#B23A4C` | `#F07F8F` | `stream-lpg` |
+| carbon / green | `#2E7550` | `#5FC48D` | `stream-green` |
 
-CSS tokens are defined in `src/app/globals.css` under `@theme inline` as `--color-tone-*`, `--color-stream-*`, plus the shadcn variables (`--background`, `--card`, `--primary`, …) so both `bg-tone-critical` and `bg-primary` work.
+CSS tokens live in `src/app/globals.css`; `@theme inline` maps them to Tailwind colours (`--color-tone-*: var(--tone-*)`, `--color-stream-*`, `--color-*-ink`, plus the shadcn variables) so `bg-tone-critical`, `text-amber-ink` and `bg-primary` all follow the theme.
 
 ### Chips (mandatory labels)
 
@@ -58,7 +65,7 @@ CSS tokens are defined in `src/app/globals.css` under `@theme inline` as `--colo
 ```
 src/
   app/
-    layout.tsx                 fonts (Outfit, Inter), ThemeProvider, Toaster, StoreHydrator
+    layout.tsx                 fonts (Plus Jakarta Sans, JetBrains Mono), ThemeProvider (light default), Toaster, StoreHydrator
     globals.css                tokens
     page.tsx                   landing
     auth/page.tsx

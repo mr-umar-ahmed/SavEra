@@ -25,15 +25,15 @@ export default function GovIndustrialPage() {
         badge={
           <div className="flex items-center gap-2">
             <StatusBadge status="simulation" label="Simulated Feeds / GHG Prototype" />
-            <span className="text-xs font-mono text-white/50">OCEMS Standards</span>
+            <span className="text-xs font-mono text-muted-foreground">OCEMS Standards</span>
           </div>
         }
       />
 
       <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
-        <TabsList className="bg-black/40 border border-white/10 p-1">
-          <TabsTrigger value="emissions" className="text-xs">Continuous Emission Feeds</TabsTrigger>
-          <TabsTrigger value="ghg" className="text-xs">GHG Accounting Inventory</TabsTrigger>
+        <TabsList>
+          <TabsTrigger value="emissions">Continuous Emission Feeds</TabsTrigger>
+          <TabsTrigger value="ghg">GHG Accounting Inventory</TabsTrigger>
         </TabsList>
 
         <TabsContent value="emissions" className="space-y-6">
@@ -64,21 +64,21 @@ export default function GovIndustrialPage() {
             />
           </div>
 
-          <div className="rounded-2xl border border-white/10 bg-[#070D0A]/95 p-6 backdrop-blur-xl">
-            <h3 className="text-sm font-bold text-white mb-4">Industrial Point-Source Emission Stations</h3>
+          <div className="rounded-2xl border border-border bg-card p-6 backdrop-blur-xl">
+            <h3 className="text-sm font-bold text-foreground mb-4">Industrial Point-Source Emission Stations</h3>
 
-            <div className="divide-y divide-white/5">
+            <div className="divide-y divide-border">
               {units.map((u, idx) => (
                 <div key={idx} className="py-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4 text-xs">
                   <div>
                     <div className="flex items-center gap-2 mb-1">
-                      <span className="font-bold text-white text-sm">{u.name}</span>
-                      <span className="text-white/40 text-[11px]">({u.type})</span>
+                      <span className="font-bold text-foreground text-sm">{u.name}</span>
+                      <span className="text-faint text-xs">({u.type})</span>
                     </div>
-                    <div className="flex items-center gap-4 text-white/60 font-mono text-[11px]">
-                      <span>PM: <strong className="text-white">{u.pm}</strong></span>
-                      <span>SO₂: <strong className="text-white">{u.so2}</strong></span>
-                      <span>NOx: <strong className="text-white">{u.nox}</strong></span>
+                    <div className="flex items-center gap-4 text-muted-foreground font-mono text-xs">
+                      <span>PM: <strong className="text-foreground">{u.pm}</strong></span>
+                      <span>SO₂: <strong className="text-foreground">{u.so2}</strong></span>
+                      <span>NOx: <strong className="text-foreground">{u.nox}</strong></span>
                     </div>
                   </div>
 
@@ -90,24 +90,24 @@ export default function GovIndustrialPage() {
         </TabsContent>
 
         <TabsContent value="ghg" className="space-y-6">
-          <div className="p-6 rounded-2xl border border-white/10 bg-[#070D0A]/95 backdrop-blur-xl space-y-4">
-            <h3 className="text-base font-bold text-white">Municipal GHG Accounting Breakdown (Scopes 1, 2, 3)</h3>
+          <div className="p-6 rounded-2xl border border-border bg-card backdrop-blur-xl space-y-4">
+            <h3 className="text-base font-bold text-foreground">Municipal GHG Accounting Breakdown (Scopes 1, 2, 3)</h3>
 
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 font-mono text-xs">
-              <div className="p-4 rounded-xl bg-black/40 border border-white/5 space-y-1">
-                <span className="text-white/40 block text-[10px]">SCOPE 1 (DIRECT COMBUSTION)</span>
-                <span className="text-xl font-bold text-white">124,500 tCO₂e</span>
-                <span className="text-[11px] text-white/50 block">Captive diesel & industrial boilers</span>
+              <div className="p-4 rounded-xl bg-inset border border-border/60 space-y-1">
+                <span className="text-faint block text-2xs">SCOPE 1 (DIRECT COMBUSTION)</span>
+                <span className="text-xl font-bold text-foreground">124,500 tCO₂e</span>
+                <span className="text-xs text-muted-foreground block">Captive diesel & industrial boilers</span>
               </div>
-              <div className="p-4 rounded-xl bg-black/40 border border-white/5 space-y-1">
-                <span className="text-white/40 block text-[10px]">SCOPE 2 (GRID CONSUMPTION)</span>
-                <span className="text-xl font-bold text-emerald-400">342,100 tCO₂e</span>
-                <span className="text-[11px] text-white/50 block">Purchased grid electricity (0.82 kg/kWh)</span>
+              <div className="p-4 rounded-xl bg-inset border border-border/60 space-y-1">
+                <span className="text-faint block text-2xs">SCOPE 2 (GRID CONSUMPTION)</span>
+                <span className="text-xl font-bold text-positive">342,100 tCO₂e</span>
+                <span className="text-xs text-muted-foreground block">Purchased grid electricity (0.82 kg/kWh)</span>
               </div>
-              <div className="p-4 rounded-xl bg-black/40 border border-white/5 space-y-1">
-                <span className="text-white/40 block text-[10px]">SCOPE 3 (VALUE CHAIN)</span>
-                <span className="text-xl font-bold text-teal-400">89,200 tCO₂e</span>
-                <span className="text-[11px] text-white/50 block">Logistics, waste & water treatment</span>
+              <div className="p-4 rounded-xl bg-inset border border-border/60 space-y-1">
+                <span className="text-faint block text-2xs">SCOPE 3 (VALUE CHAIN)</span>
+                <span className="text-xl font-bold text-teal-ink">89,200 tCO₂e</span>
+                <span className="text-xs text-muted-foreground block">Logistics, waste & water treatment</span>
               </div>
             </div>
           </div>

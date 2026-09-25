@@ -84,7 +84,7 @@ export function RangeBar({
         <div className="relative h-5">
           <span
             className={cn(
-              "absolute -translate-x-1/2 rounded-full border px-2 py-0.5 text-[11px] font-semibold whitespace-nowrap tabular-nums",
+              "absolute -translate-x-1/2 rounded-full border px-2 py-0.5 text-xs font-semibold whitespace-nowrap tabular-nums",
               t.bgSoft,
               t.text,
               t.border,
@@ -96,10 +96,10 @@ export function RangeBar({
         </div>
       ) : null}
 
-      <div className="bg-muted relative h-2.5 w-full rounded-full dark:bg-white/10">
+      <div className="bg-muted relative h-2.5 w-full rounded-full dark:bg-secondary">
         <span
           aria-hidden="true"
-          className="absolute inset-y-0 rounded-full border border-emerald-500/40 bg-emerald-500/25"
+          className="absolute inset-y-0 rounded-full border border-positive/40 bg-positive/25"
           style={{ left: `${bandLeft}%`, width: `${bandWidth}%` }}
         />
         {markerPct !== null ? (
@@ -114,7 +114,7 @@ export function RangeBar({
         ) : null}
       </div>
 
-      <div className="text-muted-foreground relative h-4 text-[11px] tabular-nums">
+      <div className="text-muted-foreground relative h-4 text-xs tabular-nums">
         <span className="absolute -translate-x-1/2" style={{ left: `${bandLeft}%` }}>
           {fmt(low)}
         </span>
@@ -124,7 +124,7 @@ export function RangeBar({
       </div>
       <p className="text-muted-foreground text-xs">
         <span
-          className="mr-1.5 inline-block size-2 rounded-sm bg-emerald-500/40 align-middle"
+          className="mr-1.5 inline-block size-2 rounded-sm bg-positive/40 align-middle"
           aria-hidden="true"
         />
         {bandLabel}: {fmt(low)} – {fmt(high)}

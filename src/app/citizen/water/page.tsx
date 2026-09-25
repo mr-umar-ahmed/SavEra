@@ -151,7 +151,7 @@ export default function CitizenWaterPortalPage() {
               status={activeCase ? "warning" : "normal"}
               label={activeCase ? "🟡 Concern under review" : "🟢 Supply as scheduled"}
             />
-            <span className="text-xs font-mono text-white/50">XYZ Colony · Ward 24</span>
+            <span className="text-xs font-mono text-muted-foreground">XYZ Colony · Ward 24</span>
           </div>
         }
         actions={
@@ -160,7 +160,7 @@ export default function CitizenWaterPortalPage() {
               <Button
                 variant="outline"
                 size="sm"
-                className="h-8 gap-1.5 border-white/10 bg-white/5 hover:bg-white/10 text-xs text-teal-400 rounded-xl"
+                className="h-8 gap-1.5 border-border bg-muted hover:bg-secondary text-xs text-teal-ink rounded-xl"
               >
                 <MapPin className="h-3.5 w-3.5" />
                 <span>Area Water Status</span>
@@ -172,15 +172,15 @@ export default function CitizenWaterPortalPage() {
 
       {/* Active Official Disruption Alert Banner */}
       {waterAlert && (
-        <div className="p-4 rounded-2xl bg-teal-500/10 border border-teal-500/30 flex items-start justify-between gap-3 text-xs text-teal-200">
+        <div className="p-4 rounded-2xl bg-teal-500/10 border border-teal-500/30 flex items-start justify-between gap-3 text-xs text-teal-ink">
           <div className="flex items-start gap-2.5">
-            <AlertTriangle className="h-4 w-4 text-teal-400 shrink-0 mt-0.5" />
+            <AlertTriangle className="h-4 w-4 text-teal-ink shrink-0 mt-0.5" />
             <div>
-              <span className="font-bold block text-white">{waterAlert.title}</span>
-              <p className="text-teal-200/80 mt-0.5">{waterAlert.reason}</p>
+              <span className="font-bold block text-foreground">{waterAlert.title}</span>
+              <p className="text-teal-ink/80 mt-0.5">{waterAlert.reason}</p>
             </div>
           </div>
-          <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-teal-500/20 text-teal-300 border border-teal-500/30 shrink-0">
+          <span className="text-2xs font-mono px-2 py-0.5 rounded bg-teal-500/20 text-teal-ink border border-teal-500/30 shrink-0">
             Official Advisory
           </span>
         </div>
@@ -188,10 +188,10 @@ export default function CitizenWaterPortalPage() {
 
       {/* 2. Today's Planned Supply Card & Household Availability */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-        <div className="md:col-span-2 p-6 rounded-3xl border border-white/10 bg-[#070D0A]/95 backdrop-blur-xl shadow-xl flex flex-col justify-between">
+        <div className="md:col-span-2 p-6 rounded-3xl border border-border bg-card backdrop-blur-xl shadow-xl flex flex-col justify-between">
           <div>
             <div className="flex items-center justify-between mb-3">
-              <div className="flex items-center gap-2 text-teal-400 font-bold text-xs uppercase tracking-wider font-mono">
+              <div className="flex items-center gap-2 text-teal-ink font-bold text-xs uppercase tracking-wider font-mono">
                 <Clock className="h-4 w-4" />
                 <span>Today&apos;s Planned Supply</span>
               </div>
@@ -201,19 +201,19 @@ export default function CitizenWaterPortalPage() {
               />
             </div>
 
-            <h3 className="text-2xl font-extrabold text-white mb-1.5">
+            <h3 className="text-2xl font-extrabold text-foreground mb-1.5">
               XYZ Colony · 7:00–8:00 AM Daily
             </h3>
-            <p className="text-xs text-white/60 leading-relaxed font-mono">
-              Planned Volume: <span className="text-teal-400 font-bold">4,50,000 L</span> for the colony feeder manifold.
+            <p className="text-xs text-muted-foreground leading-relaxed font-mono">
+              Planned Volume: <span className="text-teal-ink font-bold">4,50,000 L</span> for the colony feeder manifold.
             </p>
           </div>
 
-          <div className="pt-6 border-t border-white/5 mt-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+          <div className="pt-6 border-t border-border/60 mt-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
             <div>
-              <span className="text-xs text-white/50 block">Estimated Household Availability:</span>
+              <span className="text-xs text-muted-foreground block">Estimated Household Availability:</span>
               <div className="flex items-center gap-2 mt-0.5">
-                <span className="text-base font-bold font-mono text-emerald-400">~640 L / day</span>
+                <span className="text-base font-bold font-mono text-positive">~640 L / day</span>
                 <EstimatedChip confidence="Medium" />
               </div>
             </div>
@@ -221,7 +221,7 @@ export default function CitizenWaterPortalPage() {
             {!reportingOpen && (
               <Button
                 onClick={handleStartReport}
-                className="bg-teal-500 text-black hover:bg-teal-400 font-bold text-xs h-9 px-5 gap-2 rounded-xl shadow-lg shadow-teal-500/20"
+                className="bg-positive text-positive-foreground hover:bg-positive/90 font-bold text-xs h-9 px-5 gap-2 rounded-xl shadow-lg shadow-positive/10"
               >
                 <Droplet className="h-4 w-4" />
                 <span>Report Water Issue</span>
@@ -231,23 +231,23 @@ export default function CitizenWaterPortalPage() {
         </div>
 
         {/* Quick Area Status Card */}
-        <div className="p-6 rounded-3xl border border-white/10 bg-[#070D0A]/95 backdrop-blur-xl shadow-xl flex flex-col justify-between">
+        <div className="p-6 rounded-3xl border border-border bg-card backdrop-blur-xl shadow-xl flex flex-col justify-between">
           <div>
-            <span className="text-xs font-mono uppercase tracking-wider text-white/50 block mb-1">
+            <span className="text-xs font-mono uppercase tracking-wider text-muted-foreground block mb-1">
               Community Experience
             </span>
-            <div className="text-3xl font-extrabold font-mono text-white">78 Reports</div>
-            <p className="text-xs text-white/60 mt-1 leading-relaxed">
-              Grouped by AI into Case <strong className="text-teal-400 font-mono">XYZ-001</strong>. Supervisor field verification active.
+            <div className="text-3xl font-extrabold font-display text-foreground">78 Reports</div>
+            <p className="text-xs text-muted-foreground mt-1 leading-relaxed">
+              Grouped by AI into Case <strong className="text-teal-ink font-mono">XYZ-001</strong>. Supervisor field verification active.
             </p>
           </div>
 
-          <div className="pt-4 border-t border-white/5 mt-4">
+          <div className="pt-4 border-t border-border/60 mt-4">
             <Link href="/citizen/water/area">
               <Button
                 variant="outline"
                 size="sm"
-                className="w-full border-teal-500/30 bg-teal-500/10 hover:bg-teal-500/20 text-teal-300 text-xs font-semibold h-9 rounded-xl gap-2"
+                className="w-full border-teal-500/30 bg-teal-500/10 hover:bg-teal-500/20 text-teal-ink text-xs font-semibold h-9 rounded-xl gap-2"
               >
                 <span>View Full Area Status</span>
                 <ArrowRight className="h-3.5 w-3.5" />
@@ -260,19 +260,19 @@ export default function CitizenWaterPortalPage() {
       {/* 3. 4-STEP REPORT FLOW (Matching §3) */}
       {reportingOpen && (
         <div className="rounded-3xl border border-teal-500/30 bg-teal-500/[0.03] p-6 sm:p-8 backdrop-blur-2xl space-y-6 shadow-2xl">
-          <div className="flex items-center justify-between pb-4 border-b border-white/10">
+          <div className="flex items-center justify-between pb-4 border-b border-border">
             <div>
-              <span className="text-xs font-mono uppercase tracking-wider text-teal-400 font-bold block">
+              <span className="text-xs font-mono uppercase tracking-wider text-teal-ink font-bold block">
                 Citizen Supply Feedback
               </span>
-              <h3 className="text-lg font-bold text-white mt-0.5">
+              <h3 className="text-lg font-bold text-foreground mt-0.5">
                 Step {reportStep} of 4: {reportStep === 1 ? "Supply Details" : reportStep === 2 ? "Water Experience" : reportStep === 3 ? "Issue Details" : "Report Submitted"}
               </h3>
             </div>
             <button
               type="button"
               onClick={() => setReportingOpen(false)}
-              className="text-xs text-white/50 hover:text-white"
+              className="text-xs text-muted-foreground hover:text-foreground"
             >
               Cancel
             </button>
@@ -281,25 +281,25 @@ export default function CitizenWaterPortalPage() {
           {/* STEP 1: Supply Details */}
           {reportStep === 1 && (
             <div className="space-y-4">
-              <div className="p-4 rounded-2xl bg-black/40 border border-white/10 space-y-2 text-xs font-mono">
-                <div className="flex justify-between py-1 border-b border-white/5">
-                  <span className="text-white/50 font-sans">Locality:</span>
-                  <span className="text-white font-bold">XYZ Colony, Ward 24</span>
+              <div className="p-4 rounded-2xl bg-inset border border-border space-y-2 text-xs font-mono">
+                <div className="flex justify-between py-1 border-b border-border/60">
+                  <span className="text-muted-foreground font-sans">Locality:</span>
+                  <span className="text-foreground font-bold">XYZ Colony, Ward 24</span>
                 </div>
-                <div className="flex justify-between py-1 border-b border-white/5">
-                  <span className="text-white/50 font-sans">Supply Window:</span>
-                  <span className="text-emerald-400 font-bold">7:00 AM – 8:00 AM Today</span>
+                <div className="flex justify-between py-1 border-b border-border/60">
+                  <span className="text-muted-foreground font-sans">Supply Window:</span>
+                  <span className="text-positive font-bold">7:00 AM – 8:00 AM Today</span>
                 </div>
                 <div className="flex justify-between py-1">
-                  <span className="text-white/50 font-sans">Planned Area Allocation:</span>
-                  <span className="text-white">4,50,000 Litres</span>
+                  <span className="text-muted-foreground font-sans">Planned Area Allocation:</span>
+                  <span className="text-foreground">4,50,000 Litres</span>
                 </div>
               </div>
 
               <div className="flex justify-end pt-2">
                 <Button
                   onClick={() => setReportStep(2)}
-                  className="bg-teal-500 text-black hover:bg-teal-400 font-bold text-xs h-9 px-6 rounded-xl gap-2 shadow-lg shadow-teal-500/20"
+                  className="bg-positive text-positive-foreground hover:bg-positive/90 font-bold text-xs h-9 px-6 rounded-xl gap-2 shadow-lg shadow-positive/10"
                 >
                   <span>Continue</span>
                   <ArrowRight className="h-3.5 w-3.5" />
@@ -311,7 +311,7 @@ export default function CitizenWaterPortalPage() {
           {/* STEP 2: Water Experience */}
           {reportStep === 2 && (
             <div className="space-y-4">
-              <h4 className="text-sm font-semibold text-white">How was today&apos;s water supply?</h4>
+              <h4 className="text-sm font-semibold text-foreground">How was today&apos;s water supply?</h4>
               <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
                 {[
                   { id: "sufficient" as const, label: "Sufficient", desc: "Adequate volume & pressure" },
@@ -325,12 +325,12 @@ export default function CitizenWaterPortalPage() {
                     key={opt.id}
                     type="button"
                     onClick={() => handleExperienceSelect(opt.id)}
-                    className="p-4 rounded-2xl bg-white/[0.02] border border-white/10 hover:border-teal-500/50 hover:bg-teal-500/[0.05] text-left transition-all group"
+                    className="p-4 rounded-2xl bg-muted/60 border border-border hover:border-teal-500/50 hover:bg-teal-500/[0.05] text-left transition-all group"
                   >
-                    <span className="font-bold text-sm text-white group-hover:text-teal-300 block mb-1">
+                    <span className="font-bold text-sm text-foreground group-hover:text-teal-ink block mb-1">
                       {opt.label}
                     </span>
-                    <span className="text-[11px] text-white/50">{opt.desc}</span>
+                    <span className="text-xs text-muted-foreground">{opt.desc}</span>
                   </button>
                 ))}
               </div>
@@ -341,19 +341,19 @@ export default function CitizenWaterPortalPage() {
           {reportStep === 3 && (
             <form onSubmit={handleSubmitReport} className="space-y-5">
               <div>
-                <label className="block text-xs font-medium text-white/80 mb-1.5">
+                <label className="block text-xs font-medium text-soft mb-1.5">
                   What happened? (Optional notes)
                 </label>
                 <textarea
                   value={issueDetails}
                   onChange={(e) => setIssueDetails(e.target.value)}
-                  className="w-full h-20 rounded-xl bg-white/5 border border-white/10 text-white text-xs p-3 outline-none focus:border-teal-500"
+                  className="w-full h-20 rounded-xl bg-muted border border-border text-foreground text-xs p-3 outline-none focus:border-teal-500"
                   placeholder="e.g. Water came only for about 30 minutes with low pressure."
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-medium text-white/80 mb-2">
+                <label className="block text-xs font-medium text-soft mb-2">
                   Duration received (minutes)
                 </label>
                 <div className="flex gap-2">
@@ -364,8 +364,8 @@ export default function CitizenWaterPortalPage() {
                       onClick={() => setDurationReceived(mins)}
                       className={`px-4 py-2 rounded-xl text-xs font-mono font-bold border transition-all ${
                         durationReceived === mins
-                          ? "bg-teal-500 text-black shadow-md shadow-teal-500/20"
-                          : "bg-white/5 border-white/10 text-white/70 hover:bg-white/10"
+                          ? "bg-positive text-positive-foreground shadow-md shadow-positive/10"
+                          : "bg-muted border-border text-soft hover:bg-secondary"
                       }`}
                     >
                       {mins} mins
@@ -375,7 +375,7 @@ export default function CitizenWaterPortalPage() {
               </div>
 
               <div>
-                <label className="block text-xs font-medium text-white/80 mb-2">
+                <label className="block text-xs font-medium text-soft mb-2">
                   Was your requirement satisfied?
                 </label>
                 <div className="flex gap-2">
@@ -390,8 +390,8 @@ export default function CitizenWaterPortalPage() {
                       onClick={() => setRequirementSatisfied(s.id)}
                       className={`px-4 py-2 rounded-xl text-xs font-semibold border transition-all ${
                         requirementSatisfied === s.id
-                          ? "bg-teal-500/20 border-teal-500/40 text-teal-300 font-bold"
-                          : "bg-white/5 border-white/10 text-white/60"
+                          ? "bg-teal-500/20 border-teal-500/40 text-teal-ink font-bold"
+                          : "bg-muted border-border text-muted-foreground"
                       }`}
                     >
                       {s.label}
@@ -401,7 +401,7 @@ export default function CitizenWaterPortalPage() {
               </div>
 
               <div>
-                <label className="block text-xs font-medium text-white/80 mb-1.5">
+                <label className="block text-xs font-medium text-soft mb-1.5">
                   Optional photo / video (Simulated upload)
                 </label>
                 <div
@@ -409,9 +409,9 @@ export default function CitizenWaterPortalPage() {
                     setUploadedEvidenceName("pressure_gauge_0.8bar.jpg");
                     toast.success("Photo attached (Simulated upload)");
                   }}
-                  className="p-3 rounded-xl border border-dashed border-white/15 hover:border-teal-500/40 bg-white/[0.01] text-center cursor-pointer text-xs text-white/60 flex items-center justify-center gap-2"
+                  className="p-3 rounded-xl border border-dashed border-border-strong hover:border-teal-500/40 bg-muted/60 text-center cursor-pointer text-xs text-muted-foreground flex items-center justify-center gap-2"
                 >
-                  <Camera className="h-4 w-4 text-teal-400" />
+                  <Camera className="h-4 w-4 text-teal-ink" />
                   <span>
                     {uploadedEvidenceName
                       ? `Attached: ${uploadedEvidenceName}`
@@ -420,20 +420,20 @@ export default function CitizenWaterPortalPage() {
                 </div>
               </div>
 
-              <div className="pt-3 border-t border-white/10 flex justify-between items-center">
+              <div className="pt-3 border-t border-border flex justify-between items-center">
                 <Button
                   type="button"
                   variant="outline"
                   size="sm"
                   onClick={() => setReportStep(2)}
-                  className="text-xs text-white/70"
+                  className="text-xs text-soft"
                 >
                   &larr; Back
                 </Button>
                 <Button
                   type="submit"
                   disabled={submitting}
-                  className="bg-teal-500 text-black hover:bg-teal-400 font-bold text-xs h-9 px-6 rounded-xl gap-2 shadow-lg shadow-teal-500/20"
+                  className="bg-positive text-positive-foreground hover:bg-positive/90 font-bold text-xs h-9 px-6 rounded-xl gap-2 shadow-lg shadow-positive/10"
                 >
                   <span>Submit Report</span>
                   <Send className="h-3.5 w-3.5" />
@@ -444,35 +444,35 @@ export default function CitizenWaterPortalPage() {
 
           {/* STEP 4: Report Submitted Card matching §3 */}
           {reportStep === 4 && (
-            <div className="p-6 rounded-2xl bg-black/40 border border-teal-500/30 space-y-4">
+            <div className="p-6 rounded-2xl bg-inset border border-teal-500/30 space-y-4">
               <div className="flex items-center gap-3">
-                <div className="h-10 w-10 rounded-xl bg-teal-500/20 border border-teal-500/30 flex items-center justify-center text-teal-400">
+                <div className="h-10 w-10 rounded-xl bg-teal-500/20 border border-teal-500/30 flex items-center justify-center text-teal-ink">
                   <CheckCircle2 className="h-6 w-6" />
                 </div>
                 <div>
-                  <h4 className="text-base font-bold text-white">Report Successfully Logged</h4>
-                  <p className="text-xs text-teal-300 font-mono">
+                  <h4 className="text-base font-bold text-foreground">Report Successfully Logged</h4>
+                  <p className="text-xs text-teal-ink font-mono">
                     Report ID: {submittedReportId} · 8:12 AM
                   </p>
                 </div>
               </div>
 
-              <div className="p-3.5 rounded-xl bg-white/[0.02] border border-white/5 grid grid-cols-2 gap-3 text-xs font-mono">
+              <div className="p-3.5 rounded-xl bg-muted/60 border border-border/60 grid grid-cols-2 gap-3 text-xs font-mono">
                 <div>
-                  <span className="text-white/40 block font-sans">Issue Reported:</span>
-                  <span className="text-white font-semibold">
+                  <span className="text-faint block font-sans">Issue Reported:</span>
+                  <span className="text-foreground font-semibold">
                     {experience === "sufficient" ? "Sufficient" : "Less than usual"}
                   </span>
                 </div>
                 <div>
-                  <span className="text-white/40 block font-sans">Current Stage:</span>
-                  <span className="text-teal-400 font-semibold">Submitted &rarr; AI Area Analysis</span>
+                  <span className="text-faint block font-sans">Current Stage:</span>
+                  <span className="text-teal-ink font-semibold">Submitted &rarr; AI Area Analysis</span>
                 </div>
               </div>
 
               <div className="pt-2 flex flex-col sm:flex-row gap-3">
                 <Link href={`/citizen/water/reports/${submittedReportId}`} className="flex-1">
-                  <Button className="w-full bg-teal-500 text-black hover:bg-teal-400 font-bold text-xs h-9 rounded-xl gap-2 shadow-lg shadow-teal-500/20">
+                  <Button className="w-full bg-positive text-positive-foreground hover:bg-positive/90 font-bold text-xs h-9 rounded-xl gap-2 shadow-lg shadow-positive/10">
                     <span>Track My Report Timeline</span>
                     <ArrowRight className="h-3.5 w-3.5" />
                   </Button>
@@ -480,7 +480,7 @@ export default function CitizenWaterPortalPage() {
                 <Button
                   variant="outline"
                   onClick={() => setReportingOpen(false)}
-                  className="text-xs border-white/10 bg-white/5 hover:bg-white/10 text-white h-9 rounded-xl"
+                  className="text-xs border-border bg-muted hover:bg-secondary text-foreground h-9 rounded-xl"
                 >
                   Back to Water Home
                 </Button>
@@ -493,27 +493,27 @@ export default function CitizenWaterPortalPage() {
       {/* Cards: My Reports (latest 3) & Supply Details */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
         {/* Card: My Reports */}
-        <div className="p-6 rounded-3xl border border-white/10 bg-[#070D0A]/95 backdrop-blur-xl shadow-xl space-y-4">
-          <div className="flex items-center justify-between pb-3 border-b border-white/10">
-            <h3 className="text-sm font-bold text-white flex items-center gap-2">
-              <History className="h-4 w-4 text-teal-400" />
+        <div className="p-6 rounded-3xl border border-border bg-card backdrop-blur-xl shadow-xl space-y-4">
+          <div className="flex items-center justify-between pb-3 border-b border-border">
+            <h3 className="text-sm font-bold text-foreground flex items-center gap-2">
+              <History className="h-4 w-4 text-teal-ink" />
               <span>My Reports (Recent Submissions)</span>
             </h3>
-            <span className="text-xs text-white/40 font-mono">{reports.length} total</span>
+            <span className="text-xs text-faint font-mono">{reports.length} total</span>
           </div>
 
-          <div className="divide-y divide-white/5">
+          <div className="divide-y divide-border">
             {reports.slice(0, 3).map((r) => (
               <div key={r.id} className="py-3 flex items-center justify-between text-xs">
                 <div>
                   <div className="flex items-center gap-2">
-                    <span className="font-mono font-bold text-white">{r.id}</span>
+                    <span className="font-mono font-bold text-foreground">{r.id}</span>
                     <StatusBadge
                       status={r.status === "closed" || r.status === "actioned" ? "normal" : "warning"}
                       label={r.status === "closed" || r.status === "actioned" ? "Resolved" : "In Review"}
                     />
                   </div>
-                  <span className="text-[11px] text-white/50 block mt-0.5">
+                  <span className="text-xs text-muted-foreground block mt-0.5">
                     {r.date} · {r.experience.replace("_", " ")}
                   </span>
                 </div>
@@ -522,7 +522,7 @@ export default function CitizenWaterPortalPage() {
                   <Button
                     variant="ghost"
                     size="sm"
-                    className="h-7 text-[11px] text-teal-400 hover:text-teal-300 font-semibold"
+                    className="h-7 text-xs text-teal-ink hover:text-teal-ink font-semibold"
                   >
                     Track &rarr;
                   </Button>
@@ -533,15 +533,15 @@ export default function CitizenWaterPortalPage() {
         </div>
 
         {/* Card: Supply Details & Storage Tips */}
-        <div className="p-6 rounded-3xl border border-white/10 bg-[#070D0A]/95 backdrop-blur-xl shadow-xl space-y-3">
-          <div className="flex items-center gap-2 text-teal-400 font-bold text-xs uppercase tracking-wider font-mono">
+        <div className="p-6 rounded-3xl border border-border bg-card backdrop-blur-xl shadow-xl space-y-3">
+          <div className="flex items-center gap-2 text-teal-ink font-bold text-xs uppercase tracking-wider font-mono">
             <Info className="h-4 w-4" />
             <span>Supply Details &amp; Storage Tips</span>
           </div>
-          <p className="text-xs text-white/70 leading-relaxed">
+          <p className="text-xs text-soft leading-relaxed">
             Feeder Valve 4B operates under gravity head from the Raichur Central Reservoir. In areas with booster pump operation, keep sumps clear and fill overhead tanks during the first 45 minutes of scheduled delivery.
           </p>
-          <div className="p-3 rounded-xl bg-white/[0.02] border border-white/5 space-y-1.5 text-[11px] font-mono text-white/60">
+          <div className="p-3 rounded-xl bg-muted/60 border border-border/60 space-y-1.5 text-xs font-mono text-muted-foreground">
             <div>• Standard pressure: 1.4 Bar at manifold</div>
             <div>• Feeder duration: 60 minutes nominal</div>
             <div>• Storage target: 1,000 L overhead / 2,000 L sump</div>

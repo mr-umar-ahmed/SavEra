@@ -35,7 +35,7 @@ export default function GovNotificationsPage() {
               variant="outline"
               size="sm"
               onClick={markAllRead}
-              className="h-8 gap-1.5 border-white/10 bg-white/5 text-xs text-emerald-400"
+              className="h-8 gap-1.5 border-border bg-muted text-xs text-positive"
             >
               <CheckCheck className="h-3.5 w-3.5" />
               <span>Mark All as Read</span>
@@ -44,7 +44,7 @@ export default function GovNotificationsPage() {
         }
       />
 
-      <div className="rounded-2xl border border-white/10 bg-[#070D0A]/95 p-6 backdrop-blur-xl divide-y divide-white/5">
+      <div className="rounded-2xl border border-border bg-card p-6 backdrop-blur-xl divide-y divide-border">
         {filtered.map((n) => {
           const isUnread = user ? !n.readBy.includes(user.id) : false;
           return (
@@ -52,20 +52,20 @@ export default function GovNotificationsPage() {
               key={n.id}
               onClick={() => markRead(n.id)}
               className={`py-4 flex items-start gap-4 transition-colors cursor-pointer ${
-                isUnread ? "bg-emerald-500/[0.03]" : ""
+                isUnread ? "bg-positive/[0.03]" : ""
               }`}
             >
               <div className="pt-0.5 shrink-0">
                 {n.official ? (
-                  <div className="h-8 w-8 rounded-lg bg-amber-500/15 border border-amber-500/30 flex items-center justify-center text-amber-400">
+                  <div className="h-8 w-8 rounded-lg bg-amber-500/15 border border-amber-500/30 flex items-center justify-center text-amber-ink">
                     <ShieldAlert className="h-4 w-4" />
                   </div>
                 ) : n.stream ? (
-                  <div className="h-8 w-8 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center">
+                  <div className="h-8 w-8 rounded-lg bg-muted border border-border flex items-center justify-center">
                     <StreamIcon stream={n.stream} className="h-4 w-4" />
                   </div>
                 ) : (
-                  <div className="h-8 w-8 rounded-lg bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400">
+                  <div className="h-8 w-8 rounded-lg bg-positive/10 border border-positive/20 flex items-center justify-center text-positive">
                     <Sparkles className="h-4 w-4" />
                   </div>
                 )}
@@ -74,22 +74,22 @@ export default function GovNotificationsPage() {
               <div className="flex-1 min-w-0">
                 <div className="flex items-center justify-between gap-2 mb-1">
                   <div className="flex items-center gap-2 flex-wrap">
-                    <span className={`text-xs font-bold ${isUnread ? "text-white" : "text-white/80"}`}>
+                    <span className={`text-xs font-bold ${isUnread ? "text-foreground" : "text-soft"}`}>
                       {n.title}
                     </span>
                     {n.official && <StatusBadge status="official" />}
                   </div>
-                  <span className="text-[10px] text-white/40 shrink-0 font-mono">
+                  <span className="text-2xs text-faint shrink-0 font-mono">
                     {relativeTime(n.createdAt, demoNow)}
                   </span>
                 </div>
 
-                <p className="text-xs text-white/70 leading-relaxed mb-2">{n.body}</p>
+                <p className="text-xs text-soft leading-relaxed mb-2">{n.body}</p>
 
                 {n.href && (
                   <Link
                     href={n.href}
-                    className="inline-flex items-center gap-1 text-[11px] font-medium text-emerald-400 hover:underline"
+                    className="inline-flex items-center gap-1 text-xs font-medium text-positive hover:underline"
                   >
                     <span>Inspect event</span>
                     <ExternalLink className="h-3 w-3" />

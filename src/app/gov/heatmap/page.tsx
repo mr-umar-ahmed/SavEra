@@ -26,7 +26,7 @@ export default function GovHeatmapPage() {
         badge={
           <div className="flex items-center gap-2">
             <StatusBadge status="normal" label="GIS Layers Active" />
-            <span className="text-xs font-mono text-white/50">Raichur Spatial Matrix</span>
+            <span className="text-xs font-mono text-muted-foreground">Raichur Spatial Matrix</span>
           </div>
         }
       />
@@ -37,8 +37,8 @@ export default function GovHeatmapPage() {
           onClick={() => setActiveLayer("water")}
           className={`px-4 py-2 rounded-xl text-xs font-medium flex items-center gap-2 border transition-all ${
             activeLayer === "water"
-              ? "bg-teal-500/20 border-teal-500/40 text-teal-300 font-bold"
-              : "bg-white/5 border-white/10 text-white/70"
+              ? "bg-teal-500/20 border-teal-500/40 text-teal-ink font-bold"
+              : "bg-muted border-border text-soft"
           }`}
         >
           <Droplet className="h-4 w-4" />
@@ -49,8 +49,8 @@ export default function GovHeatmapPage() {
           onClick={() => setActiveLayer("electricity")}
           className={`px-4 py-2 rounded-xl text-xs font-medium flex items-center gap-2 border transition-all ${
             activeLayer === "electricity"
-              ? "bg-amber-500/20 border-amber-500/40 text-amber-300 font-bold"
-              : "bg-white/5 border-white/10 text-white/70"
+              ? "bg-amber-500/20 border-amber-500/40 text-amber-ink font-bold"
+              : "bg-muted border-border text-soft"
           }`}
         >
           <Zap className="h-4 w-4" />
@@ -61,8 +61,8 @@ export default function GovHeatmapPage() {
           onClick={() => setActiveLayer("lpg")}
           className={`px-4 py-2 rounded-xl text-xs font-medium flex items-center gap-2 border transition-all ${
             activeLayer === "lpg"
-              ? "bg-rose-500/20 border-rose-500/40 text-rose-300 font-bold"
-              : "bg-white/5 border-white/10 text-white/70"
+              ? "bg-rose-500/20 border-rose-500/40 text-rose-ink font-bold"
+              : "bg-muted border-border text-soft"
           }`}
         >
           <Flame className="h-4 w-4" />
@@ -75,16 +75,16 @@ export default function GovHeatmapPage() {
         {wardStatuses.map((w, idx) => {
           const tone = activeLayer === "water" ? w.water : activeLayer === "electricity" ? w.el : w.lpg;
           return (
-            <div key={idx} className="p-5 rounded-2xl border border-white/10 bg-[#070D0A]/95 backdrop-blur-xl space-y-3">
+            <div key={idx} className="p-5 rounded-2xl border border-border bg-card backdrop-blur-xl space-y-3">
               <div className="flex items-center justify-between">
-                <span className="font-bold text-white text-sm">{w.ward}</span>
+                <span className="font-bold text-foreground text-sm">{w.ward}</span>
                 <StatusBadge
                   status={tone as "normal" | "warning" | "danger"}
                   label={tone === "danger" ? "Critical Stress" : tone === "warning" ? "Elevated" : "Normal"}
                 />
               </div>
-              <p className="text-xs text-white/60">{w.desc}</p>
-              <div className="pt-2 border-t border-white/5 flex justify-between text-[11px] text-white/40 font-mono">
+              <p className="text-xs text-muted-foreground">{w.desc}</p>
+              <div className="pt-2 border-t border-border/60 flex justify-between text-xs text-faint font-mono">
                 <span>Active Layer: {activeLayer.toUpperCase()}</span>
                 <span>Raichur Municipal GIS</span>
               </div>

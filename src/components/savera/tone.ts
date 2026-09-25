@@ -55,20 +55,23 @@ export const TONE_CLASSES: Record<Tone, ToneClasses> = {
   },
 };
 
-/** Hex per tone (ARCHITECTURE §2 status palette). */
+/**
+ * Hex per tone (ARCHITECTURE §2 hues, "Earth" light values). Prefer the
+ * `tone-*` CSS utilities or `useChartTheme().tone`, which follow the theme.
+ */
 export const TONE_HEX: Record<Tone, string> = {
-  optimal: "#22D3EE",
-  normal: "#10B981",
-  moderate: "#F59E0B",
-  critical: "#EF4444",
-  unknown: "#6B7280",
+  optimal: "#0E6F86",
+  normal: "#2E7550",
+  moderate: "#B06A12",
+  critical: "#B0372A",
+  unknown: "#8A8076",
 };
 
-/** Hex per stream (ARCHITECTURE §2 stream colours). */
+/** Hex per stream ("Earth" light values). Prefer `stream-*` utilities. */
 export const STREAM_HEX: Record<Stream, string> = {
-  electricity: "#F59E0B",
-  water: "#38BDF8",
-  lpg: "#F43F5E",
+  electricity: "#B06A12",
+  water: "#1D6C9C",
+  lpg: "#B23A4C",
 };
 
 /** Tone-like class helpers per stream (same shape as `ToneClasses`). */

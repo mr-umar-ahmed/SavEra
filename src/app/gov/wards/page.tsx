@@ -22,18 +22,18 @@ export default function GovWardsPage() {
         badge={
           <div className="flex items-center gap-2">
             <StatusBadge status="normal" label="Privacy-Preserving Aggregates" />
-            <span className="text-xs font-mono text-white/50">Zero Citizen PII</span>
+            <span className="text-xs font-mono text-muted-foreground">Zero Citizen PII</span>
           </div>
         }
       />
 
-      <div className="rounded-2xl border border-white/10 bg-[#070D0A]/95 p-6 backdrop-blur-xl">
-        <h3 className="text-base font-bold text-white mb-4">Municipal Ward Standings</h3>
+      <div className="rounded-2xl border border-border bg-card p-6 backdrop-blur-xl">
+        <h3 className="text-base font-bold text-foreground mb-4">Municipal Ward Standings</h3>
 
         <div className="overflow-x-auto">
           <table className="w-full text-xs">
             <thead>
-              <tr className="border-b border-white/10 text-white/50 text-left font-mono">
+              <tr className="border-b border-border text-muted-foreground text-left font-mono">
                 <th className="pb-3 font-medium">WARD</th>
                 <th className="pb-3 font-medium">PARTICIPATING HOMES</th>
                 <th className="pb-3 font-medium">WATER STATUS</th>
@@ -42,11 +42,11 @@ export default function GovWardsPage() {
                 <th className="pb-3 font-medium">DEMAND TREND</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-white/5 font-mono">
+            <tbody className="divide-y divide-border font-mono">
               {wards.map((w) => (
-                <tr key={w.id} className="hover:bg-white/[0.02]">
-                  <td className="py-3.5 font-bold text-white font-sans">{w.name}</td>
-                  <td className="py-3.5 text-white/70">{w.households.toLocaleString()}</td>
+                <tr key={w.id} className="hover:bg-muted/60">
+                  <td className="py-3.5 font-bold text-foreground font-sans">{w.name}</td>
+                  <td className="py-3.5 text-soft">{w.households.toLocaleString()}</td>
                   <td className="py-3.5">
                     <StatusBadge status={w.waterStatus as "normal" | "warning" | "danger"} />
                   </td>
@@ -56,7 +56,7 @@ export default function GovWardsPage() {
                   <td className="py-3.5">
                     <StatusBadge status={w.elStatus as "normal" | "warning" | "danger"} />
                   </td>
-                  <td className="py-3.5 font-bold text-white font-sans">{w.trend}</td>
+                  <td className="py-3.5 font-bold text-foreground font-sans">{w.trend}</td>
                 </tr>
               ))}
             </tbody>

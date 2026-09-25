@@ -26,7 +26,7 @@ export default function AreaGasDetailsPage({
         ]}
         actions={
           <Link href="/supervisor/gas">
-            <Button variant="outline" size="sm" className="h-8 gap-1.5 border-white/10 bg-white/5 text-xs text-white">
+            <Button variant="outline" size="sm" className="h-8 gap-1.5 border-border bg-muted text-xs text-foreground">
               <ArrowLeft className="h-3.5 w-3.5" />
               <span>Back to LPG Desk</span>
             </Button>
@@ -55,9 +55,9 @@ export default function AreaGasDetailsPage({
         />
       </div>
 
-      <div className="p-6 rounded-2xl border border-white/10 bg-[#070D0A]/95 space-y-3">
-        <h3 className="text-sm font-bold text-white">Distributor Dispatch Action</h3>
-        <p className="text-xs text-white/70 leading-relaxed">
+      <div className="p-6 rounded-2xl border border-border bg-card space-y-3">
+        <h3 className="text-sm font-bold text-foreground">Distributor Dispatch Action</h3>
+        <p className="text-xs text-soft leading-relaxed">
           Local distributor Indane Gas Agency (Raichur Branch 2) has been notified to pre-stage 50 additional 14.2 kg domestic cylinders at the Ward 24 staging point to prevent refill stockouts.
         </p>
       </div>

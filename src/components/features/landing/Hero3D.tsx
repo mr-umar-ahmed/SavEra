@@ -2,14 +2,63 @@
 
 import { useEffect, useRef, useState } from "react";
 import * as THREE from "three";
+import { useTheme } from "next-themes";
 import { useReducedMotion } from "@/components/hooks/useReducedMotion";
 import { Box, Droplet, Flame, Zap } from "lucide-react";
+
+/** Scene palette per theme ("Earth" light / "Espresso" dark). */
+const HERO_PALETTE = {
+  light: {
+    ambient: 0xfff4e6,
+    ambientIntensity: 1.1,
+    key: 0xffe2c0,
+    water: 0x1d6c9c,
+    gold: 0xd08a2a,
+    base: 0xe4d7c3,
+    rim: 0x6b3d1c,
+    gridMajor: 0x2e6b4a,
+    gridMinor: 0xd2c3ad,
+    glass: 0xfbf7f0,
+    glassMetalness: 0.1,
+    glassRoughness: 0.45,
+    edge: 0x6b3d1c,
+    solar: 0x1d4e6c,
+    tank: 0x2e6b4a,
+    streamElectricity: 0xb06a12,
+    streamWater: 0x1d6c9c,
+    streamLpg: 0xb23a4c,
+    additive: false,
+  },
+  dark: {
+    ambient: 0xffffff,
+    ambientIntensity: 0.6,
+    key: 0xd49a62,
+    water: 0x62b9e6,
+    gold: 0xedaa45,
+    base: 0x1a140f,
+    rim: 0xd49a62,
+    gridMajor: 0x7cc59a,
+    gridMinor: 0x2e251c,
+    glass: 0x201913,
+    glassMetalness: 0.8,
+    glassRoughness: 0.2,
+    edge: 0xd49a62,
+    solar: 0x1d6c9c,
+    tank: 0x2e7550,
+    streamElectricity: 0xedaa45,
+    streamWater: 0x62b9e6,
+    streamLpg: 0xf07f8f,
+    additive: true,
+  },
+} as const;
 
 export function Hero3D() {
   const containerRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const prefersReducedMotion = useReducedMotion();
   const [webGlSupported, setWebGlSupported] = useState(true);
+  const { resolvedTheme } = useTheme();
+  const palette = resolvedTheme === "dark" ? HERO_PALETTE.dark : HERO_PALETTE.light;
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -41,18 +90,18 @@ export function Hero3D() {
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 
     // Lighting
-    const ambientLight = new THREE.AmbientLight(0xffffff, 0.7);
+    const ambientLight = new THREE.AmbientLight(palette.ambient, palette.ambientIntensity);
     scene.add(ambientLight);
 
-    const dirLight = new THREE.DirectionalLight(0x10b981, 2.5);
+    const dirLight = new THREE.DirectionalLight(palette.key, 2.2);
     dirLight.position.set(10, 20, 10);
     scene.add(dirLight);
 
-    const cyanLight = new THREE.PointLight(0x06b6d4, 3, 20);
+    const cyanLight = new THREE.PointLight(palette.water, 3, 20);
     cyanLight.position.set(-6, 8, -4);
     scene.add(cyanLight);
 
-    const goldLight = new THREE.PointLight(0xf59e0b, 2.5, 20);
+    const goldLight = new THREE.PointLight(palette.gold, 2.5, 20);
     goldLight.position.set(6, 4, 6);
     scene.add(goldLight);
 
@@ -62,7 +111,7 @@ export function Hero3D() {
     // 1. Pedestal Base
     const baseGeo = new THREE.CylinderGeometry(5.8, 6.2, 0.4, 32);
     const baseMat = new THREE.MeshStandardMaterial({
-      color: 0x07110c,
+      color: palette.base,
       roughness: 0.8,
       metalness: 0.2,
     });
@@ -72,26 +121,26 @@ export function Hero3D() {
 
     // Glowing rim
     const rimGeo = new THREE.TorusGeometry(5.82, 0.04, 16, 64);
-    const rimMat = new THREE.MeshBasicMaterial({ color: 0x10b981 });
+    const rimMat = new THREE.MeshBasicMaterial({ color: palette.rim });
     const rim = new THREE.Mesh(rimGeo, rimMat);
     rim.rotation.x = Math.PI / 2;
     rim.position.y = 0.01;
     mainGroup.add(rim);
 
     // Grid on base
-    const grid = new THREE.GridHelper(9, 18, 0x10b981, 0x0f2c1f);
+    const grid = new THREE.GridHelper(9, 18, palette.gridMajor, palette.gridMinor);
     grid.position.y = 0.02;
     mainGroup.add(grid);
 
     // 2. Architectural House Volumes
     const glassMat = new THREE.MeshStandardMaterial({
-      color: 0x0b1a13,
-      roughness: 0.2,
-      metalness: 0.8,
+      color: palette.glass,
+      roughness: palette.glassRoughness,
+      metalness: palette.glassMetalness,
       transparent: true,
       opacity: 0.85,
     });
-    const edgeMat = new THREE.LineBasicMaterial({ color: 0x34d399, transparent: true, opacity: 0.6 });
+    const edgeMat = new THREE.LineBasicMaterial({ color: palette.edge, transparent: true, opacity: 0.7 });
 
     // Main living cube
     const mainCubeGeo = new THREE.BoxGeometry(3.6, 2.4, 3.2);
@@ -114,7 +163,7 @@ export function Hero3D() {
     // Solar Roof Panel
     const solarGeo = new THREE.BoxGeometry(2.6, 0.1, 2.6);
     const solarMat = new THREE.MeshStandardMaterial({
-      color: 0x0284c7,
+      color: palette.solar,
       metalness: 0.9,
       roughness: 0.1,
     });
@@ -126,7 +175,7 @@ export function Hero3D() {
     // Rooftop Water Tank (Cylinder)
     const tankGeo = new THREE.CylinderGeometry(0.5, 0.5, 1.0, 16);
     const tankMat = new THREE.MeshStandardMaterial({
-      color: 0x0d9488,
+      color: palette.tank,
       metalness: 0.5,
       roughness: 0.3,
       transparent: true,
@@ -183,16 +232,16 @@ export function Hero3D() {
         size,
         transparent: true,
         opacity: 0.9,
-        blending: THREE.AdditiveBlending,
+        blending: palette.additive ? THREE.AdditiveBlending : THREE.NormalBlending,
       });
 
       const points = new THREE.Points(geo, mat);
       return { points, curve, offsets, count };
     };
 
-    const elStream = createStream(elCurve, 70, 0xf59e0b, 0.14);
-    const waterStream = createStream(waterCurve, 70, 0x06b6d4, 0.14);
-    const lpgStream = createStream(lpgCurve, 50, 0xf43f5e, 0.13);
+    const elStream = createStream(elCurve, 70, palette.streamElectricity, 0.15);
+    const waterStream = createStream(waterCurve, 70, palette.streamWater, 0.15);
+    const lpgStream = createStream(lpgCurve, 50, palette.streamLpg, 0.14);
 
     mainGroup.add(elStream.points);
     mainGroup.add(waterStream.points);
@@ -298,7 +347,7 @@ export function Hero3D() {
       lpgStream.points.geometry.dispose();
       (lpgStream.points.material as THREE.Material).dispose();
     };
-  }, [prefersReducedMotion]);
+  }, [prefersReducedMotion, palette]);
 
   if (prefersReducedMotion || !webGlSupported) {
     return <StaticHeroFallback />;
@@ -307,37 +356,33 @@ export function Hero3D() {
   return (
     <div
       ref={containerRef}
-      className="relative w-full h-[380px] sm:h-[460px] lg:h-[500px] rounded-3xl overflow-hidden border border-white/10 bg-gradient-to-b from-emerald-950/20 via-black to-teal-950/20 backdrop-blur-2xl flex items-center justify-center shadow-2xl shadow-emerald-950/40"
+      className="relative w-full h-[380px] sm:h-[460px] lg:h-[500px] rounded-3xl overflow-hidden border border-border bg-gradient-to-b from-positive-soft via-card to-secondary flex items-center justify-center shadow-xl"
     >
       <canvas ref={canvasRef} className="w-full h-full cursor-grab active:cursor-grabbing" />
 
       {/* Floating HUD Badges on 3D viewport */}
       <div className="absolute top-4 left-4 flex flex-col gap-2 pointer-events-none">
-        <div className="inline-flex items-center gap-2 px-2.5 py-1 rounded-full bg-black/60 border border-emerald-500/30 text-emerald-400 text-[11px] font-mono backdrop-blur-md">
-          <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />
+        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-card/90 border border-positive/30 text-positive text-xs font-mono">
+          <span className="h-1.5 w-1.5 rounded-full bg-positive animate-pulse" />
           <span>Interactive 3D Habitat Model · 60 FPS</span>
         </div>
       </div>
 
-      <div className="absolute bottom-4 right-4 flex items-center gap-3 pointer-events-none">
-        <div className="flex items-center gap-3 px-3 py-1.5 rounded-xl bg-black/70 border border-white/10 text-[10px] font-mono text-white/70 backdrop-blur-md">
-          <div className="flex items-center gap-1 text-amber-400">
+      <div className="absolute bottom-4 inset-x-4 flex items-center justify-center gap-3 pointer-events-none">
+        <div className="flex items-center gap-3 px-3 py-1.5 rounded-xl bg-card/90 border border-border text-xs font-mono text-soft">
+          <div className="flex items-center gap-1 text-amber-ink">
             <Zap className="h-3 w-3" />
             <span>Electricity Flow</span>
           </div>
-          <div className="flex items-center gap-1 text-cyan-400">
+          <div className="flex items-center gap-1 text-cyan-ink">
             <Droplet className="h-3 w-3" />
             <span>Water Inflow</span>
           </div>
-          <div className="flex items-center gap-1 text-rose-400">
+          <div className="flex items-center gap-1 text-rose-ink">
             <Flame className="h-3 w-3" />
             <span>LPG Burn</span>
           </div>
         </div>
-      </div>
-
-      <div className="absolute bottom-4 left-4 text-[10px] text-white/40 font-mono pointer-events-none">
-        Rotate & explore isometric telemetry
       </div>
     </div>
   );
@@ -345,24 +390,24 @@ export function Hero3D() {
 
 function StaticHeroFallback() {
   return (
-    <div className="relative w-full h-[380px] sm:h-[460px] lg:h-[500px] rounded-3xl overflow-hidden border border-white/10 bg-[#070D0A]/90 p-8 flex flex-col items-center justify-center text-center shadow-2xl">
-      <div className="h-20 w-20 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400 mb-6">
-        <Box className="h-10 w-10 text-emerald-400" />
+    <div className="relative w-full h-[380px] sm:h-[460px] lg:h-[500px] rounded-3xl overflow-hidden border border-border bg-card p-8 flex flex-col items-center justify-center text-center shadow-2xl">
+      <div className="h-20 w-20 rounded-2xl bg-positive/10 border border-positive/20 flex items-center justify-center text-positive mb-6">
+        <Box className="h-10 w-10 text-positive" />
       </div>
-      <h3 className="text-xl font-bold text-white mb-2">Habitat Digital Twin Schematic</h3>
-      <p className="text-xs text-white/60 max-w-md leading-relaxed mb-6">
+      <h3 className="text-xl font-bold text-foreground mb-2">Habitat Digital Twin Schematic</h3>
+      <p className="text-sm text-muted-foreground max-w-md leading-relaxed mb-6">
         Three-stream resource model mapping domestic load, municipal water intake, and LPG burn rates.
       </p>
       <div className="flex items-center gap-4 text-xs font-mono">
-        <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-amber-500/10 text-amber-300 border border-amber-500/20">
+        <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-amber-500/10 text-amber-ink border border-amber-500/20">
           <Zap className="h-3.5 w-3.5" />
           <span>Grid Flow: 390 kWh</span>
         </div>
-        <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-teal-500/10 text-teal-300 border border-teal-500/20">
+        <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-teal-500/10 text-teal-ink border border-teal-500/20">
           <Droplet className="h-3.5 w-3.5" />
           <span>Supply: 450 L/day</span>
         </div>
-        <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-rose-500/10 text-rose-300 border border-rose-500/20">
+        <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-rose-500/10 text-rose-ink border border-rose-500/20">
           <Flame className="h-3.5 w-3.5" />
           <span>LPG: 0.57 kg/day</span>
         </div>

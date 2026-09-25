@@ -6,15 +6,20 @@
   outline: none;
 }
 
-/* Dark tiles: invert the OSM raster so it sits on the #050B08 surface. */
+/* Light tiles: warm sepia wash so the OSM raster sits on the cream surface. */
+.savera-map .leaflet-tile-pane {
+  filter: sepia(0.35) saturate(0.75) brightness(1.02) contrast(0.95);
+}
+
+/* Dark tiles: invert the OSM raster and warm it for the espresso surface. */
 .dark .savera-map .leaflet-tile-pane {
-  filter: invert(1) hue-rotate(180deg) brightness(0.85) contrast(0.9) saturate(0.6);
+  filter: invert(1) hue-rotate(180deg) sepia(0.3) brightness(0.8) contrast(0.9) saturate(0.55);
 }
 
 .savera-map .leaflet-control-attribution {
   background: color-mix(in srgb, var(--card) 80%, transparent);
   color: var(--muted-foreground);
-  font-size: 10px;
+  font-size: 11px;
   padding: 2px 6px;
   border-top-left-radius: 8px;
 }
@@ -27,7 +32,7 @@
   border: 1px solid var(--border);
   border-radius: 12px;
   overflow: hidden;
-  box-shadow: 0 10px 30px -15px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 10px 30px -15px rgba(58, 38, 20, 0.35);
 }
 
 .savera-map .leaflet-bar a {
@@ -56,9 +61,9 @@
   border: 1px solid var(--border);
   border-radius: 12px;
   padding: 6px 10px;
-  font-size: 12px;
-  line-height: 1.4;
-  box-shadow: 0 16px 32px -16px rgba(0, 0, 0, 0.6);
+  font-size: 13px;
+  line-height: 1.45;
+  box-shadow: 0 16px 32px -16px rgba(58, 38, 20, 0.4);
 }
 
 .savera-map .leaflet-tooltip::before {

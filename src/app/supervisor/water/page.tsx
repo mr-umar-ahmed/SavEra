@@ -67,10 +67,10 @@ export default function SupervisorWaterDashboard() {
         subtitle="Monitor area supply schedules, triage AI-grouped citizen pressure reports, and coordinate field verification teams."
         badge={
           <div className="flex items-center gap-2">
-            <span className="text-xs font-mono font-bold text-teal-400 bg-teal-500/10 border border-teal-500/20 px-2.5 py-0.5 rounded-full">
+            <span className="text-xs font-mono font-bold text-teal-ink bg-teal-500/10 border border-teal-500/20 px-2.5 py-0.5 rounded-full">
               Ward 24
             </span>
-            <span className="text-xs font-mono text-white/50">4 Localities Under Watch</span>
+            <span className="text-xs font-mono text-muted-foreground">4 Localities Under Watch</span>
           </div>
         }
         actions={
@@ -78,9 +78,9 @@ export default function SupervisorWaterDashboard() {
             <Button
               variant="outline"
               size="sm"
-              className="h-8 gap-1.5 border-white/10 bg-white/5 hover:bg-white/10 text-xs text-teal-300 rounded-xl"
+              className="h-8 gap-1.5 border-border bg-muted hover:bg-secondary text-xs text-teal-ink rounded-xl"
             >
-              <ShieldCheck className="h-3.5 w-3.5 text-teal-400" />
+              <ShieldCheck className="h-3.5 w-3.5 text-teal-ink" />
               <span>Verified Reports &amp; Dept Updates</span>
             </Button>
           </Link>
@@ -122,19 +122,19 @@ export default function SupervisorWaterDashboard() {
       </div>
 
       {/* Area Table matching §6.1 */}
-      <div className="rounded-3xl border border-white/10 bg-[#070D0A]/95 p-6 backdrop-blur-xl shadow-xl space-y-4">
-        <div className="flex items-center justify-between pb-3 border-b border-white/10">
+      <div className="rounded-3xl border border-border bg-card p-6 backdrop-blur-xl shadow-xl space-y-4">
+        <div className="flex items-center justify-between pb-3 border-b border-border">
           <div>
-            <h3 className="text-base font-bold text-white">Ward Localities &amp; Report Triage</h3>
-            <p className="text-xs text-white/50">Aggregates and counts only — no household data.</p>
+            <h3 className="text-base font-bold text-foreground">Ward Localities &amp; Report Triage</h3>
+            <p className="text-xs text-muted-foreground">Aggregates and counts only — no household data.</p>
           </div>
-          <span className="text-xs font-mono text-white/40">4 Key Sectors</span>
+          <span className="text-xs font-mono text-faint">4 Key Sectors</span>
         </div>
 
         <div className="overflow-x-auto">
-          <table className="w-full text-left text-xs text-white/80">
+          <table className="w-full text-left text-xs text-soft">
             <thead>
-              <tr className="border-b border-white/10 text-white/40 font-mono text-[11px]">
+              <tr className="border-b border-border text-faint font-mono text-xs">
                 <th className="pb-3 font-semibold">Area</th>
                 <th className="pb-3 font-semibold">Status</th>
                 <th className="pb-3 text-right font-semibold">Citizen Reports</th>
@@ -142,13 +142,13 @@ export default function SupervisorWaterDashboard() {
                 <th className="pb-3 text-right font-semibold">Action</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-white/5 font-mono text-xs">
+            <tbody className="divide-y divide-border font-mono text-xs">
               {areas.map((a) => (
-                <tr key={a.id} className="hover:bg-white/[0.02]">
-                  <td className="py-3.5 font-sans font-bold text-white">
+                <tr key={a.id} className="hover:bg-muted/60">
+                  <td className="py-3.5 font-sans font-bold text-foreground">
                     <Link
                       href={`/supervisor/water/areas/${a.id}`}
-                      className="hover:text-teal-300 transition-colors"
+                      className="hover:text-teal-ink transition-colors"
                     >
                       {a.name}
                     </Link>
@@ -156,14 +156,14 @@ export default function SupervisorWaterDashboard() {
                   <td className="py-3.5">
                     <StatusBadge status={a.tone} label={a.status} />
                   </td>
-                  <td className="py-3.5 text-right font-bold text-white">{a.reports}</td>
-                  <td className="py-3.5 text-right text-white/70">{a.stage}</td>
+                  <td className="py-3.5 text-right font-bold text-foreground">{a.reports}</td>
+                  <td className="py-3.5 text-right text-soft">{a.stage}</td>
                   <td className="py-3.5 text-right">
                     <Link href={`/supervisor/water/areas/${a.id}`}>
                       <Button
                         size="sm"
                         variant="ghost"
-                        className="h-7 text-[11px] text-teal-400 hover:text-teal-300 font-semibold"
+                        className="h-7 text-xs text-teal-ink hover:text-teal-ink font-semibold"
                       >
                         Area Report &rarr;
                       </Button>
@@ -179,11 +179,11 @@ export default function SupervisorWaterDashboard() {
       {/* 6.2 AI Water Supply Alerts matching §6.2 */}
       <div className="space-y-4">
         <div className="flex items-center justify-between">
-          <h3 className="text-base font-bold text-white flex items-center gap-2">
-            <AlertTriangle className="h-4 w-4 text-amber-400" />
+          <h3 className="text-base font-bold text-foreground flex items-center gap-2">
+            <AlertTriangle className="h-4 w-4 text-amber-ink" />
             <span>AI Water Supply Alerts</span>
           </h3>
-          <span className="text-xs font-mono text-white/50">Human in the Loop</span>
+          <span className="text-xs font-mono text-muted-foreground">Human in the Loop</span>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -191,35 +191,35 @@ export default function SupervisorWaterDashboard() {
           <div className="p-6 rounded-3xl border border-rose-500/30 bg-rose-500/[0.03] backdrop-blur-xl shadow-xl flex flex-col justify-between space-y-4">
             <div>
               <div className="flex items-center justify-between mb-2">
-                <span className="text-xs font-mono font-bold text-rose-400 uppercase tracking-wider flex items-center gap-1.5">
+                <span className="text-xs font-mono font-bold text-rose-ink uppercase tracking-wider flex items-center gap-1.5">
                   <ShieldAlert className="h-4 w-4" />
                   <span>🔴 HIGH · XYZ Colony</span>
                 </span>
-                <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-rose-500/20 text-rose-300">
+                <span className="text-2xs font-mono px-2 py-0.5 rounded bg-rose-500/20 text-rose-ink">
                   78 households
                 </span>
               </div>
 
               <div className="space-y-1.5 text-xs">
-                <p className="text-white/80">
-                  Planned supply: <strong className="font-mono text-white">7:00–8:00 AM</strong> · Availability significantly below expected · Frequency: High · Historical: Below normal.
+                <p className="text-soft">
+                  Planned supply: <strong className="font-mono text-foreground">7:00–8:00 AM</strong> · Availability significantly below expected · Frequency: High · Historical: Below normal.
                 </p>
-                <div className="p-3 rounded-xl bg-black/40 border border-white/5 text-[11px] text-rose-200/90 leading-relaxed font-mono">
+                <div className="p-3 rounded-xl bg-inset border border-border/60 text-xs text-rose-ink/90 leading-relaxed font-mono">
                   AI assessment: Possible supply-demand gap. Field verification required.
                 </div>
               </div>
             </div>
 
-            <div className="pt-3 border-t border-white/10 flex items-center gap-3">
+            <div className="pt-3 border-t border-border flex items-center gap-3">
               <Link href="/supervisor/water/cases/case-xyz-001" className="flex-1">
-                <Button className="w-full bg-rose-500 text-white hover:bg-rose-400 font-bold text-xs h-9 rounded-xl shadow-lg shadow-rose-500/20">
+                <Button className="w-full bg-primary text-primary-foreground hover:bg-primary-hover font-bold text-xs h-9 rounded-xl">
                   Open Case
                 </Button>
               </Link>
               <Link href="/supervisor/water/areas/area-xyz">
                 <Button
                   variant="outline"
-                  className="border-white/15 bg-white/5 hover:bg-white/10 text-xs text-white h-9 rounded-xl px-4"
+                  className="border-border-strong bg-muted hover:bg-secondary text-xs text-foreground h-9 rounded-xl px-4"
                 >
                   View Area Report
                 </Button>
@@ -228,25 +228,25 @@ export default function SupervisorWaterDashboard() {
           </div>
 
           {/* Card 2: 🔴 HIGH · GHI Colony */}
-          <div className="p-6 rounded-3xl border border-rose-500/20 bg-white/[0.02] backdrop-blur-xl shadow-xl flex flex-col justify-between space-y-4">
+          <div className="p-6 rounded-3xl border border-rose-500/20 bg-muted/60 backdrop-blur-xl shadow-xl flex flex-col justify-between space-y-4">
             <div>
               <div className="flex items-center justify-between mb-2">
-                <span className="text-xs font-mono font-bold text-rose-400 uppercase tracking-wider">
+                <span className="text-xs font-mono font-bold text-rose-ink uppercase tracking-wider">
                   🔴 HIGH · GHI Colony
                 </span>
-                <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-white/10 text-white/70">
+                <span className="text-2xs font-mono px-2 py-0.5 rounded bg-secondary text-soft">
                   56 households
                 </span>
               </div>
-              <p className="text-xs text-white/70">
-                Planned supply: 6:30–7:30 AM · Field verification assigned to <strong className="text-white">Arif Khan</strong>.
+              <p className="text-xs text-soft">
+                Planned supply: 6:30–7:30 AM · Field verification assigned to <strong className="text-foreground">Arif Khan</strong>.
               </p>
             </div>
 
-            <div className="pt-3 border-t border-white/5 flex items-center justify-between text-xs">
-              <span className="text-white/40 font-mono">Status: Verification Assigned</span>
+            <div className="pt-3 border-t border-border/60 flex items-center justify-between text-xs">
+              <span className="text-faint font-mono">Status: Verification Assigned</span>
               <Link href="/supervisor/water/cases/case-ghi-001">
-                <Button variant="ghost" size="sm" className="h-8 text-xs text-teal-400">
+                <Button variant="ghost" size="sm" className="h-8 text-xs text-teal-ink">
                   Open Case &rarr;
                 </Button>
               </Link>
@@ -254,25 +254,25 @@ export default function SupervisorWaterDashboard() {
           </div>
 
           {/* Card 3: 🟡 MODERATE · ABC Colony */}
-          <div className="p-6 rounded-3xl border border-amber-500/20 bg-white/[0.02] backdrop-blur-xl shadow-xl flex flex-col justify-between space-y-4">
+          <div className="p-6 rounded-3xl border border-amber-500/20 bg-muted/60 backdrop-blur-xl shadow-xl flex flex-col justify-between space-y-4">
             <div>
               <div className="flex items-center justify-between mb-2">
-                <span className="text-xs font-mono font-bold text-amber-400 uppercase tracking-wider">
+                <span className="text-xs font-mono font-bold text-amber-ink uppercase tracking-wider">
                   🟡 MODERATE · ABC Colony
                 </span>
-                <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-white/10 text-white/70">
+                <span className="text-2xs font-mono px-2 py-0.5 rounded bg-secondary text-soft">
                   34 households
                 </span>
               </div>
-              <p className="text-xs text-white/70">
-                Planned supply: 7:30–8:30 AM · Field verification in progress with <strong className="text-white">Suresh M</strong>.
+              <p className="text-xs text-soft">
+                Planned supply: 7:30–8:30 AM · Field verification in progress with <strong className="text-foreground">Suresh M</strong>.
               </p>
             </div>
 
-            <div className="pt-3 border-t border-white/5 flex items-center justify-between text-xs">
-              <span className="text-white/40 font-mono">Status: In Progress</span>
+            <div className="pt-3 border-t border-border/60 flex items-center justify-between text-xs">
+              <span className="text-faint font-mono">Status: In Progress</span>
               <Link href="/supervisor/water/cases/case-abc-001">
-                <Button variant="ghost" size="sm" className="h-8 text-xs text-teal-400">
+                <Button variant="ghost" size="sm" className="h-8 text-xs text-teal-ink">
                   Open Case &rarr;
                 </Button>
               </Link>
@@ -280,25 +280,25 @@ export default function SupervisorWaterDashboard() {
           </div>
 
           {/* Card 4: 🟢 NORMAL · DEF Colony */}
-          <div className="p-6 rounded-3xl border border-emerald-500/20 bg-white/[0.02] backdrop-blur-xl shadow-xl flex flex-col justify-between space-y-4">
+          <div className="p-6 rounded-3xl border border-positive/20 bg-muted/60 backdrop-blur-xl shadow-xl flex flex-col justify-between space-y-4">
             <div>
               <div className="flex items-center justify-between mb-2">
-                <span className="text-xs font-mono font-bold text-emerald-400 uppercase tracking-wider">
+                <span className="text-xs font-mono font-bold text-positive uppercase tracking-wider">
                   🟢 NORMAL · DEF Colony
                 </span>
-                <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-white/10 text-white/70">
+                <span className="text-2xs font-mono px-2 py-0.5 rounded bg-secondary text-soft">
                   12 households
                 </span>
               </div>
-              <p className="text-xs text-white/70">
+              <p className="text-xs text-soft">
                 Planned supply: 8:00–9:00 AM · Full pressure confirmed on ground.
               </p>
             </div>
 
-            <div className="pt-3 border-t border-white/5 flex items-center justify-between text-xs">
-              <span className="text-emerald-400 font-mono">Status: Verified</span>
+            <div className="pt-3 border-t border-border/60 flex items-center justify-between text-xs">
+              <span className="text-positive font-mono">Status: Verified</span>
               <Link href="/supervisor/water/cases/case-def-001">
-                <Button variant="ghost" size="sm" className="h-8 text-xs text-emerald-400">
+                <Button variant="ghost" size="sm" className="h-8 text-xs text-positive">
                   View Log &rarr;
                 </Button>
               </Link>

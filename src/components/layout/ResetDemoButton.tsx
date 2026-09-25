@@ -26,15 +26,14 @@ export function ResetDemoButton() {
 
   return (
     <Button
-      variant="outline"
       size="sm"
       onClick={handleReset}
       disabled={loading}
-      className="h-8 gap-1.5 border-dashed border-amber-500/40 bg-amber-500/10 text-amber-300 hover:bg-amber-500/20 hover:text-amber-200 text-xs font-mono font-medium rounded-full"
+      className="h-10 gap-2 px-4 text-sm"
       title="Reset mock database to default seeded state"
     >
-      <RotateCcw className={`h-3 w-3 ${loading ? "animate-spin" : ""}`} />
-      <span>Reset Demo</span>
+      <RotateCcw className={`size-4 ${loading ? "animate-spin" : ""}`} />
+      <span className="hidden sm:inline">Reset Demo</span>
     </Button>
   );
 }

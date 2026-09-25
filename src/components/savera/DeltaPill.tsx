@@ -40,8 +40,8 @@ export function DeltaPill({
     good === null
       ? "border-border bg-muted text-muted-foreground"
       : good
-        ? "border-emerald-500/30 bg-emerald-500/15 text-emerald-700 dark:text-emerald-400"
-        : "border-red-500/30 bg-red-500/15 text-red-700 dark:text-red-400";
+        ? "border-positive/30 bg-positive/15 text-positive dark:text-positive"
+        : "border-red-500/30 bg-red-500/15 text-red-700 dark:text-red-ink";
 
   const Icon = direction === "up" ? ArrowUpRight : direction === "down" ? ArrowDownRight : Minus;
   const magnitude = finite ? formatIN(Math.abs(rounded), decimals) : "—";
@@ -55,7 +55,7 @@ export function DeltaPill({
       data-direction={direction}
       className={cn(
         "inline-flex w-fit shrink-0 items-center gap-0.5 rounded-full border font-semibold whitespace-nowrap tabular-nums",
-        size === "sm" ? "px-1.5 py-0.5 text-[11px]" : "px-2 py-0.5 text-xs",
+        size === "sm" ? "px-1.5 py-0.5 text-xs" : "px-2 py-0.5 text-xs",
         colour,
         className,
       )}

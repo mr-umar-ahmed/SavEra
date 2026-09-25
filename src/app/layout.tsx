@@ -1,19 +1,21 @@
 import type { Metadata, Viewport } from "next";
-import { Inter, Outfit } from "next/font/google";
+import { JetBrains_Mono, Plus_Jakarta_Sans } from "next/font/google";
 import { ThemeProvider } from "@/components/theme/ThemeProvider";
 import { Toaster } from "@/components/ui/sonner";
 import { StoreHydrator } from "@/components/layout/StoreHydrator";
 import "./globals.css";
 
-const outfit = Outfit({
+const jakarta = Plus_Jakarta_Sans({
   subsets: ["latin"],
-  variable: "--font-outfit",
+  weight: ["400", "500", "600", "700", "800"],
+  variable: "--font-jakarta",
   display: "swap",
 });
 
-const inter = Inter({
+const jetbrains = JetBrains_Mono({
   subsets: ["latin"],
-  variable: "--font-inter",
+  weight: ["400", "500", "600", "700", "800"],
+  variable: "--font-jetbrains",
   display: "swap",
 });
 
@@ -26,12 +28,15 @@ export const metadata: Metadata = {
   appleWebApp: {
     capable: true,
     title: "SAVERA",
-    statusBarStyle: "black-translucent",
+    statusBarStyle: "default",
   },
 };
 
 export const viewport: Viewport = {
-  themeColor: "#050B08",
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#F3ECE1" },
+    { media: "(prefers-color-scheme: dark)", color: "#15100C" },
+  ],
   width: "device-width",
   initialScale: 1,
   viewportFit: "cover",
@@ -39,9 +44,9 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en" suppressHydrationWarning className={`${outfit.variable} ${inter.variable}`}>
-      <body className="bg-background text-foreground min-h-screen overflow-x-hidden antialiased selection:bg-emerald-500/30">
-        <ThemeProvider attribute="class" defaultTheme="dark" enableSystem={false}>
+    <html lang="en" suppressHydrationWarning className={`${jakarta.variable} ${jetbrains.variable}`}>
+      <body className="bg-background text-foreground min-h-screen overflow-x-hidden antialiased">
+        <ThemeProvider attribute="class" defaultTheme="light" enableSystem={false} storageKey="savera-theme-v2">
           <StoreHydrator />
           {children}
           <Toaster />

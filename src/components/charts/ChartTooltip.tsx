@@ -88,7 +88,7 @@ export function ChartTooltip({
       {label !== undefined && label !== "" ? (
         <p
           style={{ color: theme.mutedText }}
-          className="mb-1 text-[11px] font-semibold tracking-wide uppercase"
+          className="mb-1 text-xs font-semibold tracking-wide uppercase"
         >
           {formatLabel ? formatLabel(label) : String(label)}
         </p>

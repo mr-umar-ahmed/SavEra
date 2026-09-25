@@ -6,20 +6,36 @@ import { useTheme } from "next-themes";
 import { useHasMounted } from "@/components/hooks/useHasMounted";
 import type { Stream, Tone } from "@/types/common";
 
-/** Status tone hex map (ARCHITECTURE §2). */
+/** Status tone hex map — light "Earth" theme (ARCHITECTURE §2 hues, deepened for cream). */
 export const TONE_HEX: Record<Tone, string> = {
-  optimal: "#22D3EE",
-  normal: "#10B981",
-  moderate: "#F59E0B",
-  critical: "#EF4444",
-  unknown: "#6B7280",
+  optimal: "#0E6F86",
+  normal: "#2E7550",
+  moderate: "#B06A12",
+  critical: "#B0372A",
+  unknown: "#8A8076",
 };
 
-/** Stream hex map (ARCHITECTURE §2). */
+/** Status tone hex map — dark "Espresso" theme. */
+export const TONE_HEX_DARK: Record<Tone, string> = {
+  optimal: "#4FCBDB",
+  normal: "#5FC48D",
+  moderate: "#EDAA45",
+  critical: "#F07868",
+  unknown: "#A09585",
+};
+
+/** Stream hex map — light theme. */
 export const STREAM_HEX: Record<Stream, string> = {
-  electricity: "#F59E0B",
-  water: "#38BDF8",
-  lpg: "#F43F5E",
+  electricity: "#B06A12",
+  water: "#1D6C9C",
+  lpg: "#B23A4C",
+};
+
+/** Stream hex map — dark theme. */
+export const STREAM_HEX_DARK: Record<Stream, string> = {
+  electricity: "#EDAA45",
+  water: "#62B9E6",
+  lpg: "#F07F8F",
 };
 
 export interface GradientStop {
@@ -70,9 +86,9 @@ export interface ChartTheme {
   /** Inline style for Recharts `contentStyle` / the themed tooltip wrapper. */
   tooltipStyle: CSSProperties;
   fontFamily: string;
-  /** Emerald primary. */
+  /** Brand primary (chocolate / caramel). */
   primary: string;
-  /** Blue secondary (authority / comparison series). */
+  /** Green secondary (comparison / positive series). */
   secondary: string;
   /** Neutral series (previous period, "other"). */
   neutral: string;
@@ -85,68 +101,75 @@ export interface ChartTheme {
   gradientDefs: typeof gradientDefs;
 }
 
-const FONT = "var(--font-inter), ui-sans-serif, system-ui, sans-serif";
+const FONT = "var(--font-jakarta), ui-sans-serif, system-ui, sans-serif";
 
-/** Dark theme (default). */
-export const CHART: ChartTheme = {
-  isDark: true,
-  grid: "rgba(255,255,255,0.06)",
-  axis: "rgba(255,255,255,0.45)",
-  text: "#FFFFFF",
-  mutedText: "rgba(255,255,255,0.5)",
-  surface: "#0A0F0D",
+/** Light "Earth" theme (default): cream surface, chocolate primary, forest green secondary. */
+export const CHART_LIGHT: ChartTheme = {
+  isDark: false,
+  grid: "rgba(35,26,18,0.08)",
+  axis: "#75665A",
+  text: "#231A12",
+  mutedText: "#665849",
+  surface: "#FBF7F0",
   tooltipStyle: {
-    background: "#050B08",
-    border: "1px solid rgba(255,255,255,0.10)",
-    borderRadius: 16,
+    background: "#FDFAF5",
+    border: "1px solid #E3D7C5",
+    borderRadius: 14,
     padding: "8px 12px",
-    fontSize: 12,
+    fontSize: 13,
     fontFamily: FONT,
-    color: "#FFFFFF",
-    boxShadow: "0 20px 40px -20px rgba(0,0,0,0.6)",
+    color: "#231A12",
+    boxShadow: "0 18px 36px -18px rgba(58,38,20,0.3)",
   },
   fontFamily: FONT,
-  primary: "#10B981",
-  secondary: "#3B82F6",
-  neutral: "rgba(255,255,255,0.28)",
-  band: "rgba(16,185,129,0.18)",
-  cursor: "rgba(255,255,255,0.25)",
+  primary: "#6B3D1C",
+  secondary: "#2E6B4A",
+  neutral: "rgba(35,26,18,0.22)",
+  band: "rgba(46,107,74,0.14)",
+  cursor: "rgba(35,26,18,0.2)",
   tone: TONE_HEX,
   stream: STREAM_HEX,
   gradientDefs,
 };
 
-/** Light theme variant (tokens flip; accents stay). */
-export const CHART_LIGHT: ChartTheme = {
-  ...CHART,
-  isDark: false,
-  grid: "rgba(11,18,16,0.08)",
-  axis: "rgba(11,18,16,0.5)",
-  text: "#0B1210",
-  mutedText: "#5B6660",
-  surface: "#FFFFFF",
+/** Dark "Espresso" theme. */
+export const CHART: ChartTheme = {
+  isDark: true,
+  grid: "rgba(244,235,221,0.07)",
+  axis: "#9C8C78",
+  text: "#F4EBDD",
+  mutedText: "#B5A590",
+  surface: "#201913",
   tooltipStyle: {
-    ...CHART.tooltipStyle,
-    background: "#FFFFFF",
-    border: "1px solid #E5E7EB",
-    color: "#0B1210",
-    boxShadow: "0 20px 40px -20px rgba(11,18,16,0.25)",
+    background: "#231B15",
+    border: "1px solid #33291F",
+    borderRadius: 14,
+    padding: "8px 12px",
+    fontSize: 13,
+    fontFamily: FONT,
+    color: "#F4EBDD",
+    boxShadow: "0 20px 40px -20px rgba(0,0,0,0.6)",
   },
-  primary: "#059669",
-  neutral: "rgba(11,18,16,0.22)",
-  band: "rgba(5,150,105,0.16)",
-  cursor: "rgba(11,18,16,0.25)",
+  fontFamily: FONT,
+  primary: "#D49A62",
+  secondary: "#7CC59A",
+  neutral: "rgba(244,235,221,0.26)",
+  band: "rgba(124,197,154,0.16)",
+  cursor: "rgba(244,235,221,0.22)",
+  tone: TONE_HEX_DARK,
+  stream: STREAM_HEX_DARK,
+  gradientDefs,
 };
 
 /**
- * Chart theme that follows `next-themes` (`resolvedTheme`). Returns the dark
- * theme until mounted so server and first client render agree.
+ * Chart theme that follows `next-themes` (`resolvedTheme`). Returns the light
+ * (default) theme until mounted so server and first client render agree.
  */
 export function useChartTheme(): ChartTheme {
   const mounted = useHasMounted();
   const { resolvedTheme } = useTheme();
-  if (!mounted) return CHART;
-  return resolvedTheme === "light" ? CHART_LIGHT : CHART;
+  if (!mounted) return CHART_LIGHT;
+  return resolvedTheme === "dark" ? CHART : CHART_LIGHT;
 }
 
 /** Shared axis tick style. */
@@ -155,7 +178,7 @@ export function tickStyle(theme: ChartTheme): {
   fontSize: number;
   fontFamily: string;
 } {
-  return { fill: theme.axis, fontSize: 12, fontFamily: theme.fontFamily };
+  return { fill: theme.axis, fontSize: 13, fontFamily: theme.fontFamily };
 }
 
 /** Value → string with sensible decimals for tooltips and axis ticks. */

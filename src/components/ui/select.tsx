@@ -28,7 +28,7 @@ function SelectTrigger({ className, size = "default", children, ...props }: Sele
       data-slot="select-trigger"
       data-size={size}
       className={cn(
-        "border-input bg-card/60 text-foreground focus-visible:border-ring focus-visible:ring-ring/30 aria-invalid:border-destructive aria-invalid:ring-destructive/25 data-[placeholder]:text-muted-foreground [&_svg:not([class*='text-'])]:text-muted-foreground flex w-fit cursor-pointer items-center justify-between gap-2 rounded-xl border px-4 py-2 text-sm whitespace-nowrap transition-colors outline-none focus-visible:ring-2 disabled:cursor-not-allowed disabled:opacity-50 aria-invalid:ring-2 data-[size=default]:h-10 data-[size=sm]:h-8 data-[size=sm]:px-3 data-[size=sm]:text-xs *:data-[slot=select-value]:line-clamp-1 *:data-[slot=select-value]:flex *:data-[slot=select-value]:items-center *:data-[slot=select-value]:gap-2 dark:bg-white/5 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
+        "border-input bg-card text-foreground focus-visible:border-ring focus-visible:ring-ring/30 aria-invalid:border-destructive aria-invalid:ring-destructive/25 data-[placeholder]:text-muted-foreground [&_svg:not([class*='text-'])]:text-muted-foreground flex w-fit cursor-pointer items-center justify-between gap-2 rounded-xl border px-4 py-2 text-sm whitespace-nowrap transition-colors outline-none focus-visible:ring-2 disabled:cursor-not-allowed disabled:opacity-50 aria-invalid:ring-2 data-[size=default]:h-10 data-[size=sm]:h-8 data-[size=sm]:px-3 data-[size=sm]:text-xs *:data-[slot=select-value]:line-clamp-1 *:data-[slot=select-value]:flex *:data-[slot=select-value]:items-center *:data-[slot=select-value]:gap-2 dark:bg-muted [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
         className,
       )}
       {...props}
@@ -81,7 +81,7 @@ function SelectLabel({ className, ...props }: React.ComponentProps<typeof Select
     <SelectPrimitive.Label
       data-slot="select-label"
       className={cn(
-        "text-muted-foreground px-3 py-1.5 font-mono text-[11px] tracking-widest uppercase",
+        "text-muted-foreground px-3 py-1.5 font-mono text-xs tracking-widest uppercase",
         className,
       )}
       {...props}

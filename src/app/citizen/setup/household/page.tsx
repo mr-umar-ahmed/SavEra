@@ -64,16 +64,16 @@ export default function HouseholdSetupPage() {
         ]}
       />
 
-      <div className="rounded-3xl border border-white/10 bg-[#070D0A]/95 p-6 sm:p-8 backdrop-blur-2xl space-y-6 shadow-2xl">
+      <div className="rounded-3xl border border-border bg-card p-6 sm:p-8 backdrop-blur-2xl space-y-6 shadow-2xl">
         {/* Name and Mobile */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
-            <label className="block text-xs font-semibold text-white mb-1.5">Full Name</label>
+            <label className="block text-xs font-semibold text-foreground mb-1.5">Full Name</label>
             <Input
               type="text"
               value={name}
               onChange={(e) => setName(e.target.value)}
-              className="bg-white/5 border-white/10 text-xs text-white h-10 rounded-xl"
+              className="bg-muted border-border text-xs text-foreground h-10 rounded-xl"
             />
             <SkipRow
               onSkip={() => setName("Priya Sharma")}
@@ -83,12 +83,12 @@ export default function HouseholdSetupPage() {
           </div>
 
           <div>
-            <label className="block text-xs font-semibold text-white mb-1.5">Mobile Number</label>
+            <label className="block text-xs font-semibold text-foreground mb-1.5">Mobile Number</label>
             <Input
               type="tel"
               value={mobile}
               onChange={(e) => setMobile(e.target.value)}
-              className="bg-white/5 border-white/10 text-xs text-white h-10 rounded-xl font-mono"
+              className="bg-muted border-border text-xs text-foreground h-10 rounded-xl font-mono"
             />
             <SkipRow
               onSkip={() => setMobile("9000000001")}
@@ -101,12 +101,12 @@ export default function HouseholdSetupPage() {
         {/* Location / PIN and Ward / Area */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
-            <label className="block text-xs font-semibold text-white mb-1.5">Location / PIN</label>
+            <label className="block text-xs font-semibold text-foreground mb-1.5">Location / PIN</label>
             <Input
               type="text"
               value={locationPin}
               onChange={(e) => setLocationPin(e.target.value)}
-              className="bg-white/5 border-white/10 text-xs text-white h-10 rounded-xl"
+              className="bg-muted border-border text-xs text-foreground h-10 rounded-xl"
             />
             <SkipRow
               onSkip={() => setLocationPin("Raichur · 584101")}
@@ -116,11 +116,11 @@ export default function HouseholdSetupPage() {
           </div>
 
           <div>
-            <label className="block text-xs font-semibold text-white mb-1.5">Ward / Area</label>
+            <label className="block text-xs font-semibold text-foreground mb-1.5">Ward / Area</label>
             <select
               value={wardArea}
               onChange={(e) => setWardArea(e.target.value)}
-              className="w-full bg-[#050B08] border border-white/10 text-xs text-white h-10 rounded-xl px-3 outline-none"
+              className="w-full bg-background border border-border text-xs text-foreground h-10 rounded-xl px-3 outline-none"
             >
               <option value="Ward 24 · XYZ Colony">Ward 24 · XYZ Colony</option>
               <option value="Ward 24 · ABC Colony">Ward 24 · ABC Colony</option>
@@ -137,11 +137,11 @@ export default function HouseholdSetupPage() {
 
         {/* Electricity Provider */}
         <div>
-          <label className="block text-xs font-semibold text-white mb-1.5">Electricity Provider</label>
+          <label className="block text-xs font-semibold text-foreground mb-1.5">Electricity Provider</label>
           <select
             value={provider}
             onChange={(e) => setProvider(e.target.value)}
-            className="w-full bg-[#050B08] border border-white/10 text-xs text-white h-10 rounded-xl px-3 outline-none"
+            className="w-full bg-background border border-border text-xs text-foreground h-10 rounded-xl px-3 outline-none"
           >
             <option value="Electricity Department (Raichur)">
               Electricity Department (Raichur) — GESCOM Grid
@@ -152,7 +152,7 @@ export default function HouseholdSetupPage() {
 
         {/* Consumer Category */}
         <div>
-          <label className="block text-xs font-semibold text-white mb-2">Consumer Category</label>
+          <label className="block text-xs font-semibold text-foreground mb-2">Consumer Category</label>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
             {[
               { id: "domestic", label: "Domestic (LT-2)" },
@@ -165,8 +165,8 @@ export default function HouseholdSetupPage() {
                 onClick={() => setConsumerCategory(cat.id as typeof consumerCategory)}
                 className={`p-3 rounded-xl text-xs font-medium text-left border transition-all ${
                   consumerCategory === cat.id
-                    ? "bg-emerald-500/15 border-emerald-500/40 text-emerald-300 font-semibold"
-                    : "bg-white/5 border-white/10 text-white/70 hover:bg-white/10"
+                    ? "bg-positive/15 border-positive/40 text-positive font-semibold"
+                    : "bg-muted border-border text-soft hover:bg-secondary"
                 }`}
               >
                 {cat.label}
@@ -183,8 +183,8 @@ export default function HouseholdSetupPage() {
         {/* Occupancy Stepper */}
         <div>
           <div className="flex items-center justify-between mb-2">
-            <label className="block text-xs font-semibold text-white">Number of People</label>
-            <span className="text-xs font-mono text-emerald-400 font-bold">{people} residents</span>
+            <label className="block text-xs font-semibold text-foreground">Number of People</label>
+            <span className="text-xs font-mono text-positive font-bold">{people} residents</span>
           </div>
           <div className="flex gap-2">
             {[1, 2, 3, 4, 5, 6, 7, 8].map((num) => (
@@ -194,8 +194,8 @@ export default function HouseholdSetupPage() {
                 onClick={() => setPeople(num)}
                 className={`h-10 w-11 rounded-xl text-xs font-mono font-bold transition-all ${
                   people === num
-                    ? "bg-emerald-500 text-black shadow-lg shadow-emerald-500/20"
-                    : "bg-white/5 border border-white/10 text-white/70 hover:bg-white/10"
+                    ? "bg-primary text-primary-foreground shadow-lg shadow-primary/10"
+                    : "bg-muted border border-border text-soft hover:bg-secondary"
                 }`}
               >
                 {num}
@@ -207,7 +207,7 @@ export default function HouseholdSetupPage() {
 
         {/* Home Type and Size */}
         <div>
-          <label className="block text-xs font-semibold text-white mb-2">Home Type / Layout</label>
+          <label className="block text-xs font-semibold text-foreground mb-2">Home Type / Layout</label>
           <div className="grid grid-cols-2 sm:grid-cols-5 gap-2.5">
             {[
               { id: "1BHK" as const, label: "1BHK" },
@@ -222,8 +222,8 @@ export default function HouseholdSetupPage() {
                 onClick={() => setHomeType(t.id)}
                 className={`p-3 rounded-xl text-xs font-medium text-left border transition-all ${
                   homeType === t.id
-                    ? "bg-emerald-500/15 border-emerald-500/40 text-emerald-300 font-semibold"
-                    : "bg-white/5 border-white/10 text-white/70 hover:bg-white/10"
+                    ? "bg-positive/15 border-positive/40 text-positive font-semibold"
+                    : "bg-muted border-border text-soft hover:bg-secondary"
                 }`}
               >
                 {t.label}
@@ -232,15 +232,15 @@ export default function HouseholdSetupPage() {
           </div>
 
           <div className="mt-3 flex items-center gap-3">
-            <span className="text-xs text-white/70">Estimated Floor Size:</span>
+            <span className="text-xs text-soft">Estimated Floor Size:</span>
             <div className="flex items-center gap-1.5 w-32">
               <Input
                 type="number"
                 value={homeSize}
                 onChange={(e) => setHomeSize(e.target.value)}
-                className="bg-white/5 border-white/10 text-xs text-white h-8 font-mono"
+                className="bg-muted border-border text-xs text-foreground h-8 font-mono"
               />
-              <span className="text-xs text-white/50 font-mono">sq ft</span>
+              <span className="text-xs text-muted-foreground font-mono">sq ft</span>
             </div>
           </div>
           <SkipRow
@@ -255,7 +255,7 @@ export default function HouseholdSetupPage() {
 
         {/* Renewable Energy */}
         <div>
-          <label className="block text-xs font-semibold text-white mb-2">
+          <label className="block text-xs font-semibold text-foreground mb-2">
             Renewable Energy Opted
           </label>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
@@ -270,8 +270,8 @@ export default function HouseholdSetupPage() {
                 onClick={() => setRenewable(r.id as typeof renewable)}
                 className={`p-3 rounded-xl text-xs font-medium text-left border transition-all ${
                   renewable === r.id
-                    ? "bg-emerald-500/15 border-emerald-500/40 text-emerald-300 font-semibold"
-                    : "bg-white/5 border-white/10 text-white/70 hover:bg-white/10"
+                    ? "bg-positive/15 border-positive/40 text-positive font-semibold"
+                    : "bg-muted border-border text-soft hover:bg-secondary"
                 }`}
               >
                 {r.label}
@@ -282,7 +282,7 @@ export default function HouseholdSetupPage() {
         </div>
 
         {/* Actions */}
-        <div className="pt-6 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between gap-4">
+        <div className="pt-6 border-t border-border flex flex-col sm:flex-row items-center justify-between gap-4">
           <SkipRow
             onSkip={handleSkipAll}
             onLater={handleSkipAll}
@@ -291,7 +291,7 @@ export default function HouseholdSetupPage() {
 
           <Button
             onClick={handleSave}
-            className="w-full sm:w-auto bg-emerald-500 text-black hover:bg-emerald-400 font-bold text-xs h-10 px-6 gap-2 rounded-xl shadow-lg shadow-emerald-500/20"
+            className="w-full sm:w-auto bg-primary text-primary-foreground hover:bg-primary-hover font-bold text-xs h-10 px-6 gap-2 rounded-xl shadow-lg shadow-primary/10"
           >
             <span>Continue to Home Energy Setup</span>
             <ArrowRight className="h-3.5 w-3.5" />

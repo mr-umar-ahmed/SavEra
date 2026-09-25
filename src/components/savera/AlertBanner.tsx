@@ -151,7 +151,7 @@ export function AlertBanner({
     compact ? "px-4 py-3" : "p-5",
     alert.status === "active" && "border-l-red-500",
     alert.status === "scheduled" && "border-l-amber-500",
-    alert.status === "resolved" && "border-l-emerald-500",
+    alert.status === "resolved" && "border-l-positive",
     interactive &&
       "hover:border-foreground/20 focus-visible:ring-ring/60 cursor-pointer outline-none focus-visible:ring-2",
     className,

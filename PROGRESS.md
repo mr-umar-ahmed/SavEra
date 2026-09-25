@@ -1,9 +1,9 @@
 # SAVERA — Progress Tracker
 
-**Rule:** this file is updated every time a task changes state (start, finish, block, defer). Plan: `docs/IMPLEMENTATION_PLAN.md`. Deviations: `DECISIONS.md`.
+**Rule:** this file is updated every time a task changes state (start, finish, block, defer). Plan: `docs/IMPLEMENTATION_PLAN.md` + `docs/CONTINUATION_PLAN.md` (Phase T and Phases 4–8 detail). Deviations: `DECISIONS.md`.
 Legend: ⬜ not started · 🟡 in progress · ✅ done · ❌ blocked · ⏭ deferred
 
-_Last updated: 2026-09-25 02:50 IST_
+_Last updated: 2026-09-25 (Phase T complete; Phase 4 next)_
 
 ## Overall
 
@@ -13,7 +13,8 @@ _Last updated: 2026-09-25 02:50 IST_
 | 1 Landing + Auth | ✅ | slice S1 complete: 3D hero with particle streams, verbatim copy, 6-step loop, portals, connected layer, 6-persona auth, 6-box OTP |
 | 2 Citizen Electricity | ✅ | slice S2 complete: habitat hub, household setup, 6-step wizard (9 categories, simulated OCR, seasonal baseline), 6-tab dashboard with reconciliation & printable report |
 | 3 Water pipeline | ✅ | slice S3 complete: citizen setup, water dashboard with report flow, status timeline, area report, supervisor dashboard, area report telemetry, case workspace state machine, verified logs, gov water board, gov cases |
-| 4 LPG | ⬜ | slice S4 queued |
+| T Theme "Savera Earth" + larger type | ✅ | reference-image palette (cream/brown/green) in light + warm dark, Plus Jakarta Sans + JetBrains Mono, larger scale; all routes verified by screenshot |
+| 4 LPG | ⬜ | slice S4 queued (after Phase T) |
 | 5 Green Score / Carbon | ⬜ | slice S5 queued |
 | 6 Electricity Sup + Gov | ⬜ | slice S6 queued |
 | 7 Connected Layer | ⬜ | slice S7 queued |
@@ -37,6 +38,21 @@ _Last updated: 2026-09-25 02:50 IST_
 | 0.12 | Portal chrome + route shells + auth/landing shells | ✅ | Sidebar, TopBar, PortalShell, RoleGuard; all 49 routes exist and render |
 | 0.13 | Verify & fix (typecheck, lint, test, build, route sweep) | ✅ | tsc clean, ESLint clean (0 errors), 103/103 tests pass, next build (49/49 pages) clean |
 | 0.14 | Commit `feat(phase-0)` | ✅ | committed `0266205`; foundation frozen |
+
+## Phase T — "Savera Earth" theme + typography
+
+| # | Task | Status | Evidence |
+|---|---|---|---|
+| T.1 | Token layer (light + dark palettes, ink tokens, type scale, radius, shadows) | ✅ | globals.css: light Earth + dark Espresso tokens, ink/tone/stream per theme, text scale, radius 0.75rem, warm shadows; contrast script: all text tokens >= 4.5:1 |
+| T.2 | Fonts (Plus Jakarta Sans + JetBrains Mono) + light default | ✅ | layout.tsx: Plus Jakarta Sans + JetBrains Mono via next/font, defaultTheme light, storageKey savera-theme-v2 |
+| T.3 | Codemod hard-coded dark classes → semantic tokens | ✅ | codemod: 3,410 replacements in 92 files; leftover grep clean except intentional (rose recording state, amber tints) |
+| T.4 | UI primitives restyle | ✅ | button (default/outline/positive), tabs (pill track, brown active), badge tones, inputs |
+| T.5 | Domain components restyle | ✅ | PageHeader (mono copper eyebrow, 32–40 px title), KpiCard, EstimatedChip (tinted, wraps when narrow), LabelChip measured |
+| T.6 | Portal chrome (sidebar, top bar, voice FAB) to match reference | ✅ | Sidebar rebuilt to reference, TopBar breadcrumb + pills, brown Reset Demo, round theme toggle, brown voice FAB |
+| T.7 | Charts, maps, 3D colours | ✅ | chartTheme light/dark maps + light default before mount; AreaMap tones from theme, sepia tiles; Hero3D palette per theme |
+| T.8 | Landing + auth pass | ✅ | landing + auth logos (green round sprout), SAV/ERA in primary, HUD overlap fixed, action buttons → primary |
+| T.9 | Visual verification (both themes) | ✅ | Playwright screenshots of all 49 routes at 1440 px (0 page/console errors), electricity + landing in dark, 390 px mobile |
+| T.10 | Docs (ARCHITECTURE §2, CLAUDE, DECISIONS) | ✅ | ARCHITECTURE §2 rewritten, CLAUDE theme line, DECISIONS #14–#17, CONTINUATION_PLAN |
 
 ## Phases 1–7 — feature slices
 
@@ -76,6 +92,11 @@ _Last updated: 2026-09-25 02:50 IST_
 - 2026-09-25 04:05 — Phase 1 (Slice S1 — Landing + Auth) complete: 3D hero with particle streams, 7-section landing page, role cards, 6-persona authentication, 6-box OTP, and clean 49-page build.
 - 2026-09-25 04:12 — Phase 2 (Slice S2 — Citizen Electricity) complete: habitat setup hub with 12-row status breakdown, skippable household details, 6-step progressive wizard with 9 categories & simulated OCR, and full 6-tab electricity dashboard with meter reconciliation & printable report.
 
+- 2026-09-25 — docs/CONTINUATION_PLAN.md written (Phase T theme conversion + detailed Phases 4–8). Phase T started.
+
+- 2026-09-25 — Phase T complete: Savera Earth theme (light default + Espresso dark), Plus Jakarta Sans + JetBrains Mono, larger type scale, 3,410-class codemod, chrome rebuilt to match the reference; typecheck/lint (0 errors)/103 tests green; all routes screenshot-verified.
+
 ## Known issues / blockers
 
-- None open.
+- 278 pre-existing `no-unused-vars` lint warnings (0 errors) from earlier phases; to be cleaned in Phase 8 polish.
+- The Next.js dev indicator ("N" bubble) overlaps the sidebar footer in dev only; not present in production builds.

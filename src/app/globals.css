@@ -3,84 +3,174 @@
 
 @custom-variant dark (&:is(.dark *));
 
+/* ================================================================== */
+/* SAVERA "Earth" theme (docs/CONTINUATION_PLAN.md, Phase T)           */
+/* Light = cream surfaces, chocolate primary, forest-green accent.     */
+/* Dark  = espresso surfaces, caramel primary, sage-green accent.      */
+/* All text tokens are >= 4.5:1 on background and card.                */
+/* ================================================================== */
+
 /* ------------------------------------------------------------------ */
-/* Light tokens                                                        */
+/* Light tokens (default theme)                                        */
 /* ------------------------------------------------------------------ */
 :root {
-  --background: #f6f8f7;
-  --foreground: #0b1210;
-  --card: #ffffff;
-  --card-foreground: #0b1210;
-  --popover: #ffffff;
-  --popover-foreground: #0b1210;
-  --primary: #059669;
-  --primary-foreground: #ffffff;
-  --secondary: #e8f5ef;
-  --secondary-foreground: #064e3b;
-  --muted: #eef2f0;
-  --muted-foreground: #5b6660;
-  --accent: #e8f5ef;
-  --accent-foreground: #047857;
-  --destructive: #dc2626;
+  --background: #f3ece1;
+  --foreground: #231a12;
+  --soft: #4a3d30;
+  --faint: #75665a;
+  --card: #fbf7f0;
+  --card-foreground: #231a12;
+  --popover: #fdfaf5;
+  --popover-foreground: #231a12;
+  --primary: #6b3d1c;
+  --primary-hover: #58311a;
+  --primary-foreground: #fbf6ee;
+  --secondary: #ebe2d3;
+  --secondary-foreground: #3a2c1f;
+  --muted: #f0e8db;
+  --muted-foreground: #665849;
+  --inset: #eae1d2;
+  --overlay: rgba(35, 26, 18, 0.45);
+  --accent: #e3eee2;
+  --accent-foreground: #2e6b4a;
+  --positive: #2e6b4a;
+  --positive-foreground: #f6fbf7;
+  --positive-soft: #e3eee2;
+  --destructive: #b0372a;
   --destructive-foreground: #ffffff;
-  --border: #e2e8e5;
-  --input: #e2e8e5;
-  --ring: #10b981;
-  --radius: 1rem;
-  --sidebar: #ffffff;
-  --sidebar-foreground: #5b6660;
-  --sidebar-primary: #059669;
-  --sidebar-primary-foreground: #ffffff;
-  --sidebar-accent: #eef2f0;
-  --sidebar-accent-foreground: #0b1210;
-  --sidebar-border: #e2e8e5;
-  --sidebar-ring: #10b981;
-  --chart-1: #059669;
-  --chart-2: #3b82f6;
-  --chart-3: #f59e0b;
-  --chart-4: #14b8a6;
-  --chart-5: #f43f5e;
-  --scrollbar-thumb: rgba(11, 18, 16, 0.15);
+  --border: #e3d7c5;
+  --border-strong: #cdbca4;
+  --input: #ddd0bc;
+  --ring: #8a5a33;
+  --radius: 0.75rem;
+
+  --sidebar: #eee5d6;
+  --sidebar-foreground: #4a3d30;
+  --sidebar-primary: #6b3d1c;
+  --sidebar-primary-foreground: #fbf6ee;
+  --sidebar-accent: #e6dccb;
+  --sidebar-accent-foreground: #231a12;
+  --sidebar-border: #e0d3c0;
+  --sidebar-ring: #8a5a33;
+
+  /* Status tones — hues fixed by ARCHITECTURE §2, deepened for cream. */
+  --tone-optimal: #0e6f86;
+  --tone-normal: #2e7550;
+  --tone-moderate: #9a5a0b;
+  --tone-critical: #b0372a;
+  --tone-unknown: #6b6259;
+
+  /* Streams */
+  --stream-electricity: #95570a;
+  --stream-water: #1d6c9c;
+  --stream-lpg: #b23a4c;
+  --stream-green: #2e7550;
+
+  /* Readable text ink per hue (replaces bright 100–600 text shades). */
+  --ink-amber: oklch(47.3% 0.137 46.201);
+  --ink-orange: oklch(47% 0.157 37.304);
+  --ink-yellow: oklch(47.6% 0.114 61.907);
+  --ink-lime: oklch(45.3% 0.124 130.933);
+  --ink-green: oklch(44.8% 0.119 151.328);
+  --ink-teal: oklch(51.1% 0.096 186.391);
+  --ink-cyan: oklch(52% 0.105 223.128);
+  --ink-sky: oklch(50% 0.134 242.749);
+  --ink-blue: oklch(48.8% 0.243 264.376);
+  --ink-indigo: oklch(45.7% 0.24 277.023);
+  --ink-violet: oklch(49.1% 0.27 292.581);
+  --ink-purple: oklch(49.6% 0.265 301.924);
+  --ink-pink: oklch(52.5% 0.223 3.958);
+  --ink-rose: oklch(51.4% 0.222 16.935);
+  --ink-red: oklch(50.5% 0.213 27.518);
+
+  --chart-1: #6b3d1c;
+  --chart-2: #2e6b4a;
+  --chart-3: #9a5a0b;
+  --chart-4: #1d6c9c;
+  --chart-5: #b23a4c;
+
+  --grid-line: rgba(35, 26, 18, 0.05);
+  --scrollbar-thumb: rgba(35, 26, 18, 0.18);
   color-scheme: light;
 }
 
 /* ------------------------------------------------------------------ */
-/* Dark tokens (default theme)                                         */
+/* Dark tokens ("Espresso")                                            */
 /* ------------------------------------------------------------------ */
 .dark {
-  --background: #050b08;
-  --foreground: #ffffff;
-  --card: #0a0f0d;
-  --card-foreground: #ffffff;
-  --popover: #0a0f0d;
-  --popover-foreground: #ffffff;
-  --primary: #10b981;
-  --primary-foreground: #050b08;
-  --secondary: rgba(255, 255, 255, 0.06);
-  --secondary-foreground: #ffffff;
-  --muted: rgba(255, 255, 255, 0.06);
-  --muted-foreground: rgba(255, 255, 255, 0.5);
-  --accent: rgba(16, 185, 129, 0.12);
-  --accent-foreground: #34d399;
-  --destructive: #ef4444;
-  --destructive-foreground: #ffffff;
-  --border: rgba(255, 255, 255, 0.1);
-  --input: rgba(255, 255, 255, 0.08);
-  --ring: #10b981;
-  --sidebar: #0a0f0d;
-  --sidebar-foreground: rgba(255, 255, 255, 0.5);
-  --sidebar-primary: #10b981;
-  --sidebar-primary-foreground: #050b08;
-  --sidebar-accent: rgba(255, 255, 255, 0.05);
-  --sidebar-accent-foreground: #ffffff;
-  --sidebar-border: rgba(255, 255, 255, 0.1);
-  --sidebar-ring: #10b981;
-  --chart-1: #10b981;
-  --chart-2: #3b82f6;
-  --chart-3: #f59e0b;
-  --chart-4: #14b8a6;
-  --chart-5: #f43f5e;
-  --scrollbar-thumb: rgba(255, 255, 255, 0.1);
+  --background: #15100c;
+  --foreground: #f4ebdd;
+  --soft: #d9cbb7;
+  --faint: #9c8c78;
+  --card: #201913;
+  --card-foreground: #f4ebdd;
+  --popover: #231b15;
+  --popover-foreground: #f4ebdd;
+  --primary: #d49a62;
+  --primary-hover: #e0ab76;
+  --primary-foreground: #1b120a;
+  --secondary: #2d241c;
+  --secondary-foreground: #f4ebdd;
+  --muted: #271f18;
+  --muted-foreground: #b5a590;
+  --inset: #110d0a;
+  --overlay: rgba(8, 5, 3, 0.7);
+  --accent: rgba(124, 197, 154, 0.12);
+  --accent-foreground: #7cc59a;
+  --positive: #7cc59a;
+  --positive-foreground: #10160f;
+  --positive-soft: rgba(124, 197, 154, 0.12);
+  --destructive: #f07868;
+  --destructive-foreground: #1b120a;
+  --border: #33291f;
+  --border-strong: #4a3c2e;
+  --input: #3a2f24;
+  --ring: #d49a62;
+
+  --sidebar: #1a140f;
+  --sidebar-foreground: #d9cbb7;
+  --sidebar-primary: #d49a62;
+  --sidebar-primary-foreground: #1b120a;
+  --sidebar-accent: #2a2119;
+  --sidebar-accent-foreground: #f4ebdd;
+  --sidebar-border: #2e251c;
+  --sidebar-ring: #d49a62;
+
+  --tone-optimal: #4fcbdb;
+  --tone-normal: #5fc48d;
+  --tone-moderate: #edaa45;
+  --tone-critical: #f07868;
+  --tone-unknown: #a09585;
+
+  --stream-electricity: #edaa45;
+  --stream-water: #62b9e6;
+  --stream-lpg: #f07f8f;
+  --stream-green: #5fc48d;
+
+  --ink-amber: oklch(82.8% 0.189 84.429);
+  --ink-orange: oklch(75% 0.183 55.934);
+  --ink-yellow: oklch(85.2% 0.199 91.936);
+  --ink-lime: oklch(84.1% 0.238 128.85);
+  --ink-green: oklch(79.2% 0.209 151.711);
+  --ink-teal: oklch(77.7% 0.152 181.912);
+  --ink-cyan: oklch(78.9% 0.154 211.53);
+  --ink-sky: oklch(74.6% 0.16 232.661);
+  --ink-blue: oklch(70.7% 0.165 254.624);
+  --ink-indigo: oklch(78.5% 0.115 274.713);
+  --ink-violet: oklch(81.1% 0.111 293.571);
+  --ink-purple: oklch(82.7% 0.119 306.383);
+  --ink-pink: oklch(82.3% 0.12 346.018);
+  --ink-rose: oklch(81% 0.117 11.638);
+  --ink-red: oklch(80.8% 0.114 19.571);
+
+  --chart-1: #d49a62;
+  --chart-2: #7cc59a;
+  --chart-3: #edaa45;
+  --chart-4: #62b9e6;
+  --chart-5: #f07f8f;
+
+  --grid-line: rgba(244, 235, 221, 0.04);
+  --scrollbar-thumb: rgba(244, 235, 221, 0.14);
   color-scheme: dark;
 }
 
@@ -90,21 +180,30 @@
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
+  --color-soft: var(--soft);
+  --color-faint: var(--faint);
   --color-card: var(--card);
   --color-card-foreground: var(--card-foreground);
   --color-popover: var(--popover);
   --color-popover-foreground: var(--popover-foreground);
   --color-primary: var(--primary);
+  --color-primary-hover: var(--primary-hover);
   --color-primary-foreground: var(--primary-foreground);
   --color-secondary: var(--secondary);
   --color-secondary-foreground: var(--secondary-foreground);
   --color-muted: var(--muted);
   --color-muted-foreground: var(--muted-foreground);
+  --color-inset: var(--inset);
+  --color-overlay: var(--overlay);
   --color-accent: var(--accent);
   --color-accent-foreground: var(--accent-foreground);
+  --color-positive: var(--positive);
+  --color-positive-foreground: var(--positive-foreground);
+  --color-positive-soft: var(--positive-soft);
   --color-destructive: var(--destructive);
   --color-destructive-foreground: var(--destructive-foreground);
   --color-border: var(--border);
+  --color-border-strong: var(--border-strong);
   --color-input: var(--input);
   --color-ring: var(--ring);
   --color-sidebar: var(--sidebar);
@@ -121,7 +220,43 @@
   --color-chart-4: var(--chart-4);
   --color-chart-5: var(--chart-5);
 
-  /* Radius scale anchored on --radius (1rem). rounded-3xl equals rounded-[2rem]. */
+  /* Status tones (ARCHITECTURE §2). Always pair colour with a label or icon. */
+  --color-tone-optimal: var(--tone-optimal);
+  --color-tone-normal: var(--tone-normal);
+  --color-tone-moderate: var(--tone-moderate);
+  --color-tone-critical: var(--tone-critical);
+  --color-tone-unknown: var(--tone-unknown);
+
+  /* Streams */
+  --color-stream-electricity: var(--stream-electricity);
+  --color-stream-water: var(--stream-water);
+  --color-stream-lpg: var(--stream-lpg);
+  --color-stream-green: var(--stream-green);
+
+  /* Theme-aware text ink per hue: `text-amber-ink`, `text-teal-ink`, … */
+  --color-amber-ink: var(--ink-amber);
+  --color-orange-ink: var(--ink-orange);
+  --color-yellow-ink: var(--ink-yellow);
+  --color-lime-ink: var(--ink-lime);
+  --color-green-ink: var(--ink-green);
+  --color-teal-ink: var(--ink-teal);
+  --color-cyan-ink: var(--ink-cyan);
+  --color-sky-ink: var(--ink-sky);
+  --color-blue-ink: var(--ink-blue);
+  --color-indigo-ink: var(--ink-indigo);
+  --color-violet-ink: var(--ink-violet);
+  --color-purple-ink: var(--ink-purple);
+  --color-pink-ink: var(--ink-pink);
+  --color-rose-ink: var(--ink-rose);
+  --color-red-ink: var(--ink-red);
+
+  /* Brand aliases */
+  --color-brand-primary: var(--primary);
+  --color-brand-green: var(--positive);
+  --color-surface: var(--card);
+  --color-page: var(--background);
+
+  /* Radius scale anchored on --radius (0.75rem): lg 12 · xl 15 · 2xl 18 · 3xl 24 px. */
   --radius-sm: calc(var(--radius) * 0.5);
   --radius-md: calc(var(--radius) * 0.75);
   --radius-lg: var(--radius);
@@ -130,29 +265,37 @@
   --radius-3xl: calc(var(--radius) * 2);
 
   /* Fonts (variables are set on <html> by next/font in app/layout.tsx) */
-  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
-  --font-display: var(--font-outfit), var(--font-inter), sans-serif;
-  --font-mono: ui-monospace, SFMono-Regular, Menlo, monospace;
+  --font-sans: var(--font-jakarta), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-jakarta), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-jetbrains), ui-monospace, SFMono-Regular, Menlo, monospace;
 
-  /* Status tones (ARCHITECTURE section 2). Always pair colour with a label or icon. */
-  --color-tone-optimal: #22d3ee;
-  --color-tone-normal: #10b981;
-  --color-tone-moderate: #f59e0b;
-  --color-tone-critical: #ef4444;
-  --color-tone-unknown: #6b7280;
+  /* Larger, more legible type scale (Phase T.2). */
+  --text-2xs: 0.75rem;
+  --text-2xs--line-height: 1rem;
+  --text-xs: 0.8125rem;
+  --text-xs--line-height: 1.15rem;
+  --text-sm: 0.9375rem;
+  --text-sm--line-height: 1.4rem;
+  --text-base: 1.0625rem;
+  --text-base--line-height: 1.65rem;
+  --text-lg: 1.1875rem;
+  --text-lg--line-height: 1.75rem;
+  --text-xl: 1.375rem;
+  --text-xl--line-height: 1.9rem;
+  --text-2xl: 1.625rem;
+  --text-2xl--line-height: 2.1rem;
+  --text-3xl: 2rem;
+  --text-3xl--line-height: 2.4rem;
+  --text-4xl: 2.5rem;
+  --text-4xl--line-height: 2.85rem;
 
-  /* Streams */
-  --color-stream-electricity: #f59e0b;
-  --color-stream-water: #38bdf8;
-  --color-stream-lpg: #f43f5e;
-  --color-stream-green: #10b981;
-
-  /* Brand */
-  --color-brand-emerald: #10b981;
-  --color-brand-blue: #3b82f6;
-  --color-brand-teal: #14b8a6;
-  --color-surface: #0a0f0d;
-  --color-page: #050b08;
+  /* Warm, soft shadows (reference cards barely lift off the page). */
+  --shadow-xs: 0 1px 2px 0 rgb(58 38 20 / 0.05);
+  --shadow-sm: 0 1px 3px 0 rgb(58 38 20 / 0.07), 0 1px 2px -1px rgb(58 38 20 / 0.05);
+  --shadow-md: 0 4px 10px -2px rgb(58 38 20 / 0.08), 0 2px 4px -2px rgb(58 38 20 / 0.05);
+  --shadow-lg: 0 10px 24px -8px rgb(58 38 20 / 0.12), 0 4px 8px -4px rgb(58 38 20 / 0.05);
+  --shadow-xl: 0 18px 36px -14px rgb(58 38 20 / 0.16), 0 6px 12px -6px rgb(58 38 20 / 0.06);
+  --shadow-2xl: 0 28px 56px -20px rgb(58 38 20 / 0.22);
 
   /* Motion */
   --animate-fade-up: fade-up 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
@@ -193,7 +336,7 @@
 
   body {
     @apply bg-background text-foreground font-sans antialiased;
-    font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+    font-feature-settings: "ss01", "cv11";
   }
 
   h1,
@@ -204,10 +347,10 @@
   }
 
   ::selection {
-    background: rgba(16, 185, 129, 0.3);
+    background: color-mix(in srgb, var(--primary) 22%, transparent);
   }
 
-  /* Thin custom scrollbar: 6px, faint thumb, emerald on hover */
+  /* Thin custom scrollbar: 6px, faint thumb, primary on hover */
   * {
     scrollbar-width: thin;
     scrollbar-color: var(--scrollbar-thumb) transparent;
@@ -224,7 +367,7 @@
     border-radius: 9999px;
   }
   ::-webkit-scrollbar-thumb:hover {
-    background: #10b981;
+    background: var(--primary);
   }
 }
 
@@ -232,30 +375,35 @@
 /* Utilities                                                           */
 /* ------------------------------------------------------------------ */
 @utility glass {
-  @apply border-border bg-card/80 border backdrop-blur-xl;
+  @apply border-border bg-card border shadow-sm;
 }
 
+/* Mono copper eyebrow ("ELECTRICITY", "TOP RECOMMENDATION"). */
 @utility eyebrow {
-  @apply text-primary text-xs font-bold tracking-widest uppercase;
+  @apply text-primary font-mono text-xs font-semibold tracking-[0.14em] uppercase;
 }
 
 @utility grid-bg {
   background-image:
-    linear-gradient(to right, rgba(255, 255, 255, 0.04) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+    linear-gradient(to right, var(--grid-line) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--grid-line) 1px, transparent 1px);
   background-size: 60px 60px;
 }
 
 @utility glow-emerald {
-  box-shadow: 0 0 40px -5px rgba(16, 185, 129, 0.4);
+  box-shadow: 0 12px 32px -14px color-mix(in srgb, var(--positive) 55%, transparent);
+}
+
+@utility glow-primary {
+  box-shadow: 0 12px 32px -14px color-mix(in srgb, var(--primary) 60%, transparent);
 }
 
 @utility glow-blue {
-  box-shadow: 0 0 40px -5px rgba(59, 130, 246, 0.4);
+  box-shadow: 0 12px 32px -14px color-mix(in srgb, var(--tone-optimal) 50%, transparent);
 }
 
 @utility meta {
-  @apply font-mono text-xs tracking-widest uppercase;
+  @apply font-mono text-2xs tracking-widest uppercase;
 }
 
 @utility spotlight {
@@ -270,7 +418,7 @@
     transition: opacity 300ms ease;
     background: radial-gradient(
       600px circle at var(--spot-x, 50%) var(--spot-y, 50%),
-      rgba(16, 185, 129, 0.12),
+      color-mix(in srgb, var(--primary) 9%, transparent),
       transparent 40%
     );
   }

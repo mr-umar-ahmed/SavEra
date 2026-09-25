@@ -13,7 +13,7 @@ export default function SupervisorTwinPage() {
         badge={
           <div className="flex items-center gap-2">
             <StatusBadge status="simulation" label="Ward Simulation Prototype" />
-            <span className="text-xs font-mono text-white/50">Ward 24 · 4 Localities</span>
+            <span className="text-xs font-mono text-muted-foreground">Ward 24 · 4 Localities</span>
           </div>
         }
       />

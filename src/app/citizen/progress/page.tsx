@@ -27,7 +27,7 @@ export default function RankProgressPage() {
         ]}
         actions={
           <Link href="/citizen/leaderboard">
-            <Button variant="outline" size="sm" className="h-8 gap-1.5 border-white/10 bg-white/5 text-xs text-white">
+            <Button variant="outline" size="sm" className="h-8 gap-1.5 border-border bg-muted text-xs text-foreground">
               <Users className="h-3.5 w-3.5" />
               <span>Leaderboard</span>
             </Button>
@@ -59,20 +59,20 @@ export default function RankProgressPage() {
       </div>
 
       {/* Trajectory Table */}
-      <div className="rounded-2xl border border-white/10 bg-[#070D0A]/95 p-6 backdrop-blur-xl">
-        <h3 className="text-base font-bold text-white mb-4">5-Month Progression Trajectory</h3>
+      <div className="rounded-2xl border border-border bg-card p-6 backdrop-blur-xl">
+        <h3 className="text-base font-bold text-foreground mb-4">5-Month Progression Trajectory</h3>
 
-        <div className="divide-y divide-white/5 font-mono text-xs">
+        <div className="divide-y divide-border font-mono text-xs">
           {history.map((h, idx) => (
             <div key={idx} className="py-3.5 flex items-center justify-between">
               <div className="flex items-center gap-4">
-                <span className="text-white/60 font-sans">{h.month}</span>
-                <span className="text-white/40 hidden sm:inline font-sans">· {h.note}</span>
+                <span className="text-muted-foreground font-sans">{h.month}</span>
+                <span className="text-faint hidden sm:inline font-sans">· {h.note}</span>
               </div>
 
               <div className="flex items-center gap-6">
-                <span className="text-emerald-400 font-bold text-sm">#{h.rank}</span>
-                <span className="text-white font-extrabold text-sm">{h.score} pts</span>
+                <span className="text-positive font-bold text-sm">#{h.rank}</span>
+                <span className="text-foreground font-extrabold text-sm">{h.score} pts</span>
               </div>
             </div>
           ))}

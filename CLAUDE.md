@@ -2,7 +2,7 @@
 
 SAVERA is an AI-powered household-to-city resource intelligence platform for **electricity, water and LPG** (demo city: Raichur, Karnataka). Hackathon-grade, fully clickable, mock-data-driven Next.js prototype. No backend.
 
-**Source of truth:** `docs/MASTER_PROMPT.md` (product + build spec), `docs/ARCHITECTURE.md` (binding module contract), `docs/IMPLEMENTATION_PLAN.md` (phased plan), `PROGRESS.md` (live status), `DECISIONS.md` (deviations). Read them before changing anything.
+**Source of truth:** `docs/MASTER_PROMPT.md` (product + build spec), `docs/ARCHITECTURE.md` (binding module contract), `docs/IMPLEMENTATION_PLAN.md` (phased plan), `docs/CONTINUATION_PLAN.md` (Phase T theme + detailed Phases 4–8), `PROGRESS.md` (live status), `DECISIONS.md` (deviations). Read them before changing anything.
 
 **Progress rule:** whenever a task or phase starts, finishes, blocks or is deferred, update `PROGRESS.md` (status table, evidence, changelog line with time). Never finish a piece of work without recording it there.
 
@@ -50,5 +50,5 @@ See `docs/ARCHITECTURE.md` §3. Short version: `src/app` routes · `src/componen
 - Status tones: optimal=cyan, normal=emerald, moderate=amber, critical=red, unknown=grey — always with a label/icon.
 - Indian formatting via `src/lib/format.ts` (`₹3,120`, `4,50,000 L`, `14.2 kg`).
 - No "coming soon", "TODO", lorem ipsum or placeholder screens in the UI.
-- Theme: dark `#050B08` / `#0A0F0D` surfaces, emerald primary, Outfit display + Inter body, glass cards, pill buttons. Light theme supported via `next-themes`.
+- Theme: "Savera Earth" (ARCHITECTURE §2, CONTINUATION_PLAN Phase T) — light default: cream `#F3ECE1` page / `#FBF7F0` cards, chocolate `primary`, forest-green `positive`; warm dark "Espresso" companion. Plus Jakarta Sans + JetBrains Mono (mono for eyebrows/chips/meta), larger type scale (`text-2xs` 12 px … `text-4xl` 40 px). Use tokens only: `text-foreground|soft|muted-foreground|faint`, `bg-card|muted|inset|secondary`, `border-border|border-strong`, `text-{hue}-ink`, `tone-*`, `stream-*` — never `text-white/NN`, `border-white/NN` or hex surfaces. Pill buttons (`default` brown, `outline`, `positive` green).
 - Shared foundation folders (`types`, `stores`, `lib/engine`, `lib/api`, `components/ui|savera|layout|charts|maps`, `data`) are frozen after Phase 0 — add new files rather than editing them when building features in parallel.

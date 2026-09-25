@@ -46,8 +46,8 @@ export default function LeaderboardPage() {
         ]}
         actions={
           <Link href="/citizen/progress">
-            <Button variant="outline" size="sm" className="h-8 gap-1.5 border-white/10 bg-white/5 text-xs text-white">
-              <TrendingUp className="h-3.5 w-3.5 text-emerald-400" />
+            <Button variant="outline" size="sm" className="h-8 gap-1.5 border-border bg-muted text-xs text-foreground">
+              <TrendingUp className="h-3.5 w-3.5 text-positive" />
               <span>Rank Movement</span>
             </Button>
           </Link>
@@ -55,57 +55,57 @@ export default function LeaderboardPage() {
       />
 
       {/* Privacy Toggle Card */}
-      <div className="p-4 rounded-xl border border-white/10 bg-[#070D0A]/95 backdrop-blur-xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+      <div className="p-4 rounded-xl border border-border bg-card backdrop-blur-xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <div className="flex items-center gap-3">
-          <div className="h-9 w-9 rounded-lg bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400 shrink-0">
+          <div className="h-9 w-9 rounded-lg bg-positive/10 border border-positive/20 flex items-center justify-center text-positive shrink-0">
             {isPublic ? <Eye className="h-4 w-4" /> : <EyeOff className="h-4 w-4" />}
           </div>
           <div>
-            <div className="text-xs font-bold text-white">Public Display Name Preference</div>
-            <p className="text-[11px] text-white/50">
-              Default is anonymous (<span className="font-mono text-emerald-400">Green Home #84</span>). Toggle to show your verified name publicly.
+            <div className="text-xs font-bold text-foreground">Public Display Name Preference</div>
+            <p className="text-xs text-muted-foreground">
+              Default is anonymous (<span className="font-mono text-positive">Green Home #84</span>). Toggle to show your verified name publicly.
             </p>
           </div>
         </div>
 
         <div className="flex items-center gap-2 shrink-0">
-          <span className="text-xs text-white/70">{isPublic ? "Visible" : "Anonymous"}</span>
+          <span className="text-xs text-soft">{isPublic ? "Visible" : "Anonymous"}</span>
           <Switch checked={isPublic} onCheckedChange={handleToggle} />
         </div>
       </div>
 
       {/* Leaderboard Table */}
-      <div className="rounded-2xl border border-white/10 bg-[#070D0A]/95 p-6 backdrop-blur-xl">
+      <div className="rounded-2xl border border-border bg-card p-6 backdrop-blur-xl">
         <div className="flex items-center justify-between mb-4">
-          <h3 className="text-sm font-bold text-white">Top Conservation Habitats</h3>
-          <span className="text-xs font-mono text-white/40">700 Ward Peers</span>
+          <h3 className="text-sm font-bold text-foreground">Top Conservation Habitats</h3>
+          <span className="text-xs font-mono text-faint">700 Ward Peers</span>
         </div>
 
-        <div className="divide-y divide-white/5">
+        <div className="divide-y divide-border">
           {leaders.map((item) => (
             <div
               key={item.rank}
               className={`py-3.5 px-4 rounded-xl flex items-center justify-between text-xs transition-colors ${
                 item.isYou
-                  ? "bg-emerald-500/15 border border-emerald-500/30 my-2"
-                  : "hover:bg-white/[0.02]"
+                  ? "bg-positive/15 border border-positive/30 my-2"
+                  : "hover:bg-muted/60"
               }`}
             >
               <div className="flex items-center gap-4">
-                <span className="font-mono font-bold text-sm w-8 text-center text-white/70">
+                <span className="font-mono font-bold text-sm w-8 text-center text-soft">
                   {item.rank === 1 ? "🥇 #1" : item.rank === 2 ? "🥈 #2" : item.rank === 3 ? "🥉 #3" : `#${item.rank}`}
                 </span>
                 <div>
-                  <span className={`font-semibold block ${item.isYou ? "text-emerald-300 font-bold" : "text-white"}`}>
+                  <span className={`font-semibold block ${item.isYou ? "text-positive font-bold" : "text-foreground"}`}>
                     {item.name}
                   </span>
-                  <span className="text-[10px] text-white/40">Ward 24 · XYZ Colony</span>
+                  <span className="text-2xs text-faint">Ward 24 · XYZ Colony</span>
                 </div>
               </div>
 
               <div className="flex items-center gap-6 font-mono">
-                <span className="text-emerald-400 text-xs font-medium">{item.change}</span>
-                <span className="text-base font-extrabold text-white">{item.score} <span className="text-xs text-white/40">pts</span></span>
+                <span className="text-positive text-xs font-medium">{item.change}</span>
+                <span className="text-base font-extrabold text-foreground">{item.score} <span className="text-xs text-faint">pts</span></span>
               </div>
             </div>
           ))}

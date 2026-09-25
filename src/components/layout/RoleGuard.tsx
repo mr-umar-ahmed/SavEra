@@ -30,7 +30,7 @@ export function RoleGuard({ role, children }: RoleGuardProps) {
     return (
       <div className="flex min-h-[60vh] w-full items-center justify-center p-8">
         <div className="flex items-center gap-3 text-muted-foreground animate-pulse text-sm">
-          <div className="h-4 w-4 rounded-full border-2 border-emerald-500 border-t-transparent animate-spin" />
+          <div className="h-4 w-4 rounded-full border-2 border-primary border-t-transparent animate-spin" />
           <span>Validating access credentials...</span>
         </div>
       </div>
@@ -40,12 +40,12 @@ export function RoleGuard({ role, children }: RoleGuardProps) {
   if (!isAuthorized) {
     return (
       <div className="flex min-h-[60vh] w-full flex-col items-center justify-center p-8 text-center">
-        <div className="rounded-full bg-rose-500/10 p-4 mb-4 text-rose-400">
+        <div className="rounded-full bg-rose-500/10 p-4 mb-4 text-rose-ink">
           <ShieldAlert className="h-8 w-8" />
         </div>
-        <h2 className="text-xl font-bold text-white mb-2">Restricted Access</h2>
+        <h2 className="text-xl font-bold text-foreground mb-2">Restricted Access</h2>
         <p className="text-sm text-muted-foreground max-w-md mb-6">
-          This portal section requires a <span className="capitalize font-semibold text-emerald-400">{role}</span> profile. Redirecting to authentication...
+          This portal section requires a <span className="capitalize font-semibold text-positive">{role}</span> profile. Redirecting to authentication...
         </p>
       </div>
     );

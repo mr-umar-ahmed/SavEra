@@ -8,19 +8,13 @@ import { useRouter } from "next/navigation";
 import { latLngBounds, type LeafletMouseEvent, type Polygon as LeafletPolygon } from "leaflet";
 import { CircleMarker, MapContainer, Polygon, TileLayer, Tooltip, useMap } from "react-leaflet";
 
+import { useChartTheme } from "@/components/charts/chartTheme";
 import { cn } from "@/lib/utils";
 import { TONE_LABEL, type Tone } from "@/types/common";
 import type { LatLng } from "@/types/geo";
 
 import type { AreaMapFeature, AreaMapMarker, AreaMapProps } from "./types";
 
-const TONE_HEX: Record<Tone, string> = {
-  optimal: "#22D3EE",
-  normal: "#10B981",
-  moderate: "#F59E0B",
-  critical: "#EF4444",
-  unknown: "#6B7280",
-};
 
 const TONE_DOT: Record<Tone, string> = {
   optimal: "bg-tone-optimal",
@@ -108,6 +102,8 @@ export default function AreaMapInner({
   ariaLabel,
 }: AreaMapProps) {
   const router = useRouter();
+  const chart = useChartTheme();
+  const TONE_HEX = chart.tone;
 
   const handleSelect = React.useCallback(
     (feature: AreaMapFeature) => {
@@ -174,7 +170,7 @@ export default function AreaMapInner({
               center={m.position}
               radius={7}
               pathOptions={{
-                color: "#FFFFFF",
+                color: chart.surface,
                 weight: 2,
                 opacity: 0.9,
                 fillColor: hex,

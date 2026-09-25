@@ -82,7 +82,7 @@ export function DonutChart({
               </span>
             ) : null}
             {centerLabel ? (
-              <span className="text-muted-foreground mt-1 text-[10px] font-semibold tracking-wide uppercase">
+              <span className="text-muted-foreground mt-1 text-2xs font-semibold tracking-wide uppercase">
                 {centerLabel}
               </span>
             ) : null}

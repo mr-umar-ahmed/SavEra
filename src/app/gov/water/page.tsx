@@ -85,7 +85,7 @@ export default function GovWaterPage() {
         subtitle="Bulk municipal water allocation, feeder manifold balancing, and ward distribution telemetry across Raichur."
         badge={
           <div className="flex items-center gap-2">
-            <span className="inline-flex items-center gap-1.5 rounded-full border border-teal-500/30 bg-teal-500/10 px-2.5 py-0.5 text-xs font-mono font-medium text-teal-400">
+            <span className="inline-flex items-center gap-1.5 rounded-full border border-teal-500/30 bg-teal-500/10 px-2.5 py-0.5 text-xs font-mono font-medium text-teal-ink">
               <MapPin className="h-3 w-3" />
               City of Raichur · Water Board
             </span>
@@ -95,13 +95,13 @@ export default function GovWaterPage() {
         actions={
           <div className="flex items-center gap-2">
             <Link href="/gov/heatmap">
-              <Button variant="outline" size="sm" className="h-8 gap-1.5 border-white/10 bg-white/5 text-xs text-white hover:bg-white/10">
-                <Layers className="h-3.5 w-3.5 text-teal-400" />
+              <Button variant="outline" size="sm" className="h-8 gap-1.5 border-border bg-muted text-xs text-foreground hover:bg-secondary">
+                <Layers className="h-3.5 w-3.5 text-teal-ink" />
                 <span>GIS Heatmap</span>
               </Button>
             </Link>
             <Link href="/gov/cases">
-              <Button size="sm" className="h-8 gap-1.5 bg-teal-500 text-black hover:bg-teal-400 text-xs font-semibold">
+              <Button size="sm" className="h-8 gap-1.5 bg-positive text-positive-foreground hover:bg-positive/90 text-xs font-semibold">
                 <AlertTriangle className="h-3.5 w-3.5" />
                 <span>Forwarded Cases (1 Action)</span>
               </Button>
@@ -147,70 +147,70 @@ export default function GovWaterPage() {
       {/* Middle Section: Supply Shortfall Planning Card & City Alerts */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Supply Requirement & Shortfall Card (Verbatim spec text) */}
-        <div className="lg:col-span-2 p-6 rounded-2xl border border-white/10 bg-[#070D0A]/95 backdrop-blur-xl space-y-4">
+        <div className="lg:col-span-2 p-6 rounded-2xl border border-border bg-card backdrop-blur-xl space-y-4">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
             <div>
               <div className="flex items-center gap-2">
-                <Waves className="h-4 w-4 text-teal-400" />
-                <h3 className="text-sm font-bold text-white font-mono uppercase tracking-wider">
+                <Waves className="h-4 w-4 text-teal-ink" />
+                <h3 className="text-sm font-bold text-foreground font-mono uppercase tracking-wider">
                   Bulk Supply Requirement & Capacity Balance
                 </h3>
               </div>
-              <p className="text-xs text-white/60 mt-0.5">
+              <p className="text-xs text-muted-foreground mt-0.5">
                 City storage reservoirs vs 30-day forecasted residential requirement
               </p>
             </div>
             <EstimatedChip confidence="Medium" />
           </div>
 
-          <div className="grid grid-cols-3 gap-3 p-4 rounded-xl bg-black/40 border border-white/5 font-mono text-center">
+          <div className="grid grid-cols-3 gap-3 p-4 rounded-xl bg-inset border border-border/60 font-mono text-center">
             <div>
-              <span className="text-[10px] text-white/40 block">PLANNED CAPACITY</span>
-              <span className="text-lg font-bold text-white">12.0M L/day</span>
+              <span className="text-2xs text-faint block">PLANNED CAPACITY</span>
+              <span className="text-lg font-bold text-foreground">12.0M L/day</span>
             </div>
             <div>
-              <span className="text-[10px] text-white/40 block">FORECAST DEMAND</span>
-              <span className="text-lg font-bold text-teal-400">12.4M L/day</span>
+              <span className="text-2xs text-faint block">FORECAST DEMAND</span>
+              <span className="text-lg font-bold text-teal-ink">12.4M L/day</span>
             </div>
             <div>
-              <span className="text-[10px] text-white/40 block">ESTIMATED SHORTFALL</span>
-              <span className="text-lg font-bold text-rose-400">0.4M L/day</span>
+              <span className="text-2xs text-faint block">ESTIMATED SHORTFALL</span>
+              <span className="text-lg font-bold text-rose-ink">0.4M L/day</span>
             </div>
           </div>
 
           {/* Verbatim Planning Notice */}
-          <div className="p-3.5 rounded-xl bg-amber-500/10 border border-amber-500/20 text-xs text-amber-200/90 leading-relaxed font-sans">
-            <span className="font-bold block mb-0.5 font-mono text-amber-300">
+          <div className="p-3.5 rounded-xl bg-amber-500/10 border border-amber-500/20 text-xs text-amber-ink/90 leading-relaxed font-sans">
+            <span className="font-bold block mb-0.5 font-mono text-amber-ink">
               Department Planning Notice:
             </span>
             &quot;Estimated shortfall 0.4M L/day — planning information; operational decisions remain with the department.&quot;
           </div>
 
-          <div className="text-xs text-white/70 space-y-1">
-            <span className="font-semibold text-white/90">Suggested Municipal Operational Actions:</span>
-            <p className="text-white/60">
+          <div className="text-xs text-soft space-y-1">
+            <span className="font-semibold text-foreground">Suggested Municipal Operational Actions:</span>
+            <p className="text-muted-foreground">
               Schedule review for Ward 24, tanker standby for XYZ/GHI Colony, and intermediate feeder pressure boosting.
             </p>
           </div>
         </div>
 
         {/* Board Alerts & Actions */}
-        <div className="p-6 rounded-2xl border border-white/10 bg-[#070D0A]/95 backdrop-blur-xl space-y-4 flex flex-col justify-between">
+        <div className="p-6 rounded-2xl border border-border bg-card backdrop-blur-xl space-y-4 flex flex-col justify-between">
           <div>
             <div className="flex items-center gap-2 mb-3">
-              <Radio className="h-4 w-4 text-rose-400 animate-pulse" />
-              <h3 className="text-sm font-bold text-white font-mono uppercase tracking-wider">
+              <Radio className="h-4 w-4 text-rose-ink animate-pulse" />
+              <h3 className="text-sm font-bold text-foreground font-mono uppercase tracking-wider">
                 Department Bulletins
               </h3>
             </div>
 
             <div className="space-y-3">
-              <div className="p-3 rounded-xl bg-rose-500/10 border border-rose-500/20 text-xs text-rose-300">
+              <div className="p-3 rounded-xl bg-rose-500/10 border border-rose-500/20 text-xs text-rose-ink">
                 <span className="font-bold block mb-0.5">High Demand Warning:</span>
                 Water demand higher than historical baseline in Ward 24 (+8.3%).
               </div>
 
-              <div className="p-3 rounded-xl bg-amber-500/10 border border-amber-500/20 text-xs text-amber-300">
+              <div className="p-3 rounded-xl bg-amber-500/10 border border-amber-500/20 text-xs text-amber-ink">
                 <span className="font-bold block mb-0.5">Forecast Projection:</span>
                 Forecasted water requirement increased across Zone 3 for the upcoming weekend.
               </div>
@@ -219,8 +219,8 @@ export default function GovWaterPage() {
 
           <div className="pt-2 space-y-2">
             <Link href="/gov/alerts">
-              <Button variant="outline" className="w-full border-white/10 bg-white/5 text-xs text-white hover:bg-white/10 h-9 gap-2">
-                <Send className="h-3.5 w-3.5 text-teal-400" />
+              <Button variant="outline" className="w-full border-border bg-muted text-xs text-foreground hover:bg-secondary h-9 gap-2">
+                <Send className="h-3.5 w-3.5 text-teal-ink" />
                 <span>Publish Water Advisory Notice</span>
               </Button>
             </Link>
@@ -229,48 +229,48 @@ export default function GovWaterPage() {
       </div>
 
       {/* Ward Comparison Table */}
-      <div className="rounded-2xl border border-white/10 bg-[#070D0A]/95 p-6 backdrop-blur-xl space-y-4">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-2 border-b border-white/10">
+      <div className="rounded-2xl border border-border bg-card p-6 backdrop-blur-xl space-y-4">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-2 border-b border-border">
           <div>
-            <h3 className="text-sm font-bold text-white font-mono uppercase tracking-wider">
+            <h3 className="text-sm font-bold text-foreground font-mono uppercase tracking-wider">
               Ward-Level Bulk Delivery & Stress Telemetry
             </h3>
-            <p className="text-xs text-white/50 mt-0.5">
+            <p className="text-xs text-muted-foreground mt-0.5">
               Aggregated delivery volume, baseline divergence, and demand forecasting
             </p>
           </div>
 
-          <Link href="/gov/heatmap" className="text-xs text-teal-400 hover:underline flex items-center gap-1 font-mono">
+          <Link href="/gov/heatmap" className="text-xs text-teal-ink hover:underline flex items-center gap-1 font-mono">
             <span>View on GIS Heatmap</span>
             <ArrowRight className="h-3 w-3" />
           </Link>
         </div>
 
-        <div className="divide-y divide-white/5">
+        <div className="divide-y divide-border">
           {highDemandWards.map((w, idx) => (
             <div
               key={idx}
-              className="py-3.5 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs hover:bg-white/[0.01] px-2 rounded-xl transition-all"
+              className="py-3.5 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs hover:bg-muted/60 px-2 rounded-xl transition-all"
             >
               <div>
-                <span className="font-bold text-white block text-sm font-mono">{w.ward}</span>
-                <span className="text-white/40 text-[11px]">
+                <span className="font-bold text-foreground block text-sm font-mono">{w.ward}</span>
+                <span className="text-faint text-xs">
                   {w.households} participating households · Baseline: {w.baseline}
                 </span>
               </div>
 
               <div className="flex items-center gap-6 font-mono">
                 <div>
-                  <span className="text-[10px] text-white/40 block">CURRENT</span>
-                  <span className="text-white font-bold">{w.current}</span>
+                  <span className="text-2xs text-faint block">CURRENT</span>
+                  <span className="text-foreground font-bold">{w.current}</span>
                 </div>
                 <div>
-                  <span className="text-[10px] text-white/40 block">FORECAST</span>
-                  <span className="text-teal-400 font-bold">{w.forecast}</span>
+                  <span className="text-2xs text-faint block">FORECAST</span>
+                  <span className="text-teal-ink font-bold">{w.forecast}</span>
                 </div>
                 <div>
-                  <span className="text-[10px] text-white/40 block">VARIANCE</span>
-                  <span className={w.tone === "danger" ? "text-rose-400 font-bold" : w.tone === "warning" ? "text-amber-400 font-bold" : "text-emerald-400"}>
+                  <span className="text-2xs text-faint block">VARIANCE</span>
+                  <span className={w.tone === "danger" ? "text-rose-ink font-bold" : w.tone === "warning" ? "text-amber-ink font-bold" : "text-positive"}>
                     {w.change}
                   </span>
                 </div>

@@ -13,7 +13,7 @@ export default function GovTwinPage() {
         badge={
           <div className="flex items-center gap-2">
             <StatusBadge status="simulation" label="Simulation Prototype" />
-            <span className="text-xs font-mono text-white/50">City of Raichur</span>
+            <span className="text-xs font-mono text-muted-foreground">City of Raichur</span>
           </div>
         }
       />

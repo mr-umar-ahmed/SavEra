@@ -24,7 +24,7 @@ export default function LpgHistoryPage() {
         ]}
         actions={
           <Link href="/citizen/gas">
-            <Button variant="outline" size="sm" className="h-8 gap-1.5 border-white/10 bg-white/5 text-xs text-white">
+            <Button variant="outline" size="sm" className="h-8 gap-1.5 border-border bg-muted text-xs text-foreground">
               <ArrowLeft className="h-3.5 w-3.5" />
               <span>Back to LPG</span>
             </Button>
@@ -32,11 +32,11 @@ export default function LpgHistoryPage() {
         }
       />
 
-      <div className="rounded-2xl border border-white/10 bg-[#070D0A]/95 p-6 backdrop-blur-xl">
+      <div className="rounded-2xl border border-border bg-card p-6 backdrop-blur-xl">
         <div className="overflow-x-auto">
           <table className="w-full text-xs">
             <thead>
-              <tr className="border-b border-white/10 text-white/50 text-left font-mono">
+              <tr className="border-b border-border text-muted-foreground text-left font-mono">
                 <th className="pb-3 font-medium">CYLINDER ID</th>
                 <th className="pb-3 font-medium">START DATE</th>
                 <th className="pb-3 font-medium">FINISH DATE</th>
@@ -45,15 +45,15 @@ export default function LpgHistoryPage() {
                 <th className="pb-3 font-medium">STATUS</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-white/5 font-mono">
+            <tbody className="divide-y divide-border font-mono">
               {pastCycles.map((c) => (
-                <tr key={c.id} className="hover:bg-white/[0.02]">
-                  <td className="py-3 font-bold text-white">{c.id}</td>
-                  <td className="py-3 text-white/70">{c.start}</td>
-                  <td className="py-3 text-white/70">{c.finish}</td>
-                  <td className="py-3 text-emerald-400 font-bold">{c.days} days</td>
-                  <td className="py-3 text-white/80">{c.rate}</td>
-                  <td className="py-3 text-white/50">{c.status}</td>
+                <tr key={c.id} className="hover:bg-muted/60">
+                  <td className="py-3 font-bold text-foreground">{c.id}</td>
+                  <td className="py-3 text-soft">{c.start}</td>
+                  <td className="py-3 text-soft">{c.finish}</td>
+                  <td className="py-3 text-positive font-bold">{c.days} days</td>
+                  <td className="py-3 text-soft">{c.rate}</td>
+                  <td className="py-3 text-muted-foreground">{c.status}</td>
                 </tr>
               ))}
             </tbody>

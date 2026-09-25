@@ -258,7 +258,7 @@ export default function SupervisorCaseWorkspacePage({
         ]}
         badge={
           <div className="flex items-center gap-2">
-            <span className="inline-flex items-center gap-1.5 rounded-full border border-teal-500/30 bg-teal-500/10 px-2.5 py-0.5 text-xs font-mono font-medium text-teal-400">
+            <span className="inline-flex items-center gap-1.5 rounded-full border border-teal-500/30 bg-teal-500/10 px-2.5 py-0.5 text-xs font-mono font-medium text-teal-ink">
               <MapPin className="h-3 w-3" />
               XYZ Colony · Ward 24
             </span>
@@ -279,7 +279,7 @@ export default function SupervisorCaseWorkspacePage({
         actions={
           <div className="flex items-center gap-2">
             <Link href="/supervisor/water">
-              <Button variant="outline" size="sm" className="h-8 gap-1.5 border-white/10 bg-white/5 text-xs text-white hover:bg-white/10">
+              <Button variant="outline" size="sm" className="h-8 gap-1.5 border-border bg-muted text-xs text-foreground hover:bg-secondary">
                 <ArrowLeft className="h-3.5 w-3.5" />
                 <span>Back to Desk</span>
               </Button>
@@ -288,7 +288,7 @@ export default function SupervisorCaseWorkspacePage({
               variant="ghost"
               size="sm"
               onClick={handleResetDemo}
-              className="h-8 gap-1.5 text-xs text-white/50 hover:text-white"
+              className="h-8 gap-1.5 text-xs text-muted-foreground hover:text-foreground"
               title="Reset case to Under Review for evaluation"
             >
               <RotateCcw className="h-3.5 w-3.5" />
@@ -299,16 +299,16 @@ export default function SupervisorCaseWorkspacePage({
       />
 
       {/* Case Summary Card */}
-      <div className="p-6 rounded-2xl border border-white/10 bg-[#070D0A]/95 backdrop-blur-xl space-y-4">
+      <div className="p-6 rounded-2xl border border-border bg-card backdrop-blur-xl space-y-4">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
           <div>
             <div className="flex items-center gap-2 mb-1">
-              <h2 className="text-xl font-bold text-white">XYZ Colony Water Supply Pressure Drop</h2>
-              <span className="text-xs font-mono bg-rose-500/20 text-rose-300 px-2 py-0.5 rounded-full border border-rose-500/30">
+              <h2 className="text-xl font-bold text-foreground">XYZ Colony Water Supply Pressure Drop</h2>
+              <span className="text-xs font-mono bg-rose-500/20 text-rose-ink px-2 py-0.5 rounded-full border border-rose-500/30">
                 Severity: HIGH
               </span>
             </div>
-            <p className="text-xs text-white/60">
+            <p className="text-xs text-muted-foreground">
               78 Household Reports · Planned Supply: 7:00–8:00 AM (4,50,000 L) · Feeder Line 4B
             </p>
           </div>
@@ -341,27 +341,27 @@ export default function SupervisorCaseWorkspacePage({
         </div>
 
         {/* Verbatim AI Assessment */}
-        <div className="p-3.5 rounded-xl bg-teal-500/10 border border-teal-500/20 text-xs text-teal-300">
+        <div className="p-3.5 rounded-xl bg-teal-500/10 border border-teal-500/20 text-xs text-teal-ink">
           <span className="font-bold block mb-1">AI Diagnostic Telemetry</span>
-          <p className="text-white/70 leading-relaxed font-sans">{AI_ASSESSMENT}</p>
+          <p className="text-soft leading-relaxed font-sans">{AI_ASSESSMENT}</p>
         </div>
       </div>
 
       {/* STAGE 1: UNDER REVIEW */}
       {currentState === "under_review" && (
-        <div className="p-6 rounded-2xl border border-white/10 bg-[#070D0A]/95 backdrop-blur-xl space-y-6">
+        <div className="p-6 rounded-2xl border border-border bg-card backdrop-blur-xl space-y-6">
           <div>
-            <h3 className="text-base font-bold text-white font-mono uppercase tracking-wider">
+            <h3 className="text-base font-bold text-foreground font-mono uppercase tracking-wider">
               Verification Decision & Dispatch
             </h3>
-            <p className="text-xs text-white/60 mt-1">
+            <p className="text-xs text-muted-foreground mt-1">
               Evaluate the 78 citizen reports and assign an authorized field assistant to perform pressure testing and manifold verification.
             </p>
           </div>
 
           {/* Assistant Picker */}
           <div className="space-y-3">
-            <label className="text-xs font-bold text-white uppercase tracking-wider block font-mono">
+            <label className="text-xs font-bold text-foreground uppercase tracking-wider block font-mono">
               1. Select Field Assistant
             </label>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
@@ -374,16 +374,16 @@ export default function SupervisorCaseWorkspacePage({
                     onClick={() => setSelectedAssistant(ass.name)}
                     className={`p-3.5 rounded-xl text-left border text-xs transition-all ${
                       isSelected
-                        ? "bg-teal-500/15 border-teal-500/40 text-teal-300 shadow-md shadow-teal-500/10"
-                        : "bg-white/5 border-white/10 text-white/70 hover:bg-white/10"
+                        ? "bg-teal-500/15 border-teal-500/40 text-teal-ink shadow-md shadow-positive/10"
+                        : "bg-muted border-border text-soft hover:bg-secondary"
                     }`}
                   >
                     <div className="flex items-center justify-between font-semibold">
                       <span>{ass.name}</span>
-                      {isSelected && <CheckCircle2 className="h-3.5 w-3.5 text-teal-400" />}
+                      {isSelected && <CheckCircle2 className="h-3.5 w-3.5 text-teal-ink" />}
                     </div>
-                    <div className="flex items-center gap-1.5 text-[10px] text-white/40 mt-1 font-mono">
-                      <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                    <div className="flex items-center gap-1.5 text-2xs text-faint mt-1 font-mono">
+                      <span className="h-1.5 w-1.5 rounded-full bg-positive animate-pulse" />
                       {ass.status} · GPS {ass.gps}
                     </div>
                   </button>
@@ -395,15 +395,15 @@ export default function SupervisorCaseWorkspacePage({
           {/* Priority & Deadline */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
             <div className="space-y-1.5">
-              <label className="font-bold text-white/80 block font-mono">Priority Level</label>
+              <label className="font-bold text-soft block font-mono">Priority Level</label>
               <div className="flex gap-2">
                 <button
                   type="button"
                   onClick={() => setPriority("high")}
                   className={`flex-1 py-2 px-3 rounded-lg border font-mono font-medium ${
                     priority === "high"
-                      ? "bg-rose-500/20 border-rose-500/40 text-rose-300"
-                      : "bg-white/5 border-white/10 text-white/60"
+                      ? "bg-rose-500/20 border-rose-500/40 text-rose-ink"
+                      : "bg-muted border-border text-muted-foreground"
                   }`}
                 >
                   High (Urgent Dispatch)
@@ -413,8 +413,8 @@ export default function SupervisorCaseWorkspacePage({
                   onClick={() => setPriority("medium")}
                   className={`flex-1 py-2 px-3 rounded-lg border font-mono font-medium ${
                     priority === "medium"
-                      ? "bg-amber-500/20 border-amber-500/40 text-amber-300"
-                      : "bg-white/5 border-white/10 text-white/60"
+                      ? "bg-amber-500/20 border-amber-500/40 text-amber-ink"
+                      : "bg-muted border-border text-muted-foreground"
                   }`}
                 >
                   Medium (Standard Window)
@@ -423,23 +423,23 @@ export default function SupervisorCaseWorkspacePage({
             </div>
 
             <div className="space-y-1.5">
-              <label className="font-bold text-white/80 block font-mono">Verification Deadline</label>
-              <div className="p-2.5 rounded-lg bg-white/5 border border-white/10 font-mono text-white/80 flex items-center justify-between">
+              <label className="font-bold text-soft block font-mono">Verification Deadline</label>
+              <div className="p-2.5 rounded-lg bg-muted border border-border font-mono text-soft flex items-center justify-between">
                 <span>Today, 12:00 PM</span>
-                <Clock className="h-3.5 w-3.5 text-teal-400" />
+                <Clock className="h-3.5 w-3.5 text-teal-ink" />
               </div>
             </div>
           </div>
 
           {/* 8-Item Field Checklist Preview */}
           <div className="space-y-2">
-            <label className="text-xs font-bold text-white uppercase tracking-wider block font-mono">
+            <label className="text-xs font-bold text-foreground uppercase tracking-wider block font-mono">
               2. Standard Field Verification Checklist (8 Tasks)
             </label>
-            <div className="p-4 rounded-xl bg-black/40 border border-white/5 grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs text-white/70">
+            <div className="p-4 rounded-xl bg-inset border border-border/60 grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs text-soft">
               {DEFAULT_FIELD_CHECKLIST.map((item, idx) => (
                 <div key={idx} className="flex items-center gap-2">
-                  <span className="font-mono text-teal-400 text-[11px] font-bold">{idx + 1}.</span>
+                  <span className="font-mono text-teal-ink text-xs font-bold">{idx + 1}.</span>
                   <span>{item}</span>
                 </div>
               ))}
@@ -448,7 +448,7 @@ export default function SupervisorCaseWorkspacePage({
 
           {/* Supervisor Notes */}
           <div className="space-y-2">
-            <label className="text-xs font-bold text-white uppercase tracking-wider block font-mono">
+            <label className="text-xs font-bold text-foreground uppercase tracking-wider block font-mono">
               3. Supervisor Action Notes (Optional)
             </label>
             <textarea
@@ -456,7 +456,7 @@ export default function SupervisorCaseWorkspacePage({
               value={notes}
               onChange={(e) => setNotes(e.target.value)}
               placeholder="e.g. Inspect main valve manifold at Sector 2 and verify junction pressure at Street B."
-              className="w-full p-3 rounded-xl bg-black/40 border border-white/10 text-xs text-white placeholder-white/30 focus:outline-none focus:border-teal-500/50"
+              className="w-full p-3 rounded-xl bg-inset border border-border text-xs text-foreground placeholder-white/30 focus:outline-none focus:border-teal-500/50"
             />
           </div>
 
@@ -464,7 +464,7 @@ export default function SupervisorCaseWorkspacePage({
           <div className="flex flex-col sm:flex-row gap-3 pt-2">
             <Button
               onClick={handleAssignAssistant}
-              className="flex-1 bg-teal-500 text-black hover:bg-teal-400 font-semibold text-xs h-10 gap-2 shadow-lg shadow-teal-500/20"
+              className="flex-1 bg-positive text-positive-foreground hover:bg-positive/90 font-semibold text-xs h-10 gap-2 shadow-lg shadow-positive/10"
             >
               <UserCheck className="h-4 w-4" />
               <span>Assign Field Verification ({selectedAssistant})</span>
@@ -472,14 +472,14 @@ export default function SupervisorCaseWorkspacePage({
             <Button
               variant="outline"
               onClick={handleMarkForMonitoring}
-              className="border-white/10 bg-white/5 text-xs text-white hover:bg-white/10 h-10"
+              className="border-border bg-muted text-xs text-foreground hover:bg-secondary h-10"
             >
               Mark for Monitoring
             </Button>
             <Button
               variant="outline"
               onClick={handleRequestMoreInfo}
-              className="border-amber-500/30 bg-amber-500/10 text-xs text-amber-300 hover:bg-amber-500/20 h-10"
+              className="border-amber-500/30 bg-amber-500/10 text-xs text-amber-ink hover:bg-amber-500/20 h-10"
             >
               Request More Information
             </Button>
@@ -491,31 +491,31 @@ export default function SupervisorCaseWorkspacePage({
       {currentState === "verification_assigned" && (
         <div className="p-6 rounded-2xl border border-teal-500/30 bg-teal-500/[0.03] backdrop-blur-xl space-y-5">
           <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2 text-teal-400 font-bold text-xs uppercase tracking-wider font-mono">
+            <div className="flex items-center gap-2 text-teal-ink font-bold text-xs uppercase tracking-wider font-mono">
               <UserCheck className="h-4 w-4" />
               <span>Field Verification Assigned</span>
             </div>
             <StatusBadge status="warning" label="Pending Dispatch" />
           </div>
 
-          <div className="p-4 rounded-xl bg-black/40 border border-white/5 space-y-2 text-xs">
-            <div className="flex justify-between py-1 border-b border-white/5">
-              <span className="text-white/60">Assigned Inspector:</span>
-              <span className="text-white font-medium">{selectedAssistant}</span>
+          <div className="p-4 rounded-xl bg-inset border border-border/60 space-y-2 text-xs">
+            <div className="flex justify-between py-1 border-b border-border/60">
+              <span className="text-muted-foreground">Assigned Inspector:</span>
+              <span className="text-foreground font-medium">{selectedAssistant}</span>
             </div>
-            <div className="flex justify-between py-1 border-b border-white/5">
-              <span className="text-white/60">Target Area:</span>
-              <span className="text-white">XYZ Colony (Sector 2 Feeder)</span>
+            <div className="flex justify-between py-1 border-b border-border/60">
+              <span className="text-muted-foreground">Target Area:</span>
+              <span className="text-foreground">XYZ Colony (Sector 2 Feeder)</span>
             </div>
             <div className="flex justify-between py-1">
-              <span className="text-white/60">Mandate:</span>
-              <span className="text-white">8-point protocol checklist · Manifold pressure measurement</span>
+              <span className="text-muted-foreground">Mandate:</span>
+              <span className="text-foreground">8-point protocol checklist · Manifold pressure measurement</span>
             </div>
           </div>
 
           <Button
             onClick={handleStartFieldVerification}
-            className="w-full bg-teal-500 text-black hover:bg-teal-400 font-semibold text-xs h-10 gap-2 shadow-lg shadow-teal-500/20"
+            className="w-full bg-positive text-positive-foreground hover:bg-positive/90 font-semibold text-xs h-10 gap-2 shadow-lg shadow-positive/10"
           >
             <span>Start Live Verification & Activate GPS Telemetry</span>
             <ArrowRight className="h-4 w-4" />
@@ -529,49 +529,49 @@ export default function SupervisorCaseWorkspacePage({
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2.5">
               <div className="h-3 w-3 rounded-full bg-amber-400 animate-ping" />
-              <h3 className="text-sm font-bold text-amber-300 font-mono uppercase tracking-wider">
+              <h3 className="text-sm font-bold text-amber-ink font-mono uppercase tracking-wider">
                 Live Field Verification In Progress
               </h3>
             </div>
-            <span className="text-xs font-mono text-emerald-400 font-semibold flex items-center gap-1.5">
-              <span className="h-2 w-2 rounded-full bg-emerald-400" />
+            <span className="text-xs font-mono text-positive font-semibold flex items-center gap-1.5">
+              <span className="h-2 w-2 rounded-full bg-positive" />
               GPS Active (7:05 AM)
             </span>
           </div>
 
           {/* Live Field Telemetry Indicators */}
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs">
-            <div className="p-3 rounded-xl bg-black/40 border border-white/5">
-              <span className="text-white/40 block text-[10px] font-mono">SUPPLY START</span>
-              <span className="font-mono text-white font-bold text-sm">
+            <div className="p-3 rounded-xl bg-inset border border-border/60">
+              <span className="text-faint block text-2xs font-mono">SUPPLY START</span>
+              <span className="font-mono text-foreground font-bold text-sm">
                 {simStep >= 2 ? "07:12 AM" : "Checking..."}
               </span>
             </div>
-            <div className="p-3 rounded-xl bg-black/40 border border-white/5">
-              <span className="text-white/40 block text-[10px] font-mono">SUPPLY END</span>
-              <span className="font-mono text-white font-bold text-sm">
+            <div className="p-3 rounded-xl bg-inset border border-border/60">
+              <span className="text-faint block text-2xs font-mono">SUPPLY END</span>
+              <span className="font-mono text-foreground font-bold text-sm">
                 {simStep >= 4 ? "07:42 AM (30 min)" : "Active"}
               </span>
             </div>
-            <div className="p-3 rounded-xl bg-black/40 border border-white/5">
-              <span className="text-white/40 block text-[10px] font-mono">PRESSURE GAUGE</span>
-              <span className={`font-mono font-bold text-sm ${simStep >= 3 ? "text-amber-400" : "text-white/60"}`}>
+            <div className="p-3 rounded-xl bg-inset border border-border/60">
+              <span className="text-faint block text-2xs font-mono">PRESSURE GAUGE</span>
+              <span className={`font-mono font-bold text-sm ${simStep >= 3 ? "text-amber-ink" : "text-muted-foreground"}`}>
                 {simStep >= 3 ? "0.8 Bar (Low)" : "Pending"}
               </span>
             </div>
-            <div className="p-3 rounded-xl bg-black/40 border border-white/5">
-              <span className="text-white/40 block text-[10px] font-mono">EVIDENCE UPLOADED</span>
-              <span className="font-mono text-white font-bold text-sm">
+            <div className="p-3 rounded-xl bg-inset border border-border/60">
+              <span className="text-faint block text-2xs font-mono">EVIDENCE UPLOADED</span>
+              <span className="font-mono text-foreground font-bold text-sm">
                 {simStep >= 5 ? "3 Photos + 1 Video" : `${Math.min(simStep, 2)} items`}
               </span>
             </div>
           </div>
 
           {/* Checklist progress */}
-          <div className="p-4 rounded-xl bg-black/40 border border-white/5 space-y-3">
+          <div className="p-4 rounded-xl bg-inset border border-border/60 space-y-3">
             <div className="flex items-center justify-between text-xs">
-              <span className="font-semibold text-white/80 font-mono">Field Inspection Protocol</span>
-              <span className="text-teal-400 font-mono font-bold">
+              <span className="font-semibold text-soft font-mono">Field Inspection Protocol</span>
+              <span className="text-teal-ink font-mono font-bold">
                 {simStep >= 5 ? "8 / 8 Complete" : `${Math.min(8, simStep * 2)} / 8 Items Done`}
               </span>
             </div>
@@ -581,11 +581,11 @@ export default function SupervisorCaseWorkspacePage({
                 return (
                   <div key={idx} className="flex items-center gap-2">
                     {isDone ? (
-                      <CheckCircle2 className="h-3.5 w-3.5 text-emerald-400 shrink-0" />
+                      <CheckCircle2 className="h-3.5 w-3.5 text-positive shrink-0" />
                     ) : (
-                      <div className="h-3.5 w-3.5 rounded-full border border-white/30 shrink-0" />
+                      <div className="h-3.5 w-3.5 rounded-full border border-border-strong shrink-0" />
                     )}
-                    <span className={isDone ? "text-white/90" : "text-white/40"}>{item}</span>
+                    <span className={isDone ? "text-foreground" : "text-faint"}>{item}</span>
                   </div>
                 );
               })}
@@ -594,20 +594,20 @@ export default function SupervisorCaseWorkspacePage({
 
           {/* If 5 steps done or report ready, show validation prompt */}
           {isReportReady && (
-            <div className="p-4 rounded-xl bg-emerald-500/10 border border-emerald-500/30 space-y-3">
+            <div className="p-4 rounded-xl bg-positive/10 border border-positive/30 space-y-3">
               <div className="flex items-center justify-between">
-                <span className="text-xs font-bold font-mono uppercase tracking-wider text-emerald-300">
+                <span className="text-xs font-bold font-mono uppercase tracking-wider text-positive">
                   Field Report Submitted — Ready for Supervisor Validation
                 </span>
                 <StatusBadge status="normal" label="Telemetry Ready" />
               </div>
-              <p className="text-xs text-white/70">
+              <p className="text-xs text-soft">
                 Assistant {selectedAssistant} has finalized measurements and submitted photo telemetry. Review and confirm below.
               </p>
               <div className="flex gap-2 pt-1">
                 <Button
                   onClick={handleConfirmValidation}
-                  className="flex-1 bg-emerald-500 text-black hover:bg-emerald-400 font-semibold text-xs h-9 gap-1.5"
+                  className="flex-1 bg-primary text-primary-foreground hover:bg-primary-hover font-semibold text-xs h-9 gap-1.5"
                 >
                   <CheckCircle2 className="h-3.5 w-3.5" />
                   <span>Confirm (Verified)</span>
@@ -615,7 +615,7 @@ export default function SupervisorCaseWorkspacePage({
                 <Button
                   onClick={handleRejectValidation}
                   variant="outline"
-                  className="border-rose-500/30 bg-rose-500/10 text-xs text-rose-300 hover:bg-rose-500/20 h-9"
+                  className="border-rose-500/30 bg-rose-500/10 text-xs text-rose-ink hover:bg-rose-500/20 h-9"
                 >
                   <XCircle className="h-3.5 w-3.5" />
                   <span>Reject</span>
@@ -623,7 +623,7 @@ export default function SupervisorCaseWorkspacePage({
                 <Button
                   onClick={handleNeedsFurtherVerification}
                   variant="outline"
-                  className="border-white/10 bg-white/5 text-xs text-white hover:bg-white/10 h-9"
+                  className="border-border bg-muted text-xs text-foreground hover:bg-secondary h-9"
                 >
                   Needs Further Verification
                 </Button>
@@ -635,43 +635,43 @@ export default function SupervisorCaseWorkspacePage({
 
       {/* STAGE 4: VERIFIED REPORT READY & VALIDATED */}
       {currentState === "verified" && (
-        <div className="p-6 rounded-2xl border border-emerald-500/30 bg-emerald-500/[0.03] backdrop-blur-xl space-y-5">
+        <div className="p-6 rounded-2xl border border-positive/30 bg-positive/[0.03] backdrop-blur-xl space-y-5">
           <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2 text-emerald-400 font-bold text-xs uppercase tracking-wider font-mono">
+            <div className="flex items-center gap-2 text-positive font-bold text-xs uppercase tracking-wider font-mono">
               <CheckCircle2 className="h-4 w-4" />
               <span>Field Verification Confirmed by Supervisor</span>
             </div>
             <StatusBadge status="normal" label="Verified" />
           </div>
 
-          <div className="p-4 rounded-xl bg-black/40 border border-white/5 space-y-2.5 text-xs">
-            <div className="flex justify-between py-1 border-b border-white/5">
-              <span className="text-white/60">Inspector:</span>
-              <span className="text-white font-medium">{selectedAssistant}</span>
+          <div className="p-4 rounded-xl bg-inset border border-border/60 space-y-2.5 text-xs">
+            <div className="flex justify-between py-1 border-b border-border/60">
+              <span className="text-muted-foreground">Inspector:</span>
+              <span className="text-foreground font-medium">{selectedAssistant}</span>
             </div>
-            <div className="flex justify-between py-1 border-b border-white/5">
-              <span className="text-white/60">Observed Supply Window:</span>
-              <span className="text-white font-mono">07:12 AM – 07:42 AM · 30 min actual (planned 60 min)</span>
+            <div className="flex justify-between py-1 border-b border-border/60">
+              <span className="text-muted-foreground">Observed Supply Window:</span>
+              <span className="text-foreground font-mono">07:12 AM – 07:42 AM · 30 min actual (planned 60 min)</span>
             </div>
-            <div className="flex justify-between py-1 border-b border-white/5">
-              <span className="text-white/60">Observed Pressure:</span>
-              <span className="text-amber-400 font-mono font-bold">0.8 Bar (Low · Normal: 1.4 Bar)</span>
+            <div className="flex justify-between py-1 border-b border-border/60">
+              <span className="text-muted-foreground">Observed Pressure:</span>
+              <span className="text-amber-ink font-mono font-bold">0.8 Bar (Low · Normal: 1.4 Bar)</span>
             </div>
-            <div className="flex justify-between py-1 border-b border-white/5">
-              <span className="text-white/60">Availability:</span>
-              <span className="text-amber-300 font-medium">Partial</span>
+            <div className="flex justify-between py-1 border-b border-border/60">
+              <span className="text-muted-foreground">Availability:</span>
+              <span className="text-amber-ink font-medium">Partial</span>
             </div>
-            <div className="flex justify-between py-1 border-b border-white/5">
-              <span className="text-white/60">Affected Streets:</span>
-              <span className="text-white">Streets A, B, and C in XYZ Colony</span>
+            <div className="flex justify-between py-1 border-b border-border/60">
+              <span className="text-muted-foreground">Affected Streets:</span>
+              <span className="text-foreground">Streets A, B, and C in XYZ Colony</span>
             </div>
-            <div className="flex justify-between py-1 border-b border-white/5">
-              <span className="text-white/60">Simulated Evidence:</span>
-              <span className="text-teal-400 font-mono">photo-01.jpg, photo-02.jpg, video-01.mp4 (3 items)</span>
+            <div className="flex justify-between py-1 border-b border-border/60">
+              <span className="text-muted-foreground">Simulated Evidence:</span>
+              <span className="text-teal-ink font-mono">photo-01.jpg, photo-02.jpg, video-01.mp4 (3 items)</span>
             </div>
             <div className="py-1">
-              <span className="text-white/60 block mb-0.5">Remarks:</span>
-              <span className="text-white/90 italic">
+              <span className="text-muted-foreground block mb-0.5">Remarks:</span>
+              <span className="text-foreground italic">
                 &quot;Supply shorter than planned; pressure low across surveyed points.&quot;
               </span>
             </div>
@@ -679,18 +679,18 @@ export default function SupervisorCaseWorkspacePage({
 
           {/* Action: Forward to Water Department */}
           <div className="space-y-3 pt-2">
-            <h4 className="text-xs font-bold text-white uppercase tracking-wider font-mono">
+            <h4 className="text-xs font-bold text-foreground uppercase tracking-wider font-mono">
               Forward to Municipal Water Supply Board
             </h4>
-            <div className="p-3 rounded-xl bg-white/[0.02] border border-white/5 text-xs text-white/70">
+            <div className="p-3 rounded-xl bg-muted/60 border border-border/60 text-xs text-soft">
               Auto-filled forward summary:
-              <span className="text-white font-medium block mt-1">
+              <span className="text-foreground font-medium block mt-1">
                 Observed supply 7:12–7:42 AM (30 min actual vs 60 min planned). Low pressure (0.8 bar) across Streets A, B, C. 78 household reports confirmed.
               </span>
             </div>
             <Button
               onClick={handleForwardToGov}
-              className="w-full bg-emerald-500 text-black hover:bg-emerald-400 font-semibold text-xs h-10 gap-2 shadow-lg shadow-emerald-500/20"
+              className="w-full bg-primary text-primary-foreground hover:bg-primary-hover font-semibold text-xs h-10 gap-2 shadow-lg shadow-primary/10"
             >
               <span>Forward to Water Supply Board</span>
               <Send className="h-4 w-4" />
@@ -703,26 +703,26 @@ export default function SupervisorCaseWorkspacePage({
       {currentState === "forwarded" && (
         <div className="p-6 rounded-2xl border border-teal-500/30 bg-teal-500/[0.04] backdrop-blur-xl space-y-4">
           <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2 text-teal-400 font-bold text-xs uppercase tracking-wider font-mono">
+            <div className="flex items-center gap-2 text-teal-ink font-bold text-xs uppercase tracking-wider font-mono">
               <ShieldCheck className="h-5 w-5" />
               <span>Forwarded to Raichur Water Supply Board</span>
             </div>
             <StatusBadge status="normal" label="Awaiting Board Action" />
           </div>
 
-          <p className="text-xs text-white/80 leading-relaxed font-sans">
+          <p className="text-xs text-soft leading-relaxed font-sans">
             Case has been forwarded to municipal water engineers. Verification telemetry confirmed 0.8 bar low pressure and a 30-minute shortfall. The Board is reviewing feeder re-balancing for tomorrow&apos;s morning distribution.
           </p>
 
           <div className="p-4 rounded-xl bg-amber-500/10 border border-dashed border-amber-500/40 space-y-2">
             <div className="flex items-center justify-between">
-              <span className="text-xs font-bold text-amber-300 font-mono">Demo Control Available</span>
-              <span className="text-[10px] font-mono bg-amber-500/20 text-amber-300 px-1.5 py-0.5 rounded">
+              <span className="text-xs font-bold text-amber-ink font-mono">Demo Control Available</span>
+              <span className="text-2xs font-mono bg-amber-500/20 text-amber-ink px-1.5 py-0.5 rounded">
                 SIMULATE
               </span>
             </div>
-            <p className="text-xs text-white/70">
-              Click the <strong className="text-amber-300">&quot;Simulate Department Action&quot;</strong> button above to advance to <code className="text-teal-300">action_scheduled</code>, or navigate to <Link href="/gov/cases" className="text-teal-400 underline font-semibold">Government Cases</Link> to execute it as the Water Board.
+            <p className="text-xs text-soft">
+              Click the <strong className="text-amber-ink">&quot;Simulate Department Action&quot;</strong> button above to advance to <code className="text-teal-ink">action_scheduled</code>, or navigate to <Link href="/gov/cases" className="text-teal-ink underline font-semibold">Government Cases</Link> to execute it as the Water Board.
             </p>
           </div>
         </div>
@@ -730,28 +730,28 @@ export default function SupervisorCaseWorkspacePage({
 
       {/* STAGE 6: ACTION SCHEDULED */}
       {currentState === "action_scheduled" && (
-        <div className="p-6 rounded-2xl border border-emerald-500/40 bg-emerald-500/[0.05] backdrop-blur-xl space-y-4">
+        <div className="p-6 rounded-2xl border border-positive/40 bg-positive/[0.05] backdrop-blur-xl space-y-4">
           <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2 text-emerald-400 font-bold text-xs uppercase tracking-wider font-mono">
+            <div className="flex items-center gap-2 text-positive font-bold text-xs uppercase tracking-wider font-mono">
               <CheckCircle2 className="h-5 w-5" />
               <span>Department Adjustment Scheduled</span>
             </div>
             <StatusBadge status="complete" label="Action Scheduled" />
           </div>
 
-          <div className="p-4 rounded-xl bg-black/40 border border-white/5 space-y-2 text-xs">
-            <div className="text-white/60">Verbatim Municipal Response:</div>
-            <div className="text-sm font-semibold text-emerald-300">
+          <div className="p-4 rounded-xl bg-inset border border-border/60 space-y-2 text-xs">
+            <div className="text-muted-foreground">Verbatim Municipal Response:</div>
+            <div className="text-sm font-semibold text-positive">
               &quot;Supply adjustment scheduled for tomorrow. New planned supply 7:00–8:15 AM.&quot;
             </div>
-            <div className="text-[11px] text-white/40 pt-1 font-mono">
+            <div className="text-xs text-faint pt-1 font-mono">
               Community notifications broadcast to Ward 24 · Feeder Line 4B booster pump scheduled
             </div>
           </div>
 
           <Button
             onClick={handleMarkResolved}
-            className="w-full bg-emerald-500 text-black hover:bg-emerald-400 font-semibold text-xs h-10 gap-2 shadow-lg shadow-emerald-500/20"
+            className="w-full bg-primary text-primary-foreground hover:bg-primary-hover font-semibold text-xs h-10 gap-2 shadow-lg shadow-primary/10"
           >
             <span>Mark Case Resolved</span>
             <CheckCircle2 className="h-4 w-4" />
@@ -761,10 +761,10 @@ export default function SupervisorCaseWorkspacePage({
 
       {/* STAGE 7: RESOLVED */}
       {currentState === "resolved" && (
-        <div className="p-6 rounded-2xl border border-emerald-500/50 bg-emerald-500/[0.08] backdrop-blur-xl space-y-4 text-center py-8">
-          <CheckCircle2 className="h-10 w-10 text-emerald-400 mx-auto" />
-          <h3 className="text-lg font-bold text-white">Case Resolved & Community Notified</h3>
-          <p className="text-xs text-white/70 max-w-md mx-auto leading-relaxed">
+        <div className="p-6 rounded-2xl border border-positive/50 bg-positive/[0.08] backdrop-blur-xl space-y-4 text-center py-8">
+          <CheckCircle2 className="h-10 w-10 text-positive mx-auto" />
+          <h3 className="text-lg font-bold text-foreground">Case Resolved & Community Notified</h3>
+          <p className="text-xs text-soft max-w-md mx-auto leading-relaxed">
             The supply re-balancing adjustment has been recorded. Closing notifications were dispatched to all 78 reporting households in XYZ Colony.
           </p>
           <div className="pt-2">
@@ -772,7 +772,7 @@ export default function SupervisorCaseWorkspacePage({
               onClick={handleResetDemo}
               variant="outline"
               size="sm"
-              className="border-white/10 bg-white/5 text-xs text-white hover:bg-white/10 gap-1.5"
+              className="border-border bg-muted text-xs text-foreground hover:bg-secondary gap-1.5"
             >
               <RotateCcw className="h-3.5 w-3.5" />
               <span>Reset Demo Workflow</span>
@@ -784,18 +784,18 @@ export default function SupervisorCaseWorkspacePage({
       {/* STAGE 8: NOT CONFIRMED */}
       {currentState === "not_confirmed" && (
         <div className="p-6 rounded-2xl border border-rose-500/40 bg-rose-500/[0.05] backdrop-blur-xl space-y-3">
-          <div className="flex items-center gap-2 text-rose-400 font-bold text-xs uppercase tracking-wider font-mono">
+          <div className="flex items-center gap-2 text-rose-ink font-bold text-xs uppercase tracking-wider font-mono">
             <XCircle className="h-5 w-5" />
             <span>Case Not Confirmed</span>
           </div>
-          <p className="text-xs text-white/80 leading-relaxed font-sans">
+          <p className="text-xs text-soft leading-relaxed font-sans">
             Field verification did not confirm a supply gap today in XYZ Colony. Closing advisory has been dispatched to reporting households.
           </p>
           <Button
             onClick={handleResetDemo}
             variant="outline"
             size="sm"
-            className="border-white/10 bg-white/5 text-xs text-white hover:bg-white/10 gap-1.5"
+            className="border-border bg-muted text-xs text-foreground hover:bg-secondary gap-1.5"
           >
             <RotateCcw className="h-3.5 w-3.5" />
             <span>Restart Workflow</span>
@@ -806,16 +806,16 @@ export default function SupervisorCaseWorkspacePage({
       {/* STAGE 9: NEEDS MORE */}
       {currentState === "needs_more" && (
         <div className="p-6 rounded-2xl border border-amber-500/40 bg-amber-500/[0.05] backdrop-blur-xl space-y-3">
-          <div className="flex items-center gap-2 text-amber-400 font-bold text-xs uppercase tracking-wider font-mono">
+          <div className="flex items-center gap-2 text-amber-ink font-bold text-xs uppercase tracking-wider font-mono">
             <AlertTriangle className="h-5 w-5" />
             <span>Further Verification / Information Requested</span>
           </div>
-          <p className="text-xs text-white/80 leading-relaxed font-sans">
+          <p className="text-xs text-soft leading-relaxed font-sans">
             Case requires supplementary data or re-inspection. You may re-assign a field team or review when citizen replies arrive.
           </p>
           <Button
             onClick={() => transitionTo("under_review", "Supervisor returning case to review")}
-            className="bg-teal-500 text-black hover:bg-teal-400 font-semibold text-xs h-9 gap-1.5"
+            className="bg-positive text-positive-foreground hover:bg-positive/90 font-semibold text-xs h-9 gap-1.5"
           >
             <span>Return to Review & Re-Assign</span>
           </Button>

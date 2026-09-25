@@ -35,24 +35,24 @@ export default function GasSetupPage() {
         ]}
       />
 
-      <div className="rounded-2xl border border-white/10 bg-[#070D0A]/95 p-6 backdrop-blur-xl space-y-6">
+      <div className="rounded-2xl border border-border bg-card p-6 backdrop-blur-xl space-y-6">
         <div>
-          <label className="block text-xs font-semibold text-white mb-2">Fuel Delivery Type</label>
+          <label className="block text-xs font-semibold text-foreground mb-2">Fuel Delivery Type</label>
           <div className="grid grid-cols-2 gap-3">
             <button
               type="button"
               onClick={() => setGasType("lpg")}
               className={`p-4 rounded-xl text-left border transition-all ${
                 gasType === "lpg"
-                  ? "bg-rose-500/15 border-rose-500/40 text-rose-300"
-                  : "bg-white/5 border-white/10 text-white/70"
+                  ? "bg-rose-500/15 border-rose-500/40 text-rose-ink"
+                  : "bg-muted border-border text-soft"
               }`}
             >
               <div className="flex items-center gap-2 font-bold text-xs mb-1">
                 <Flame className="h-4 w-4" />
                 <span>LPG Cylinders (Bottled Gas)</span>
               </div>
-              <p className="text-[11px] text-white/50">Standard domestic refillable cylinders</p>
+              <p className="text-xs text-muted-foreground">Standard domestic refillable cylinders</p>
             </button>
 
             <button
@@ -60,15 +60,15 @@ export default function GasSetupPage() {
               onClick={() => setGasType("piped")}
               className={`p-4 rounded-xl text-left border transition-all ${
                 gasType === "piped"
-                  ? "bg-rose-500/15 border-rose-500/40 text-rose-300"
-                  : "bg-white/5 border-white/10 text-white/70"
+                  ? "bg-rose-500/15 border-rose-500/40 text-rose-ink"
+                  : "bg-muted border-border text-soft"
               }`}
             >
               <div className="flex items-center gap-2 font-bold text-xs mb-1">
                 <Flame className="h-4 w-4" />
                 <span>Piped Natural Gas (PNG)</span>
               </div>
-              <p className="text-[11px] text-white/50">Municipal pipeline connection</p>
+              <p className="text-xs text-muted-foreground">Municipal pipeline connection</p>
             </button>
           </div>
         </div>
@@ -76,7 +76,7 @@ export default function GasSetupPage() {
         {gasType === "lpg" && (
           <>
             <div>
-              <label className="block text-xs font-semibold text-white mb-2">Cylinder Weight (Capacity)</label>
+              <label className="block text-xs font-semibold text-foreground mb-2">Cylinder Weight (Capacity)</label>
               <div className="grid grid-cols-2 gap-3">
                 {[14.2, 5.0].map((size) => (
                   <button
@@ -85,8 +85,8 @@ export default function GasSetupPage() {
                     onClick={() => setCylinderSize(size)}
                     className={`p-3 rounded-xl text-xs font-mono font-medium text-left border transition-all ${
                       cylinderSize === size
-                        ? "bg-rose-500/15 border-rose-500/40 text-rose-300"
-                        : "bg-white/5 border-white/10 text-white/70"
+                        ? "bg-rose-500/15 border-rose-500/40 text-rose-ink"
+                        : "bg-muted border-border text-soft"
                     }`}
                   >
                     {size} kg (Standard Domestic)
@@ -96,7 +96,7 @@ export default function GasSetupPage() {
             </div>
 
             <div>
-              <label className="block text-xs font-semibold text-white mb-2">Distribution Agency / Brand</label>
+              <label className="block text-xs font-semibold text-foreground mb-2">Distribution Agency / Brand</label>
               <div className="grid grid-cols-3 gap-2.5">
                 {["Indane Gas (IOCL)", "Bharat Gas (BPCL)", "HP Gas (HPCL)"].map((p) => (
                   <button
@@ -105,8 +105,8 @@ export default function GasSetupPage() {
                     onClick={() => setProvider(p)}
                     className={`p-3 rounded-xl text-xs font-medium text-left border transition-all ${
                       provider === p
-                        ? "bg-rose-500/15 border-rose-500/40 text-rose-300"
-                        : "bg-white/5 border-white/10 text-white/70"
+                        ? "bg-rose-500/15 border-rose-500/40 text-rose-ink"
+                        : "bg-muted border-border text-soft"
                     }`}
                   >
                     {p}
@@ -118,10 +118,10 @@ export default function GasSetupPage() {
         )}
 
         {/* Action */}
-        <div className="pt-4 border-t border-white/10 flex justify-end">
+        <div className="pt-4 border-t border-border flex justify-end">
           <Button
             onClick={handleSave}
-            className="bg-rose-500 text-white hover:bg-rose-400 font-semibold text-xs h-9 px-6 gap-2"
+            className="bg-primary text-primary-foreground hover:bg-primary-hover font-semibold text-xs h-9 px-6 gap-2"
           >
             <span>Save & Open LPG Dashboard</span>
             <ArrowRight className="h-3.5 w-3.5" />

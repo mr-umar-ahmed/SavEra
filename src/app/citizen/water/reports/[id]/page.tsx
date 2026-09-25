@@ -163,7 +163,7 @@ export default function WaterReportTimelinePage({
             <Button
               variant="outline"
               size="sm"
-              className="h-8 gap-1.5 border-white/10 bg-white/5 hover:bg-white/10 text-xs text-white rounded-xl"
+              className="h-8 gap-1.5 border-border bg-muted hover:bg-secondary text-xs text-foreground rounded-xl"
             >
               <ArrowLeft className="h-3.5 w-3.5" />
               <span>Back to Water Portal</span>
@@ -172,32 +172,32 @@ export default function WaterReportTimelinePage({
         }
       />
 
-      <div className="rounded-3xl border border-white/10 bg-[#070D0A]/95 p-6 sm:p-8 backdrop-blur-2xl space-y-6 shadow-2xl">
+      <div className="rounded-3xl border border-border bg-card p-6 sm:p-8 backdrop-blur-2xl space-y-6 shadow-2xl">
         {/* Header matching §4 */}
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-white/10">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-border">
           <div>
             <div className="flex items-center gap-2 mb-1">
-              <span className="font-bold text-white font-mono text-base">{id}</span>
-              <span className="text-xs text-white/50 font-mono">· {report.date}</span>
+              <span className="font-bold text-foreground font-mono text-base">{id}</span>
+              <span className="text-xs text-muted-foreground font-mono">· {report.date}</span>
               <StatusBadge
                 status={caseState === "resolved" ? "complete" : "warning"}
                 label={caseState.toUpperCase().replace("_", " ")}
               />
             </div>
-            <p className="text-xs text-teal-400 font-mono">
+            <p className="text-xs text-teal-ink font-mono">
               Linked Case: Grouped with 77 other reports from XYZ Colony
             </p>
           </div>
-          <span className="text-[11px] font-mono text-white/50 bg-white/5 px-2.5 py-1 rounded-full border border-white/10">
+          <span className="text-xs font-mono text-muted-foreground bg-muted px-2.5 py-1 rounded-full border border-border">
             Issue: {report.experience.replace("_", " ")}
           </span>
         </div>
 
         {/* Latest Update Line */}
-        <div className="p-4 rounded-2xl bg-teal-500/10 border border-teal-500/30 text-xs text-teal-200 flex items-start gap-2.5">
-          <Droplet className="h-4 w-4 text-teal-400 shrink-0 mt-0.5" />
+        <div className="p-4 rounded-2xl bg-teal-500/10 border border-teal-500/30 text-xs text-teal-ink flex items-start gap-2.5">
+          <Droplet className="h-4 w-4 text-teal-ink shrink-0 mt-0.5" />
           <div>
-            <span className="font-bold block text-white">Latest Municipal Update:</span>
+            <span className="font-bold block text-foreground">Latest Municipal Update:</span>
             <p className="mt-0.5">{getLatestUpdate()}</p>
           </div>
         </div>
@@ -207,7 +207,7 @@ export default function WaterReportTimelinePage({
           <StatusTimeline steps={timelineSteps} />
         </div>
 
-        <div className="p-4 rounded-2xl bg-white/[0.02] border border-white/5 text-[11px] text-white/50 leading-relaxed font-mono">
+        <div className="p-4 rounded-2xl bg-muted/60 border border-border/60 text-xs text-muted-foreground leading-relaxed font-mono">
           Human-in-the-loop guarantee: AI detects community report patterns; Area Supervisor assigns verification; Field Assistants physically verify; Municipal Engineers schedule operational supply adjustments.
         </div>
       </div>

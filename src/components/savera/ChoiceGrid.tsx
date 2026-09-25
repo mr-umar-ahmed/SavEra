@@ -123,7 +123,7 @@ export function ChoiceGrid<V extends string = string>(props: ChoiceGridProps<V>)
               "group focus-visible:ring-ring/60 relative flex cursor-pointer items-start gap-3 rounded-2xl border text-left transition-all outline-none focus-visible:ring-2 active:scale-[0.99] disabled:cursor-not-allowed disabled:opacity-50",
               size === "sm" ? "p-3" : "p-4",
               selected
-                ? "border-emerald-500/60 bg-emerald-500/10 shadow-[0_0_30px_-10px_rgba(16,185,129,0.5)]"
+                ? "border-positive/60 bg-positive/10 shadow-md"
                 : "border-border bg-card/60 hover:border-foreground/25 hover:bg-secondary",
             )}
           >
@@ -134,7 +134,7 @@ export function ChoiceGrid<V extends string = string>(props: ChoiceGridProps<V>)
                   "inline-flex shrink-0 items-center justify-center rounded-xl border transition-colors",
                   size === "sm" ? "size-8" : "size-9",
                   selected
-                    ? "border-emerald-500/40 bg-emerald-500/15 text-emerald-500"
+                    ? "border-positive/40 bg-positive/15 text-positive"
                     : "border-border bg-muted text-muted-foreground group-hover:text-foreground",
                 )}
               >
@@ -163,7 +163,7 @@ export function ChoiceGrid<V extends string = string>(props: ChoiceGridProps<V>)
                 "mt-0.5 inline-flex size-5 shrink-0 items-center justify-center border transition-colors",
                 multiple ? "rounded-md" : "rounded-full",
                 selected
-                  ? "border-emerald-500 bg-emerald-500 text-black"
+                  ? "border-positive bg-primary text-primary-foreground"
                   : "border-border bg-transparent text-transparent",
               )}
             >

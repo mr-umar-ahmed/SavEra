@@ -45,7 +45,7 @@ export function DemoControl({
         if (!isDisabled) void onClick();
       }}
       className={cn(
-        "group focus-visible:ring-ring/60 inline-flex cursor-pointer items-center gap-2.5 rounded-full border border-dashed border-amber-500/60 bg-amber-500/5 text-left text-amber-700 transition-all outline-none hover:border-amber-500 hover:bg-amber-500/10 focus-visible:ring-2 active:scale-[0.98] disabled:pointer-events-none disabled:opacity-60 dark:text-amber-300",
+        "group focus-visible:ring-ring/60 inline-flex cursor-pointer items-center gap-2.5 rounded-full border border-dashed border-amber-500/60 bg-amber-500/5 text-left text-amber-700 transition-all outline-none hover:border-amber-500 hover:bg-amber-500/10 focus-visible:ring-2 active:scale-[0.98] disabled:pointer-events-none disabled:opacity-60 dark:text-amber-ink",
         size === "sm" ? "px-3 py-1.5 text-xs" : "px-4 py-2 text-sm",
         className,
       )}
@@ -67,12 +67,12 @@ export function DemoControl({
       <span className="flex min-w-0 flex-col">
         <span className="flex items-center gap-2 leading-tight font-semibold">
           {label}
-          <span className="rounded-full border border-amber-500/40 px-1.5 py-px font-mono text-[10px] tracking-widest uppercase">
+          <span className="rounded-full border border-amber-500/40 px-1.5 py-px font-mono text-2xs tracking-widest uppercase">
             Demo
           </span>
         </span>
         {description ? (
-          <span className="text-muted-foreground mt-0.5 text-[11px] leading-snug font-normal">
+          <span className="text-muted-foreground mt-0.5 text-xs leading-snug font-normal">
             {description}
           </span>
         ) : null}

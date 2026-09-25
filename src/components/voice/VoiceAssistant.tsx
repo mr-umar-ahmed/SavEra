@@ -179,34 +179,33 @@ export function VoiceAssistant() {
       <div className="fixed bottom-6 right-6 z-40">
         <button
           onClick={toggleOpen}
-          className="relative group flex items-center justify-center h-12 w-12 rounded-full bg-gradient-to-tr from-emerald-500 to-teal-400 text-black shadow-lg shadow-emerald-500/30 hover:scale-105 active:scale-95 transition-all focus:outline-none focus:ring-2 focus:ring-emerald-400 focus:ring-offset-2 focus:ring-offset-[#050B08]"
+          className="relative group flex items-center justify-center h-14 w-14 rounded-full bg-primary text-primary-foreground shadow-xl glow-primary hover:bg-primary-hover hover:scale-105 active:scale-95 transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
           aria-label="Toggle Voice Assistant"
         >
-          <div className="absolute -inset-1 rounded-full bg-emerald-400/30 blur-sm animate-pulse pointer-events-none" />
-          <Mic className="h-5 w-5 text-black relative z-10" />
+          <Mic className="h-6 w-6 text-primary-foreground relative z-10" />
         </button>
       </div>
 
       {/* Slide-in Assistant Modal / Drawer */}
       {isOpen && (
-        <div className="fixed bottom-22 right-6 z-40 w-96 max-w-[calc(100vw-3rem)] rounded-2xl bg-[#070D0A]/95 border border-white/15 backdrop-blur-2xl shadow-2xl flex flex-col overflow-hidden text-white animate-scale-in">
+        <div className="fixed bottom-24 right-6 z-40 w-96 max-w-[calc(100vw-3rem)] rounded-2xl bg-card border border-border-strong backdrop-blur-2xl shadow-2xl flex flex-col overflow-hidden text-foreground animate-scale-in">
           {/* Header */}
-          <div className="p-4 border-b border-white/10 flex items-center justify-between bg-black/40">
+          <div className="p-4 border-b border-border flex items-center justify-between bg-inset">
             <div className="flex items-center gap-2.5">
-              <div className="h-7 w-7 rounded-lg bg-emerald-500/20 border border-emerald-500/30 flex items-center justify-center text-emerald-400">
+              <div className="h-7 w-7 rounded-lg bg-positive/20 border border-positive/30 flex items-center justify-center text-positive">
                 <Sparkles className="h-4 w-4" />
               </div>
               <div>
-                <h3 className="text-sm font-semibold text-white">SAVERA Voice & Query</h3>
-                <p className="text-[10px] text-muted-foreground">Natural Language Resource Assistant</p>
+                <h3 className="text-sm font-semibold text-foreground">SAVERA Voice & Query</h3>
+                <p className="text-2xs text-muted-foreground">Natural Language Resource Assistant</p>
               </div>
             </div>
 
             <div className="flex items-center gap-1">
               <button
                 onClick={() => setSpeechEnabled(!speechEnabled)}
-                className={`p-1.5 rounded-lg text-white/60 hover:text-white hover:bg-white/10 transition-colors ${
-                  speechEnabled ? "text-emerald-400" : ""
+                className={`p-1.5 rounded-lg text-muted-foreground hover:text-foreground hover:bg-secondary transition-colors ${
+                  speechEnabled ? "text-positive" : ""
                 }`}
                 title={speechEnabled ? "Speech audio output on" : "Speech audio output off"}
               >
@@ -214,7 +213,7 @@ export function VoiceAssistant() {
               </button>
               <button
                 onClick={() => setOpen(false)}
-                className="p-1.5 rounded-lg text-white/60 hover:text-white hover:bg-white/10 transition-colors"
+                className="p-1.5 rounded-lg text-muted-foreground hover:text-foreground hover:bg-secondary transition-colors"
               >
                 <X className="h-4 w-4" />
               </button>
@@ -231,8 +230,8 @@ export function VoiceAssistant() {
                 <div
                   className={`max-w-[85%] rounded-2xl px-3.5 py-2 text-xs leading-relaxed ${
                     m.sender === "user"
-                      ? "bg-emerald-500 text-black font-medium rounded-br-none shadow-sm"
-                      : "bg-white/10 text-white/90 rounded-bl-none border border-white/5"
+                      ? "bg-primary text-primary-foreground font-medium rounded-br-none shadow-sm"
+                      : "bg-secondary text-foreground rounded-bl-none border border-border/60"
                   }`}
                 >
                   {m.text}
@@ -243,12 +242,12 @@ export function VoiceAssistant() {
           </div>
 
           {/* Quick suggestions */}
-          <div className="px-3 py-2 border-t border-white/5 bg-black/20 flex gap-1.5 overflow-x-auto scrollbar-none">
+          <div className="px-3 py-2 border-t border-border/60 bg-inset flex gap-1.5 overflow-x-auto scrollbar-none">
             {quickPrompts.slice(0, 3).map((prompt, idx) => (
               <button
                 key={idx}
                 onClick={() => handleQuery(prompt)}
-                className="shrink-0 text-[11px] px-2.5 py-1 rounded-full bg-white/5 hover:bg-white/10 text-white/70 hover:text-white border border-white/5 transition-colors"
+                className="shrink-0 text-xs px-2.5 py-1 rounded-full bg-muted hover:bg-secondary text-soft hover:text-foreground border border-border/60 transition-colors"
               >
                 {prompt}
               </button>
@@ -256,13 +255,13 @@ export function VoiceAssistant() {
           </div>
 
           {/* Input Controls */}
-          <div className="p-3 border-t border-white/10 bg-black/40 flex items-center gap-2">
+          <div className="p-3 border-t border-border bg-inset flex items-center gap-2">
             <button
               onClick={toggleListening}
               className={`p-2 rounded-xl transition-all ${
                 isListening
                   ? "bg-rose-500 text-white animate-pulse"
-                  : "bg-white/10 hover:bg-white/15 text-white/80"
+                  : "bg-secondary hover:bg-secondary text-soft"
               }`}
               title={isListening ? "Listening... click to stop" : "Speak command"}
             >
@@ -275,14 +274,14 @@ export function VoiceAssistant() {
               onChange={(e) => setInput(e.target.value)}
               onKeyDown={(e) => e.key === "Enter" && handleQuery(input)}
               placeholder={isListening ? "Listening..." : "Type or speak query..."}
-              className="flex-1 bg-white/5 border border-white/10 rounded-xl px-3 py-1.5 text-xs text-white placeholder:text-white/40 focus:outline-none focus:border-emerald-500/50"
+              className="flex-1 bg-muted border border-border rounded-xl px-3 py-1.5 text-xs text-foreground placeholder:text-faint focus:outline-none focus:border-positive/50"
             />
 
             <Button
               size="sm"
               onClick={() => handleQuery(input)}
               disabled={!input.trim()}
-              className="h-8 w-8 p-0 rounded-xl bg-emerald-500 text-black hover:bg-emerald-400"
+              className="h-8 w-8 p-0 rounded-xl bg-primary text-primary-foreground hover:bg-primary-hover"
             >
               <Send className="h-3.5 w-3.5" />
             </Button>

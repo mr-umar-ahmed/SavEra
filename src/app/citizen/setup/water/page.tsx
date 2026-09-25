@@ -98,14 +98,14 @@ export default function WaterSetupPage() {
         ]}
       />
 
-      <div className="rounded-3xl border border-white/10 bg-[#070D0A]/95 p-6 sm:p-8 backdrop-blur-2xl space-y-6 shadow-2xl">
+      <div className="rounded-3xl border border-border bg-card p-6 sm:p-8 backdrop-blur-2xl space-y-6 shadow-2xl">
         {/* 1. Usage Points */}
         <div className="space-y-3">
           <div className="flex items-center justify-between">
-            <label className="text-xs font-semibold text-white">
+            <label className="text-xs font-semibold text-foreground">
               1. Household Usage Points &amp; Connections
             </label>
-            <span className="text-[11px] font-mono text-teal-400">
+            <span className="text-xs font-mono text-teal-ink">
               {usagePoints.length} selected
             </span>
           </div>
@@ -120,12 +120,12 @@ export default function WaterSetupPage() {
                   onClick={() => toggleUsagePoint(point)}
                   className={`p-3 rounded-xl text-xs font-medium text-left border transition-all flex items-center justify-between ${
                     isSelected
-                      ? "bg-teal-500/15 border-teal-500/40 text-teal-300 font-semibold"
-                      : "bg-white/5 border-white/10 text-white/70 hover:bg-white/10"
+                      ? "bg-teal-500/15 border-teal-500/40 text-teal-ink font-semibold"
+                      : "bg-muted border-border text-soft hover:bg-secondary"
                   }`}
                 >
                   <span className="truncate">{point}</span>
-                  {isSelected && <Check className="h-3.5 w-3.5 shrink-0 text-teal-400 ml-1.5" />}
+                  {isSelected && <Check className="h-3.5 w-3.5 shrink-0 text-teal-ink ml-1.5" />}
                 </button>
               );
             })}
@@ -139,25 +139,25 @@ export default function WaterSetupPage() {
         {/* 2 & 3. Area / Supply Zone & Supply Schedule */}
         <div className="p-5 rounded-2xl bg-teal-500/[0.04] border border-teal-500/20 space-y-4">
           <div className="flex items-center justify-between">
-            <span className="text-xs font-mono font-bold text-teal-400 uppercase tracking-wider flex items-center gap-1.5">
+            <span className="text-xs font-mono font-bold text-teal-ink uppercase tracking-wider flex items-center gap-1.5">
               <Droplet className="h-4 w-4" />
               <span>2. Supply Zone &amp; 3. Municipal Schedule</span>
             </span>
-            <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-teal-500/20 text-teal-300">
+            <span className="text-2xs font-mono px-2 py-0.5 rounded bg-teal-500/20 text-teal-ink">
               Pre-filled
             </span>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs font-mono">
             <div>
-              <span className="text-white/40 block font-sans mb-1">Area / Supply Zone:</span>
-              <span className="text-sm font-bold text-white block">{areaZone}</span>
+              <span className="text-faint block font-sans mb-1">Area / Supply Zone:</span>
+              <span className="text-sm font-bold text-foreground block">{areaZone}</span>
             </div>
 
             <div>
-              <span className="text-white/40 block font-sans mb-1">Planned Supply Schedule:</span>
-              <span className="text-sm font-bold text-emerald-400 block">{scheduleTime}</span>
-              <span className="text-[11px] text-white/50 block font-sans mt-0.5">
+              <span className="text-faint block font-sans mb-1">Planned Supply Schedule:</span>
+              <span className="text-sm font-bold text-positive block">{scheduleTime}</span>
+              <span className="text-xs text-muted-foreground block font-sans mt-0.5">
                 Planned: {plannedLiters}
               </span>
             </div>
@@ -166,14 +166,14 @@ export default function WaterSetupPage() {
 
         {/* 4. Storage Capacities */}
         <div className="space-y-4">
-          <label className="text-xs font-semibold text-white block">
+          <label className="text-xs font-semibold text-foreground block">
             4. Water Storage Capacities
           </label>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             {/* Overhead Tank */}
-            <div className="p-4 rounded-2xl bg-white/[0.02] border border-white/10 space-y-2">
-              <span className="text-xs text-white/70 block">Overhead Tank Capacity</span>
+            <div className="p-4 rounded-2xl bg-muted/60 border border-border space-y-2">
+              <span className="text-xs text-soft block">Overhead Tank Capacity</span>
               <div className="grid grid-cols-3 gap-2">
                 {[500, 1000, 1500].map((litres) => (
                   <button
@@ -182,8 +182,8 @@ export default function WaterSetupPage() {
                     onClick={() => setOverheadTank(litres)}
                     className={`py-2 rounded-xl text-xs font-mono font-semibold border transition-all ${
                       overheadTank === litres
-                        ? "bg-teal-500 text-black shadow-md shadow-teal-500/20"
-                        : "bg-white/5 border-white/10 text-white/70 hover:bg-white/10"
+                        ? "bg-positive text-positive-foreground shadow-md shadow-positive/10"
+                        : "bg-muted border-border text-soft hover:bg-secondary"
                     }`}
                   >
                     {litres} L
@@ -193,8 +193,8 @@ export default function WaterSetupPage() {
             </div>
 
             {/* Sump Capacity */}
-            <div className="p-4 rounded-2xl bg-white/[0.02] border border-white/10 space-y-2">
-              <span className="text-xs text-white/70 block">Underground Sump Capacity</span>
+            <div className="p-4 rounded-2xl bg-muted/60 border border-border space-y-2">
+              <span className="text-xs text-soft block">Underground Sump Capacity</span>
               <div className="grid grid-cols-3 gap-2">
                 {[1500, 2000, 3000].map((litres) => (
                   <button
@@ -203,8 +203,8 @@ export default function WaterSetupPage() {
                     onClick={() => setSumpCapacity(litres)}
                     className={`py-2 rounded-xl text-xs font-mono font-semibold border transition-all ${
                       sumpCapacity === litres
-                        ? "bg-teal-500 text-black shadow-md shadow-teal-500/20"
-                        : "bg-white/5 border-white/10 text-white/70 hover:bg-white/10"
+                        ? "bg-positive text-positive-foreground shadow-md shadow-positive/10"
+                        : "bg-muted border-border text-soft hover:bg-secondary"
                     }`}
                   >
                     {litres} L
@@ -223,21 +223,21 @@ export default function WaterSetupPage() {
         </div>
 
         {/* 5. Regional Scarcity Impact Card matching §1 verbatim */}
-        <div className="p-4 rounded-2xl bg-white/[0.02] border border-white/10 space-y-2 text-xs">
+        <div className="p-4 rounded-2xl bg-muted/60 border border-border space-y-2 text-xs">
           <div className="flex items-center justify-between">
-            <span className="font-semibold text-white flex items-center gap-1.5">
-              <Info className="h-4 w-4 text-teal-400" />
+            <span className="font-semibold text-foreground flex items-center gap-1.5">
+              <Info className="h-4 w-4 text-teal-ink" />
               <span>5. Regional Scarcity Impact</span>
             </span>
             <EstimatedChip confidence="Medium" />
           </div>
-          <p className="text-white/70 leading-relaxed">
+          <p className="text-soft leading-relaxed">
             &ldquo;XYZ Colony is in a moderate-stress supply zone. Reporting your daily supply experience helps the ward balance supply.&rdquo;
           </p>
         </div>
 
         {/* Actions */}
-        <div className="pt-6 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between gap-4">
+        <div className="pt-6 border-t border-border flex flex-col sm:flex-row items-center justify-between gap-4">
           <SkipRow
             onSkip={handleSkip}
             onLater={handleSkip}
@@ -246,7 +246,7 @@ export default function WaterSetupPage() {
 
           <Button
             onClick={handleSave}
-            className="w-full sm:w-auto bg-teal-500 text-black hover:bg-teal-400 font-bold text-xs h-10 px-6 gap-2 rounded-xl shadow-lg shadow-teal-500/20"
+            className="w-full sm:w-auto bg-positive text-positive-foreground hover:bg-positive/90 font-bold text-xs h-10 px-6 gap-2 rounded-xl shadow-lg shadow-positive/10"
           >
             <span>Save &amp; Open Water Portal</span>
             <ArrowRight className="h-3.5 w-3.5" />

@@ -37,18 +37,18 @@ export function RoleSwitcher() {
         <Button
           variant="outline"
           size="sm"
-          className="h-8 gap-2 border-white/10 bg-[#0A0F0D] text-xs font-medium text-white/90 hover:bg-white/10 rounded-full px-3"
+          className="h-10 gap-2 px-4 text-sm font-semibold"
         >
-          <UserCircle2 className="h-3.5 w-3.5 text-emerald-400" />
-          <span className="max-w-[130px] truncate">{currentAccount.label}</span>
-          <ChevronDown className="h-3 w-3 opacity-60" />
+          <UserCircle2 className="size-[1.1rem] text-positive" />
+          <span className="hidden max-w-[160px] truncate md:inline">{currentAccount.label}</span>
+          <ChevronDown className="size-4 opacity-60" />
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end" className="w-72 bg-[#0A0F0D]/95 border-white/15 backdrop-blur-xl text-white">
-        <DropdownMenuLabel className="text-xs uppercase tracking-wider text-emerald-400 font-mono">
+      <DropdownMenuContent align="end" className="w-80 bg-popover border-border-strong text-foreground">
+        <DropdownMenuLabel className="text-xs uppercase tracking-[0.14em] text-primary font-mono">
           Switch Demo Persona
         </DropdownMenuLabel>
-        <DropdownMenuSeparator className="bg-white/10" />
+        <DropdownMenuSeparator className="bg-border" />
         {DEMO_ACCOUNTS.map((account) => {
           const isActive = account.userId === user?.id;
           return (
@@ -56,14 +56,14 @@ export function RoleSwitcher() {
               key={account.userId}
               onClick={() => handleSelect(account.userId)}
               className={`flex flex-col items-start gap-0.5 p-2.5 cursor-pointer rounded-lg transition-colors ${
-                isActive ? "bg-emerald-500/15 text-emerald-300" : "hover:bg-white/10 text-white/80"
+                isActive ? "bg-positive-soft text-positive" : "hover:bg-secondary text-soft"
               }`}
             >
               <div className="flex items-center justify-between w-full">
-                <span className="font-semibold text-xs text-white">{account.label}</span>
-                {isActive && <Check className="h-3.5 w-3.5 text-emerald-400" />}
+                <span className="font-semibold text-sm text-foreground">{account.label}</span>
+                {isActive && <Check className="h-3.5 w-3.5 text-positive" />}
               </div>
-              <span className="text-[11px] text-white/50">{account.description}</span>
+              <span className="text-xs text-muted-foreground">{account.description}</span>
             </DropdownMenuItem>
           );
         })}

@@ -13,74 +13,66 @@ interface TopBarProps {
   onOpenSidebar?: () => void;
 }
 
+/** Title-cases the second path segment (`/citizen/green-score` → "Green Score"). */
+function sectionTitle(pathname: string): string {
+  const segments = pathname.split("/").filter(Boolean);
+  const raw = segments.length > 1 ? segments[1] : (segments[0] ?? "dashboard");
+  if (segments.length === 1) return "Home";
+  return raw
+    .split("-")
+    .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
+    .join(" ");
+}
+
 export function TopBar({ onOpenSidebar }: TopBarProps) {
   const pathname = usePathname();
   const toggleNotifications = useUiStore((s) => s.toggleNotifications);
   const { unreadCount } = useNotifications();
-
-  // Generate clean section title from pathname
-  const pathSegments = pathname.split("/").filter(Boolean);
-  const currentTitle =
-    pathSegments.length > 1
-      ? pathSegments[1]
-          .split("-")
-          .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
-          .join(" ")
-      : pathSegments[0]
-      ? pathSegments[0].charAt(0).toUpperCase() + pathSegments[0].slice(1)
-      : "Dashboard";
+  const currentTitle = sectionTitle(pathname);
 
   return (
-    <header className="sticky top-0 z-30 h-16 w-full border-b border-white/10 bg-[#050B08]/80 backdrop-blur-xl flex items-center justify-between px-4 lg:px-8">
-      {/* Left side: Mobile menu toggle + Breadcrumb / Portal label */}
+    <header className="bg-background/90 border-border sticky top-0 z-30 flex h-20 w-full items-center justify-between border-b px-4 backdrop-blur-md lg:px-10">
+      {/* Left: mobile menu + breadcrumb */}
       <div className="flex items-center gap-3">
         {onOpenSidebar && (
           <Button
-            variant="ghost"
+            variant="outline"
             size="icon"
             onClick={onOpenSidebar}
-            className="lg:hidden h-9 w-9 text-white/70 hover:text-white hover:bg-white/10"
+            className="size-10 lg:hidden"
             aria-label="Open sidebar"
           >
-            <Menu className="h-5 w-5" />
+            <Menu className="size-5" />
           </Button>
         )}
 
-        <div className="flex items-center gap-2 text-xs">
-          <span className="font-semibold text-white/90 tracking-wide hidden sm:inline-block">
-            SAVERA
-          </span>
-          <span className="text-white/30 hidden sm:inline-block">/</span>
-          <span className="font-medium text-emerald-400 capitalize">{currentTitle}</span>
-        </div>
+        <nav aria-label="Breadcrumb" className="flex items-center gap-2 text-base">
+          <span className="text-foreground hidden font-bold tracking-wide sm:inline-block">SAVERA</span>
+          <span className="text-faint hidden sm:inline-block">/</span>
+          <span className="text-primary font-semibold">{currentTitle}</span>
+        </nav>
       </div>
 
-      {/* Right side: Global controls */}
-      <div className="flex items-center gap-2 sm:gap-2.5">
-        {/* Notifications trigger */}
+      {/* Right: global controls */}
+      <div className="flex items-center gap-2 sm:gap-3">
         <Button
           variant="outline"
           size="sm"
           onClick={toggleNotifications}
-          className="relative h-8 w-8 sm:w-auto sm:px-2.5 gap-1.5 border-white/10 bg-[#0A0F0D] text-white/80 hover:text-white hover:bg-white/10 rounded-full"
-          aria-label="Notifications"
+          className="relative h-10 gap-2 px-3 text-sm font-semibold sm:px-4"
+          aria-label={`Alerts${unreadCount > 0 ? `, ${unreadCount} unread` : ""}`}
         >
-          <Bell className="h-3.5 w-3.5 text-white/70" />
-          <span className="hidden sm:inline-block text-xs font-medium">Alerts</span>
+          <Bell className="size-[1.1rem]" />
+          <span className="hidden sm:inline-block">Alerts</span>
           {unreadCount > 0 && (
-            <span className="absolute -top-1 -right-1 flex h-4 min-w-4 items-center justify-center rounded-full bg-emerald-500 px-1 text-[10px] font-mono font-bold text-black shadow-sm shadow-emerald-500/50">
+            <span className="bg-tone-critical ring-background absolute -top-1.5 -right-1.5 flex h-5 min-w-5 items-center justify-center rounded-full px-1 font-mono text-2xs font-bold text-white ring-2">
               {unreadCount}
             </span>
           )}
         </Button>
 
-        {/* Persona Switcher */}
         <RoleSwitcher />
-
-        {/* Reset Demo button */}
         <ResetDemoButton />
-
-        {/* Theme Toggle */}
         <ThemeToggle />
       </div>
     </header>

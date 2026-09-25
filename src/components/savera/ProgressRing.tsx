@@ -81,7 +81,7 @@ export function ProgressRing({
               {rounded}%
             </span>
             {label ? (
-              <span className="text-muted-foreground mt-0.5 text-[10px] font-semibold tracking-wider uppercase">
+              <span className="text-muted-foreground mt-0.5 text-2xs font-semibold tracking-wider uppercase">
                 {label}
               </span>
             ) : null}

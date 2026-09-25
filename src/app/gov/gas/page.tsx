@@ -25,7 +25,7 @@ export default function GovGasPage() {
         badge={
           <div className="flex items-center gap-2">
             <StatusBadge status="normal" label="Distribution Nominal" />
-            <span className="text-xs font-mono text-rose-400 font-bold">56,000 kg Monthly</span>
+            <span className="text-xs font-mono text-rose-ink font-bold">56,000 kg Monthly</span>
           </div>
         }
       />
@@ -58,16 +58,16 @@ export default function GovGasPage() {
       </div>
 
       {/* Multi-Month Demand Trend */}
-      <div className="rounded-2xl border border-white/10 bg-[#070D0A]/95 p-6 backdrop-blur-xl">
-        <h3 className="text-base font-bold text-white mb-4">Multi-Month Municipal LPG Demand Trend</h3>
+      <div className="rounded-2xl border border-border bg-card p-6 backdrop-blur-xl">
+        <h3 className="text-base font-bold text-foreground mb-4">Multi-Month Municipal LPG Demand Trend</h3>
 
-        <div className="divide-y divide-white/5 font-mono text-xs">
+        <div className="divide-y divide-border font-mono text-xs">
           {trend.map((t, idx) => (
             <div key={idx} className="py-3 flex items-center justify-between">
-              <span className="font-sans text-white/80">{t.month} {t.projected && <span className="text-rose-400 font-mono text-[10px]">(Forecast)</span>}</span>
+              <span className="font-sans text-soft">{t.month} {t.projected && <span className="text-rose-ink font-mono text-2xs">(Forecast)</span>}</span>
               <div className="flex items-center gap-6">
-                <span className="text-white font-bold">{t.demand}</span>
-                <span className="text-white/60">{t.cylinders.toLocaleString()} cylinders</span>
+                <span className="text-foreground font-bold">{t.demand}</span>
+                <span className="text-muted-foreground">{t.cylinders.toLocaleString()} cylinders</span>
               </div>
             </div>
           ))}

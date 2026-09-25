@@ -43,7 +43,7 @@ export const CITIZEN_NAV: NavItem[] = [
   { title: "Leaderboard", href: "/citizen/leaderboard", icon: Users },
   { title: "Rank Progress", href: "/citizen/progress", icon: TrendingUp },
   { title: "Carbon Footprint", href: "/citizen/carbon", icon: PieChart, badge: "New" },
-  { title: "Digital Twin", href: "/citizen/twin", icon: Box, badge: "Sim" },
+  { title: "Digital Twin", href: "/citizen/twin", icon: Box, badge: "Beta" },
   { title: "Smart Scan", href: "/citizen/scan", icon: Scan },
   { title: "Data Integration", href: "/citizen/connect", icon: Link },
   { title: "Services Hub", href: "/citizen/services", icon: Cpu },

@@ -71,7 +71,7 @@ export function StatusTimeline({
                 aria-hidden="true"
                 className={cn(
                   "absolute top-6 bottom-0 left-[11px] w-px",
-                  state === "done" ? "bg-emerald-500/50" : "bg-border",
+                  state === "done" ? "bg-positive/50" : "bg-border",
                 )}
               />
             ) : null}
@@ -80,8 +80,8 @@ export function StatusTimeline({
               aria-hidden="true"
               className={cn(
                 "relative mt-0.5 inline-flex size-6 shrink-0 items-center justify-center rounded-full border",
-                state === "done" && "border-emerald-500 bg-emerald-500 text-black",
-                state === "active" && "border-amber-500/60 bg-amber-500/15 text-amber-500",
+                state === "done" && "border-positive bg-primary text-primary-foreground",
+                state === "active" && "border-amber-500/60 bg-amber-500/15 text-amber-ink",
                 state === "pending" && "border-border bg-muted text-muted-foreground",
               )}
             >

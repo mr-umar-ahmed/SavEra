@@ -10,23 +10,25 @@ const buttonVariants = cva(
     variants: {
       variant: {
         default:
-          "rounded-full bg-primary font-bold text-primary-foreground shadow-[0_0_40px_-5px_rgba(16,185,129,0.4)] hover:bg-emerald-400 hover:shadow-[0_0_48px_-4px_rgba(16,185,129,0.55)] active:scale-[0.98] dark:hover:bg-emerald-400",
+          "rounded-full bg-primary font-bold text-primary-foreground shadow-sm hover:bg-primary-hover hover:shadow-md active:scale-[0.98]",
         secondary:
-          "rounded-full border border-border bg-secondary text-foreground hover:border-foreground/20 hover:bg-muted active:scale-[0.98]",
+          "rounded-full border border-border bg-secondary text-secondary-foreground hover:border-border-strong hover:bg-muted active:scale-[0.98]",
         outline:
-          "rounded-full border border-border bg-transparent text-foreground hover:border-foreground/25 hover:bg-secondary active:scale-[0.98]",
+          "rounded-full border border-border-strong bg-card text-foreground hover:border-primary/40 hover:bg-muted active:scale-[0.98]",
+        positive:
+          "rounded-full border border-positive/40 bg-positive-soft font-bold text-positive hover:border-positive/70 hover:bg-positive/15 active:scale-[0.98]",
         ghost:
           "rounded-full bg-transparent text-muted-foreground hover:bg-secondary hover:text-foreground",
         link: "h-auto rounded-none bg-transparent p-0 text-primary underline-offset-4 hover:underline",
         destructive:
-          "rounded-full bg-destructive font-bold text-white shadow-[0_0_30px_-8px_rgba(239,68,68,0.5)] hover:bg-red-400 active:scale-[0.98]",
+          "rounded-full bg-destructive font-bold text-destructive-foreground shadow-sm hover:bg-destructive/90 active:scale-[0.98]",
       },
       size: {
-        sm: "h-8 gap-1.5 px-4 text-xs has-[>svg]:px-3",
-        default: "h-10 px-6 has-[>svg]:px-5",
+        sm: "h-9 gap-1.5 px-4 text-xs has-[>svg]:px-3.5",
+        default: "h-11 px-6 has-[>svg]:px-5",
         lg: "h-12 px-8 text-base has-[>svg]:px-6",
         icon: "size-10",
-        "icon-sm": "size-8",
+        "icon-sm": "size-9",
         "icon-lg": "size-12",
       },
     },

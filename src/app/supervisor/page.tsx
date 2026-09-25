@@ -29,13 +29,13 @@ export default function SupervisorHomePage() {
         badge={
           <div className="flex items-center gap-2">
             <StatusBadge status="normal" label="Ward 24 Active Desk" />
-            <span className="text-xs font-mono text-white/50">Supervisor: Rajesh Gowda</span>
+            <span className="text-xs font-mono text-muted-foreground">Supervisor: Rajesh Gowda</span>
           </div>
         }
         actions={
           <Link href="/supervisor/twin">
-            <Button variant="outline" size="sm" className="h-8 gap-1.5 border-white/10 bg-white/5 text-xs text-white">
-              <Box className="h-3.5 w-3.5 text-emerald-400" />
+            <Button variant="outline" size="sm" className="h-8 gap-1.5 border-border bg-muted text-xs text-foreground">
+              <Box className="h-3.5 w-3.5 text-positive" />
               <span>Ward Simulation</span>
             </Button>
           </Link>
@@ -77,72 +77,72 @@ export default function SupervisorHomePage() {
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         {/* Stream 1: Electricity */}
         <Link href="/supervisor/electricity" className="group">
-          <div className="p-6 rounded-2xl border border-white/10 bg-[#070D0A]/95 hover:border-amber-500/40 transition-all flex flex-col justify-between h-full">
+          <div className="p-6 rounded-2xl border border-border bg-card hover:border-amber-500/40 transition-all flex flex-col justify-between h-full">
             <div>
               <div className="flex items-center justify-between mb-4">
-                <div className="h-10 w-10 rounded-xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center text-amber-400">
+                <div className="h-10 w-10 rounded-xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center text-amber-ink">
                   <Zap className="h-5 w-5" />
                 </div>
-                <ArrowRight className="h-4 w-4 text-white/40 group-hover:text-amber-400 group-hover:translate-x-1 transition-all" />
+                <ArrowRight className="h-4 w-4 text-faint group-hover:text-amber-ink group-hover:translate-x-1 transition-all" />
               </div>
-              <h3 className="text-base font-bold text-white mb-2 group-hover:text-amber-300">
+              <h3 className="text-base font-bold text-foreground mb-2 group-hover:text-amber-ink">
                 Grid Operations & Demand Response
               </h3>
-              <p className="text-xs text-white/60 leading-relaxed mb-4">
+              <p className="text-xs text-muted-foreground leading-relaxed mb-4">
                 Monitor 842 MW city grid demand, regional sensor matrices, load shedding avoidance, and broadcast citizen advisories.
               </p>
             </div>
-            <div className="pt-4 border-t border-white/5 flex items-center justify-between text-xs">
-              <span className="text-white/40">Feeder Status:</span>
-              <span className="text-emerald-400 font-mono font-medium">Stable (45% load)</span>
+            <div className="pt-4 border-t border-border/60 flex items-center justify-between text-xs">
+              <span className="text-faint">Feeder Status:</span>
+              <span className="text-positive font-mono font-medium">Stable (45% load)</span>
             </div>
           </div>
         </Link>
 
         {/* Stream 2: Water Supply */}
         <Link href="/supervisor/water" className="group">
-          <div className="p-6 rounded-2xl border border-white/10 bg-[#070D0A]/95 hover:border-teal-500/40 transition-all flex flex-col justify-between h-full">
+          <div className="p-6 rounded-2xl border border-border bg-card hover:border-teal-500/40 transition-all flex flex-col justify-between h-full">
             <div>
               <div className="flex items-center justify-between mb-4">
-                <div className="h-10 w-10 rounded-xl bg-teal-500/10 border border-teal-500/20 flex items-center justify-center text-teal-400">
+                <div className="h-10 w-10 rounded-xl bg-teal-500/10 border border-teal-500/20 flex items-center justify-center text-teal-ink">
                   <Droplet className="h-5 w-5" />
                 </div>
-                <ArrowRight className="h-4 w-4 text-white/40 group-hover:text-teal-400 group-hover:translate-x-1 transition-all" />
+                <ArrowRight className="h-4 w-4 text-faint group-hover:text-teal-ink group-hover:translate-x-1 transition-all" />
               </div>
-              <h3 className="text-base font-bold text-white mb-2 group-hover:text-teal-300">
+              <h3 className="text-base font-bold text-foreground mb-2 group-hover:text-teal-ink">
                 Water Supply & Field Verification
               </h3>
-              <p className="text-xs text-white/60 leading-relaxed mb-4">
+              <p className="text-xs text-muted-foreground leading-relaxed mb-4">
                 Review AI-grouped alerts, assign field inspection teams with GPS tracking, validate on-ground telemetry, and coordinate with the board.
               </p>
             </div>
-            <div className="pt-4 border-t border-white/5 flex items-center justify-between text-xs">
-              <span className="text-white/40">Active Cases:</span>
-              <span className="text-amber-400 font-mono font-medium">3 Pending Verification</span>
+            <div className="pt-4 border-t border-border/60 flex items-center justify-between text-xs">
+              <span className="text-faint">Active Cases:</span>
+              <span className="text-amber-ink font-mono font-medium">3 Pending Verification</span>
             </div>
           </div>
         </Link>
 
         {/* Stream 3: LPG Distribution */}
         <Link href="/supervisor/gas" className="group">
-          <div className="p-6 rounded-2xl border border-white/10 bg-[#070D0A]/95 hover:border-rose-500/40 transition-all flex flex-col justify-between h-full">
+          <div className="p-6 rounded-2xl border border-border bg-card hover:border-rose-500/40 transition-all flex flex-col justify-between h-full">
             <div>
               <div className="flex items-center justify-between mb-4">
-                <div className="h-10 w-10 rounded-xl bg-rose-500/10 border border-rose-500/20 flex items-center justify-center text-rose-400">
+                <div className="h-10 w-10 rounded-xl bg-rose-500/10 border border-rose-500/20 flex items-center justify-center text-rose-ink">
                   <Flame className="h-5 w-5" />
                 </div>
-                <ArrowRight className="h-4 w-4 text-white/40 group-hover:text-rose-400 group-hover:translate-x-1 transition-all" />
+                <ArrowRight className="h-4 w-4 text-faint group-hover:text-rose-ink group-hover:translate-x-1 transition-all" />
               </div>
-              <h3 className="text-base font-bold text-white mb-2 group-hover:text-rose-300">
+              <h3 className="text-base font-bold text-foreground mb-2 group-hover:text-rose-ink">
                 LPG Distribution & Burn Telemetry
               </h3>
-              <p className="text-xs text-white/60 leading-relaxed mb-4">
+              <p className="text-xs text-muted-foreground leading-relaxed mb-4">
                 Ward-wide cylinder consumption heatmaps, localized leak risk indicators, monthly requirement forecasts, and agency planning.
               </p>
             </div>
-            <div className="pt-4 border-t border-white/5 flex items-center justify-between text-xs">
-              <span className="text-white/40">Next Mo. Demand:</span>
-              <span className="text-white font-mono font-medium">4,650 Cylinders</span>
+            <div className="pt-4 border-t border-border/60 flex items-center justify-between text-xs">
+              <span className="text-faint">Next Mo. Demand:</span>
+              <span className="text-foreground font-mono font-medium">4,650 Cylinders</span>
             </div>
           </div>
         </Link>

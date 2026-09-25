@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { Calculator } from "lucide-react";
+import { FileText } from "lucide-react";
 
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { cn } from "@/lib/utils";
@@ -50,15 +50,18 @@ export function EstimatedChip({
           tabIndex={0}
           aria-label={`${label}. ${rows.length > 0 ? `Based on ${rows.length} inputs.` : ""}`.trim()}
           className={cn(
-            "inline-flex w-fit shrink-0 cursor-help items-center gap-1.5 rounded-full border bg-transparent font-semibold whitespace-nowrap outline-none focus-visible:ring-2",
-            size === "sm" ? "px-2 py-0.5 text-[11px]" : "px-2.5 py-1 text-xs",
+            "inline-flex w-fit max-w-full min-w-0 cursor-help items-center gap-1.5 border font-semibold outline-none focus-visible:ring-2",
+            size === "sm"
+              ? "rounded-xl px-2 py-0.5 text-2xs leading-tight"
+              : "rounded-full px-2.5 py-1 text-xs whitespace-nowrap",
             t.text,
+            t.bgSoft,
             t.border,
             t.ring,
             className,
           )}
         >
-          <Calculator aria-hidden="true" className={size === "sm" ? "size-3" : "size-3.5"} />
+          <FileText aria-hidden="true" className={size === "sm" ? "size-3 shrink-0" : "size-3.5 shrink-0"} />
           <span>
             Estimated
             {confidence ? (

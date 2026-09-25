@@ -13,7 +13,7 @@ export default function CitizenTwinPage() {
         badge={
           <div className="flex items-center gap-2">
             <StatusBadge status="simulation" label="Simulation Prototype" />
-            <span className="text-xs font-mono text-white/50">Household H-1024</span>
+            <span className="text-xs font-mono text-muted-foreground">Household H-1024</span>
           </div>
         }
       />

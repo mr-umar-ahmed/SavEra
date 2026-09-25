@@ -41,7 +41,7 @@ export function SectionCard({
     <section
       data-slot="section-card"
       className={cn(
-        "glass hover:border-foreground/20 flex flex-col rounded-2xl transition-colors",
+        "glass hover:border-border-strong flex flex-col rounded-2xl transition-colors",
         attention && t ? t.border : null,
         className,
       )}

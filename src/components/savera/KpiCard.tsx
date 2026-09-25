@@ -81,13 +81,13 @@ export function KpiCard({
     <div
       data-slot="kpi-card"
       className={cn(
-        "glass hover:border-foreground/20 relative flex flex-col gap-3 rounded-2xl p-5 transition-colors",
+        "glass hover:border-border-strong relative flex flex-col gap-3 rounded-2xl p-5 transition-colors",
         className,
       )}
       {...props}
     >
       <div className="flex items-start justify-between gap-3">
-        <p className="eyebrow leading-tight">{displayLabel}</p>
+        <p className="text-soft text-sm leading-tight font-medium">{displayLabel}</p>
         {Icon ? (
           <span
             aria-hidden="true"
@@ -106,17 +106,17 @@ export function KpiCard({
       <div className="min-w-0">
         <div
           className={cn(
-            "font-display text-foreground font-black tracking-tight tabular-nums",
+            "font-display text-foreground font-extrabold tracking-tight tabular-nums",
             size === "lg" ? "text-4xl leading-none" : "text-3xl leading-none",
           )}
         >
           {value}
         </div>
-        {displaySub ? <p className="text-muted-foreground mt-1.5 text-sm">{displaySub}</p> : null}
+        {displaySub ? <p className="text-muted-foreground mt-2 text-sm">{displaySub}</p> : null}
       </div>
 
       {hasFooter ? (
-        <div className="flex flex-wrap items-center gap-2">
+        <div className="border-border mt-1 flex flex-wrap items-center gap-2 border-t pt-3">
           {delta ? (
             <DeltaPill
               value={delta.value}

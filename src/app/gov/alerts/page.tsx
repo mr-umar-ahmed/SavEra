@@ -59,14 +59,14 @@ export default function GovAlertsPage() {
         badge={
           <div className="flex items-center gap-2">
             <StatusBadge status="official" label="Official Department Feed" />
-            <span className="text-xs font-mono text-white/50">Human-Published Only</span>
+            <span className="text-xs font-mono text-muted-foreground">Human-Published Only</span>
           </div>
         }
       />
 
       {/* Publish Form */}
-      <form onSubmit={handlePublish} className="rounded-2xl border border-white/10 bg-[#070D0A]/95 p-6 backdrop-blur-xl space-y-4">
-        <h3 className="text-sm font-bold text-white mb-2">Publish New Official Disruption Notice</h3>
+      <form onSubmit={handlePublish} className="rounded-2xl border border-border bg-card p-6 backdrop-blur-xl space-y-4">
+        <h3 className="text-sm font-bold text-foreground mb-2">Publish New Official Disruption Notice</h3>
 
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
           {[
@@ -80,8 +80,8 @@ export default function GovAlertsPage() {
               onClick={() => setStream(s.id as typeof stream)}
               className={`p-3 rounded-xl text-left border text-xs font-semibold flex items-center gap-2 transition-all ${
                 stream === s.id
-                  ? "bg-amber-500/20 border-amber-500/40 text-amber-300"
-                  : "bg-white/5 border-white/10 text-white/70"
+                  ? "bg-amber-500/20 border-amber-500/40 text-amber-ink"
+                  : "bg-muted border-border text-soft"
               }`}
             >
               <s.icon className="h-4 w-4" />
@@ -91,44 +91,44 @@ export default function GovAlertsPage() {
         </div>
 
         <div>
-          <label className="block text-xs font-medium text-white/80 mb-1">Advisory Title</label>
+          <label className="block text-xs font-medium text-soft mb-1">Advisory Title</label>
           <input
             type="text"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
-            className="w-full bg-white/5 border border-white/10 rounded-xl p-2.5 text-xs text-white"
+            className="w-full bg-muted border border-border rounded-xl p-2.5 text-xs text-foreground"
             required
           />
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
-            <label className="block text-xs font-medium text-white/80 mb-1">Impact Window</label>
+            <label className="block text-xs font-medium text-soft mb-1">Impact Window</label>
             <input
               type="text"
               value={windowStr}
               onChange={(e) => setWindowStr(e.target.value)}
-              className="w-full bg-white/5 border border-white/10 rounded-xl p-2.5 text-xs text-white"
+              className="w-full bg-muted border border-border rounded-xl p-2.5 text-xs text-foreground"
               required
             />
           </div>
           <div>
-            <label className="block text-xs font-medium text-white/80 mb-1">Target Wards</label>
+            <label className="block text-xs font-medium text-soft mb-1">Target Wards</label>
             <input
               disabled
               value="Ward 24 (XYZ Colony, ABC Colony)"
-              className="w-full bg-white/5 border border-white/10 rounded-xl p-2.5 text-xs text-white/60 font-mono"
+              className="w-full bg-muted border border-border rounded-xl p-2.5 text-xs text-muted-foreground font-mono"
             />
           </div>
         </div>
 
         <div>
-          <label className="block text-xs font-medium text-white/80 mb-1">Reason & Recommended Citizen Action</label>
+          <label className="block text-xs font-medium text-soft mb-1">Reason & Recommended Citizen Action</label>
           <textarea
             rows={2}
             value={reason}
             onChange={(e) => setReason(e.target.value)}
-            className="w-full bg-white/5 border border-white/10 rounded-xl p-2.5 text-xs text-white"
+            className="w-full bg-muted border border-border rounded-xl p-2.5 text-xs text-foreground"
             required
           />
         </div>
@@ -136,7 +136,7 @@ export default function GovAlertsPage() {
         <Button
           type="submit"
           disabled={publishing}
-          className="w-full bg-amber-500 text-black hover:bg-amber-400 font-bold text-xs h-9 gap-2 shadow-lg shadow-amber-500/20"
+          className="w-full bg-primary text-primary-foreground hover:bg-primary-hover font-bold text-xs h-9 gap-2"
         >
           <ShieldAlert className="h-4 w-4" />
           <span>{publishing ? "Broadcasting Official Notice..." : "Publish Official Alert to Citizens"}</span>
@@ -144,23 +144,23 @@ export default function GovAlertsPage() {
       </form>
 
       {/* Active Alerts List */}
-      <div className="rounded-2xl border border-white/10 bg-[#070D0A]/95 p-6 backdrop-blur-xl">
-        <h3 className="text-sm font-bold text-white mb-4">Published Official Alerts</h3>
+      <div className="rounded-2xl border border-border bg-card p-6 backdrop-blur-xl">
+        <h3 className="text-sm font-bold text-foreground mb-4">Published Official Alerts</h3>
 
-        <div className="divide-y divide-white/5">
+        <div className="divide-y divide-border">
           {officialAlerts.map((a) => (
             <div key={a.id} className="py-4 space-y-1.5 text-xs">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
-                  <span className="font-bold text-white">{a.title}</span>
+                  <span className="font-bold text-foreground">{a.title}</span>
                   <StatusBadge status="official" />
                 </div>
-                <span className="font-mono text-white/50">
+                <span className="font-mono text-muted-foreground">
                   {a.windowStart ? `${a.windowStart.slice(11, 16)}–${a.windowEnd.slice(11, 16)} UTC` : "Active"}
                 </span>
               </div>
-              <p className="text-white/70">{a.reason}</p>
-              <div className="text-[10px] text-white/40 font-mono">Published by {a.publishedBy}</div>
+              <p className="text-soft">{a.reason}</p>
+              <div className="text-2xs text-faint font-mono">Published by {a.publishedBy}</div>
             </div>
           ))}
         </div>

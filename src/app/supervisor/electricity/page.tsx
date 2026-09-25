@@ -55,16 +55,16 @@ export default function SupervisorElectricityPage() {
         subtitle="Live telemetry from Raichur power grid sub-stations, feeder sensor matrices, and demand response."
         badge={
           <div className="flex items-center gap-2">
-            <span className="flex h-2 w-2 rounded-full bg-emerald-400 animate-ping" />
-            <span className="text-xs font-mono text-emerald-400 font-bold">LIVE TELEMETRY FEED</span>
+            <span className="flex h-2 w-2 rounded-full bg-positive animate-ping" />
+            <span className="text-xs font-mono text-positive font-bold">LIVE TELEMETRY FEED</span>
           </div>
         }
       />
 
       <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
-        <TabsList className="bg-black/40 border border-white/10 p-1">
-          <TabsTrigger value="grid-ops" className="text-xs">Grid Operations & Sub-Stations</TabsTrigger>
-          <TabsTrigger value="ward-households" className="text-xs">Ward 24 Aggregate & Heatmap</TabsTrigger>
+        <TabsList>
+          <TabsTrigger value="grid-ops">Grid Operations & Sub-Stations</TabsTrigger>
+          <TabsTrigger value="ward-households">Ward 24 Aggregate & Heatmap</TabsTrigger>
         </TabsList>
 
         {/* Tab 1: Grid Operations */}
@@ -101,52 +101,52 @@ export default function SupervisorElectricityPage() {
           </div>
 
           {/* Regional Sensor Matrix */}
-          <div className="rounded-2xl border border-white/10 bg-[#070D0A]/95 p-6 backdrop-blur-xl">
-            <h3 className="text-sm font-bold text-white mb-4">Regional Sub-Station Sensor Matrix</h3>
+          <div className="rounded-2xl border border-border bg-card p-6 backdrop-blur-xl">
+            <h3 className="text-sm font-bold text-foreground mb-4">Regional Sub-Station Sensor Matrix</h3>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
               <div className="p-4 rounded-xl border border-amber-500/30 bg-amber-500/5 space-y-2">
-                <div className="flex justify-between text-xs font-semibold text-white">
+                <div className="flex justify-between text-xs font-semibold text-foreground">
                   <span>North Sub-Station</span>
-                  <span className="text-amber-400 font-mono">70% LOAD</span>
+                  <span className="text-amber-ink font-mono">70% LOAD</span>
                 </div>
-                <div className="h-1.5 rounded-full bg-white/10 overflow-hidden">
+                <div className="h-1.5 rounded-full bg-secondary overflow-hidden">
                   <div className="h-full bg-amber-400 rounded-full" style={{ width: "70%" }} />
                 </div>
-                <span className="text-[10px] text-amber-300 font-medium block">Status: MODERATE</span>
+                <span className="text-2xs text-amber-ink font-medium block">Status: MODERATE</span>
               </div>
 
-              <div className="p-4 rounded-xl border border-emerald-500/30 bg-emerald-500/5 space-y-2">
-                <div className="flex justify-between text-xs font-semibold text-white">
+              <div className="p-4 rounded-xl border border-positive/30 bg-positive/5 space-y-2">
+                <div className="flex justify-between text-xs font-semibold text-foreground">
                   <span>South Sector Feeder</span>
-                  <span className="text-emerald-400 font-mono">45% LOAD</span>
+                  <span className="text-positive font-mono">45% LOAD</span>
                 </div>
-                <div className="h-1.5 rounded-full bg-white/10 overflow-hidden">
-                  <div className="h-full bg-emerald-400 rounded-full" style={{ width: "45%" }} />
+                <div className="h-1.5 rounded-full bg-secondary overflow-hidden">
+                  <div className="h-full bg-positive rounded-full" style={{ width: "45%" }} />
                 </div>
-                <span className="text-[10px] text-emerald-300 font-medium block">Status: STABLE</span>
+                <span className="text-2xs text-positive font-medium block">Status: STABLE</span>
               </div>
 
-              <div className="p-4 rounded-xl border border-emerald-500/30 bg-emerald-500/5 space-y-2">
-                <div className="flex justify-between text-xs font-semibold text-white">
+              <div className="p-4 rounded-xl border border-positive/30 bg-positive/5 space-y-2">
+                <div className="flex justify-between text-xs font-semibold text-foreground">
                   <span>Industrial Zone 1</span>
-                  <span className="text-emerald-400 font-mono">60% LOAD</span>
+                  <span className="text-positive font-mono">60% LOAD</span>
                 </div>
-                <div className="h-1.5 rounded-full bg-white/10 overflow-hidden">
-                  <div className="h-full bg-emerald-400 rounded-full" style={{ width: "60%" }} />
+                <div className="h-1.5 rounded-full bg-secondary overflow-hidden">
+                  <div className="h-full bg-positive rounded-full" style={{ width: "60%" }} />
                 </div>
-                <span className="text-[10px] text-emerald-300 font-medium block">Status: STABLE</span>
+                <span className="text-2xs text-positive font-medium block">Status: STABLE</span>
               </div>
 
               <div className="p-4 rounded-xl border border-cyan-500/30 bg-cyan-500/5 space-y-2">
-                <div className="flex justify-between text-xs font-semibold text-white">
+                <div className="flex justify-between text-xs font-semibold text-foreground">
                   <span>Rural Feeder A</span>
-                  <span className="text-cyan-400 font-mono">30% LOAD</span>
+                  <span className="text-cyan-ink font-mono">30% LOAD</span>
                 </div>
-                <div className="h-1.5 rounded-full bg-white/10 overflow-hidden">
+                <div className="h-1.5 rounded-full bg-secondary overflow-hidden">
                   <div className="h-full bg-cyan-400 rounded-full" style={{ width: "30%" }} />
                 </div>
-                <span className="text-[10px] text-cyan-300 font-medium block">Status: OPTIMAL</span>
+                <span className="text-2xs text-cyan-ink font-medium block">Status: OPTIMAL</span>
               </div>
             </div>
           </div>
@@ -154,60 +154,60 @@ export default function SupervisorElectricityPage() {
           {/* Incidents & Command Terminal */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             {/* Live Incidents */}
-            <div className="p-6 rounded-2xl border border-white/10 bg-[#070D0A]/95 space-y-4">
-              <h3 className="text-sm font-bold text-white">Live Grid Incidents</h3>
+            <div className="p-6 rounded-2xl border border-border bg-card space-y-4">
+              <h3 className="text-sm font-bold text-foreground">Live Grid Incidents</h3>
 
               <div className="space-y-3">
                 <div className="p-3.5 rounded-xl border border-rose-500/30 bg-rose-500/10 flex items-start gap-3">
-                  <AlertTriangle className="h-5 w-5 text-rose-400 shrink-0 mt-0.5" />
+                  <AlertTriangle className="h-5 w-5 text-rose-ink shrink-0 mt-0.5" />
                   <div className="text-xs">
                     <div className="flex items-center justify-between">
-                      <span className="font-bold text-rose-300">CRITICAL: Transformer Overload</span>
-                      <span className="text-[10px] font-mono text-white/50">Just now</span>
+                      <span className="font-bold text-rose-ink">CRITICAL: Transformer Overload</span>
+                      <span className="text-2xs font-mono text-muted-foreground">Just now</span>
                     </div>
-                    <p className="text-white/70 mt-1">Sector 4 secondary transformer running at 94% threshold. Automated load balancing triggered.</p>
+                    <p className="text-soft mt-1">Sector 4 secondary transformer running at 94% threshold. Automated load balancing triggered.</p>
                   </div>
                 </div>
 
                 <div className="p-3.5 rounded-xl border border-amber-500/30 bg-amber-500/10 flex items-start gap-3">
-                  <AlertCircle className="h-5 w-5 text-amber-400 shrink-0 mt-0.5" />
+                  <AlertCircle className="h-5 w-5 text-amber-ink shrink-0 mt-0.5" />
                   <div className="text-xs">
                     <div className="flex items-center justify-between">
-                      <span className="font-bold text-amber-300">WARNING: Frequency Drop</span>
-                      <span className="text-[10px] font-mono text-white/50">1h ago</span>
+                      <span className="font-bold text-amber-ink">WARNING: Frequency Drop</span>
+                      <span className="text-2xs font-mono text-muted-foreground">1h ago</span>
                     </div>
-                    <p className="text-white/70 mt-1">Grid Feed Alpha registered 49.82 Hz transient dip. Self-recovered in 14 seconds.</p>
+                    <p className="text-soft mt-1">Grid Feed Alpha registered 49.82 Hz transient dip. Self-recovered in 14 seconds.</p>
                   </div>
                 </div>
               </div>
             </div>
 
             {/* Command Terminal */}
-            <div className="p-6 rounded-2xl border border-white/10 bg-[#070D0A]/95 space-y-4">
-              <h3 className="text-sm font-bold text-white">Supervisor Command Terminal</h3>
+            <div className="p-6 rounded-2xl border border-border bg-card space-y-4">
+              <h3 className="text-sm font-bold text-foreground">Supervisor Command Terminal</h3>
 
               <form onSubmit={handleBroadcast} className="space-y-3">
                 <div>
-                  <label className="block text-[11px] text-white/70 mb-1">Broadcast Type</label>
+                  <label className="block text-xs text-soft mb-1">Broadcast Type</label>
                   <select
                     value={broadcastType}
                     onChange={(e) => setBroadcastType(e.target.value)}
-                    className="w-full rounded-xl bg-white/5 border border-white/10 text-white text-xs p-2.5"
+                    className="w-full rounded-xl bg-muted border border-border text-foreground text-xs p-2.5"
                   >
-                    <option value="Standard Advisory (Push)" className="bg-black">Standard Advisory (Push)</option>
-                    <option value="Critical Grid Peak Notification" className="bg-black">Critical Grid Peak Notification</option>
-                    <option value="Demand Response Event Invitation" className="bg-black">Demand Response Event Invitation</option>
+                    <option value="Standard Advisory (Push)" className="bg-inset">Standard Advisory (Push)</option>
+                    <option value="Critical Grid Peak Notification" className="bg-inset">Critical Grid Peak Notification</option>
+                    <option value="Demand Response Event Invitation" className="bg-inset">Demand Response Event Invitation</option>
                   </select>
                 </div>
 
                 <div>
-                  <label className="block text-[11px] text-white/70 mb-1">Message Payload</label>
+                  <label className="block text-xs text-soft mb-1">Message Payload</label>
                   <textarea
                     rows={3}
                     value={broadcastMsg}
                     onChange={(e) => setBroadcastMsg(e.target.value)}
                     placeholder="E.g. Power Command reports high cooling load in Sector 4. Please optimize AC setpoints..."
-                    className="w-full rounded-xl bg-white/5 border border-white/10 text-white text-xs p-3 placeholder:text-white/30 focus:outline-none focus:border-emerald-500"
+                    className="w-full rounded-xl bg-muted border border-border text-foreground text-xs p-3 placeholder:text-faint focus:outline-none focus:border-positive"
                     required
                   />
                 </div>
@@ -215,7 +215,7 @@ export default function SupervisorElectricityPage() {
                 <Button
                   type="submit"
                   disabled={sending}
-                  className="w-full bg-emerald-500 text-black hover:bg-emerald-400 font-semibold text-xs h-9 gap-2"
+                  className="w-full bg-primary text-primary-foreground hover:bg-primary-hover font-semibold text-xs h-9 gap-2"
                 >
                   <Send className="h-3.5 w-3.5" />
                   <span>{sending ? "Transmitting Broadcast..." : "Send Ward 24 Broadcast"}</span>
@@ -254,8 +254,8 @@ export default function SupervisorElectricityPage() {
             />
           </div>
 
-          <div className="rounded-2xl border border-white/10 bg-[#070D0A]/95 p-6 backdrop-blur-xl">
-            <h3 className="text-base font-bold text-white mb-4">Ward 24 Area Electricity Heatmap</h3>
+          <div className="rounded-2xl border border-border bg-card p-6 backdrop-blur-xl">
+            <h3 className="text-base font-bold text-foreground mb-4">Ward 24 Area Electricity Heatmap</h3>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
               {[
@@ -264,14 +264,14 @@ export default function SupervisorElectricityPage() {
                 { name: "DEF Colony", households: 1350, status: "Normal Range", tone: "normal", pct: "-1.5%" },
                 { name: "GHI Colony", households: 1130, status: "Optimal", tone: "normal", pct: "-3.2%" },
               ].map((area, idx) => (
-                <div key={idx} className="p-4 rounded-xl border border-white/10 bg-white/[0.02] space-y-2">
+                <div key={idx} className="p-4 rounded-xl border border-border bg-muted/60 space-y-2">
                   <div className="flex justify-between items-start">
-                    <span className="font-bold text-sm text-white">{area.name}</span>
-                    <span className={`text-xs font-mono font-bold ${area.tone === "warning" ? "text-amber-400" : "text-emerald-400"}`}>
+                    <span className="font-bold text-sm text-foreground">{area.name}</span>
+                    <span className={`text-xs font-mono font-bold ${area.tone === "warning" ? "text-amber-ink" : "text-positive"}`}>
                       {area.pct}
                     </span>
                   </div>
-                  <div className="text-xs text-white/50">{area.households} households monitored</div>
+                  <div className="text-xs text-muted-foreground">{area.households} households monitored</div>
                   <StatusBadge status={area.tone === "warning" ? "warning" : "normal"} label={area.status} />
                 </div>
               ))}
