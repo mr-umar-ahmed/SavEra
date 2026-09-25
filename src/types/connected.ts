@@ -95,25 +95,37 @@ export interface Reminder {
   createdAt: IsoDateTime;
 }
 
-export type TwinDeviceId = "ac" | "fan" | "lights" | "fridge" | "geyser" | "tv";
-export type TwinRoomId = "living_room" | "bedroom" | "kitchen" | "bathroom" | "utility";
+export type TwinDeviceId =
+  | "ac"
+  | "fan"
+  | "lights"
+  | "fridge"
+  | "geyser"
+  | "tv"
+  | "washing_machine"
+  | "water_pump"
+  | "ev_charger";
+export type TwinRoomId = "living_room" | "bedroom" | "kitchen" | "bathroom" | "utility" | "outdoor";
 
 /** A device in the "My Home" digital twin (Simulation — Digital Twin Prototype). */
 export interface TwinDevice {
   id: TwinDeviceId;
   label: string;
   on: boolean;
-  /** Current simulated draw. */
+  /** Current simulated draw in kW. */
   kw: number;
-  /** Draw at full load. */
+  /** Draw at full load in kW. */
   ratedKw: number;
   setpointC?: number;
+  /** Alias for setpointC for AC. */
+  tempC?: number;
   hoursPerDay: number;
   /** Eligible for demand response (AC, geyser) vs protected (fridge). */
   flexible: boolean;
   /** lucide-react icon name. */
   icon: string;
   room?: TwinRoomId;
+  strategyApplied?: boolean;
 }
 
 export const OFFICIAL_ALERT_TYPE_LABEL: Record<OfficialAlertType, string> = {

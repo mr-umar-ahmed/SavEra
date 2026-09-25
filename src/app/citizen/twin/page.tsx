@@ -1,51 +1,107 @@
 "use client";
 
+import React, { useState } from "react";
 import Link from "next/link";
-import { ArrowLeft, QrCode, Zap } from "lucide-react";
-import { PageHeader } from "@/components/savera/PageHeader";
-import { TwinCanvas } from "@/components/twin/TwinCanvas";
-import { StatusBadge } from "@/components/savera/StatusBadge";
+import DigitalTwinView from "@/components/twin/DigitalTwinView";
+import { WaterSupplyLossSimulator } from "@/components/water/WaterSupplyLossSimulator";
+import { SimulationPrototypeBadge, EstimatedChip } from "@/components/ui/Chips";
+import { useTwinStore } from "@/stores/twinStore";
+import {
+  ArrowRight,
+  CheckCircle2,
+  Droplets,
+  Layers,
+  Sparkles,
+  Waves,
+  Zap,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { useCurrentHousehold } from "@/lib/api/hooks";
-import { useSessionStore } from "@/stores/session";
 
 export default function CitizenTwinPage() {
-  const user = useSessionStore((s) => s.user);
-  const { household } = useCurrentHousehold();
-  const currentHouseholdId = household?.id || user?.householdId || "H-1024";
+  const { setAcTemp, toggleDevice, devices } = useTwinStore();
+  const [twinPortalTab, setTwinPortalTab] = useState<"electricity" | "water">(
+    "electricity"
+  );
 
   return (
-    <div className="space-y-6">
-      <PageHeader
-        title="My Home — Digital Twin Prototype"
-        subtitle="Simulated real-time 3D isometric & schematic model of household electrical appliances. Adjust setpoints and schedules to simulate real-world grid impact."
-        badge={
-          <div className="flex items-center gap-2">
-            <StatusBadge status="simulation" label="Simulation Prototype" />
-            <span className="text-xs font-mono text-muted-foreground">
-              Household {currentHouseholdId} · {household?.name ?? user?.name ?? "Resident"}
-            </span>
-          </div>
-        }
-        actions={
-          <div className="flex items-center gap-2">
-            <Link href="/citizen/scan">
-              <Button variant="outline" size="sm" className="h-9 gap-1.5 border-border bg-muted hover:bg-secondary text-xs rounded-xl">
-                <QrCode className="size-4 text-positive" />
-                <span>Scan New Appliance</span>
-              </Button>
+    <div className="max-w-7xl mx-auto px-4 py-8 space-y-8">
+      {/* Top Header */}
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-border/80 pb-6">
+        <div>
+          <div className="flex items-center gap-2 text-xs text-muted-foreground mb-1 font-mono">
+            <Link
+              href="/citizen"
+              className="hover:text-foreground transition-colors"
+            >
+              Citizen Portal
             </Link>
-            <Link href="/citizen/electricity">
-              <Button size="sm" className="h-9 gap-1.5 bg-primary text-primary-foreground hover:bg-primary-hover text-xs rounded-xl shadow-md shadow-primary/10">
-                <Zap className="size-4" />
-                <span>Electricity Dashboard</span>
-              </Button>
-            </Link>
+            <span>/</span>
+            <span className="text-positive font-bold">Digital Twin</span>
           </div>
-        }
-      />
+          <div className="flex items-center gap-3">
+            <h1 className="text-3xl font-black text-foreground tracking-tight">
+              My Home — Connected Simulation
+            </h1>
+            <SimulationPrototypeBadge />
+          </div>
+          <p className="text-xs text-muted-foreground mt-1 max-w-2xl leading-relaxed">
+            Simulate your household micro-grid and water supply in real time. Adjust appliance setpoints, test peak-load shifting, monitor meter-to-meter hydraulic distribution, and preview projected monthly savings.
+          </p>
+        </div>
 
-      <TwinCanvas householdId={currentHouseholdId} />
+        <div className="flex flex-wrap items-center gap-2">
+          {/* Multi-Utility Twin Mode Tabs */}
+          <div className="flex items-center p-1 rounded-2xl bg-muted/80 border border-border">
+            <button
+              type="button"
+              onClick={() => setTwinPortalTab("electricity")}
+              className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 ${
+                twinPortalTab === "electricity"
+                  ? "bg-card text-foreground shadow-sm"
+                  : "text-muted-foreground hover:text-foreground"
+              }`}
+            >
+              <Zap className="size-3.5 text-amber-ink" />
+              <span>Electricity Micro-Grid</span>
+            </button>
+            <button
+              type="button"
+              onClick={() => setTwinPortalTab("water")}
+              className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 ${
+                twinPortalTab === "water"
+                  ? "bg-card text-foreground shadow-sm"
+                  : "text-muted-foreground hover:text-foreground"
+              }`}
+            >
+              <Waves className="size-3.5 text-stream-water" />
+              <span>Water SCADA & Losses</span>
+            </button>
+          </div>
+
+          <Link
+            href={
+              twinPortalTab === "electricity"
+                ? "/citizen/electricity"
+                : "/citizen/water"
+            }
+            className="px-4 py-2 rounded-xl bg-card border border-border text-xs font-semibold text-foreground hover:border-border-strong hover:bg-muted/60 transition-all flex items-center gap-1.5 shadow-sm"
+          >
+            <span>
+              {twinPortalTab === "electricity"
+                ? "Electricity Dashboard"
+                : "Water Portal"}
+            </span>
+            <ArrowRight className="size-3.5" />
+          </Link>
+        </div>
+      </div>
+
+      {/* Main Digital Twin Simulator Component */}
+      {twinPortalTab === "electricity" ? (
+        <DigitalTwinView />
+      ) : (
+        <WaterSupplyLossSimulator mode="citizen" />
+      )}
     </div>
   );
 }

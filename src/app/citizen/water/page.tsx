@@ -34,9 +34,11 @@ import { useDataStore } from "@/stores/data";
 import { newId } from "@/lib/ids";
 import type { WaterExperience, WaterIssueType } from "@/types";
 import { toast } from "sonner";
+import { WaterSupplyLossSimulator } from "@/components/water/WaterSupplyLossSimulator";
 
 export default function CitizenWaterPortalPage() {
   const router = useRouter();
+  const [citizenWaterTab, setCitizenWaterTab] = useState<"supply_desk" | "meter_to_meter">("supply_desk");
   const { schedule, reports, activeCase } = useWaterHome("H-1024");
   const addWaterReport = useDataStore((s) => s.addWaterReport);
   const officialAlerts = useDataStore((s) => s.officialAlerts);
@@ -231,8 +233,40 @@ export default function CitizenWaterPortalPage() {
         </div>
       )}
 
-      {/* 2. Today's Planned Supply Card & Household Availability */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+      {/* Multi-Tab Switcher: Supply Desk vs 3D Meter-to-Meter SCADA */}
+      <div className="flex items-center p-1 rounded-2xl bg-muted/80 border border-border w-fit shadow-sm">
+        <button
+          type="button"
+          onClick={() => setCitizenWaterTab("supply_desk")}
+          className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 ${
+            citizenWaterTab === "supply_desk"
+              ? "bg-card text-foreground shadow-sm"
+              : "text-muted-foreground hover:text-foreground"
+          }`}
+        >
+          <Droplet className="size-3.5 text-stream-water" />
+          <span>My Supply Schedule &amp; Feedback</span>
+        </button>
+        <button
+          type="button"
+          onClick={() => setCitizenWaterTab("meter_to_meter")}
+          className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 ${
+            citizenWaterTab === "meter_to_meter"
+              ? "bg-card text-foreground shadow-sm"
+              : "text-muted-foreground hover:text-foreground"
+          }`}
+        >
+          <Waves className="size-3.5 text-cyan-ink" />
+          <span>Meter-to-Meter 3D Supply &amp; Loss Detection</span>
+        </button>
+      </div>
+
+      {citizenWaterTab === "meter_to_meter" ? (
+        <WaterSupplyLossSimulator mode="citizen" />
+      ) : (
+        <>
+          {/* 2. Today's Planned Supply Card & Household Availability */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
         <div className="md:col-span-2 p-6 rounded-3xl border border-border bg-card backdrop-blur-xl shadow-xl flex flex-col justify-between">
           <div>
             <div className="flex items-center justify-between mb-3">
@@ -636,6 +670,8 @@ export default function CitizenWaterPortalPage() {
           </div>
         </div>
       </div>
+      </>
+      )}
     </div>
   );
 }

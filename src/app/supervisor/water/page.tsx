@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
 import {
   AlertCircle,
@@ -9,6 +10,7 @@ import {
   Clock,
   Droplet,
   ExternalLink,
+  Layers,
   MapPin,
   ShieldAlert,
   ShieldCheck,
@@ -22,8 +24,10 @@ import { Button } from "@/components/ui/button";
 import { AreaMap } from "@/components/maps";
 import { AREAS } from "@/data/geo/raichur";
 import { getWaterPipelinePolylines, getWaterInfrastructureMarkers } from "@/data/geo/waterPipelines";
+import { WaterSupplyLossSimulator } from "@/components/water/WaterSupplyLossSimulator";
 
 export default function SupervisorWaterDashboard() {
+  const [activeViewMode, setActiveViewMode] = useState<"scada_3d" | "gis_map">("scada_3d");
   const areas = [
     {
       id: "area-xyz",
@@ -124,8 +128,40 @@ export default function SupervisorWaterDashboard() {
         />
       </div>
 
-      {/* Ward 24 Real Water Pipeline & SCADA Map Visualizer */}
-      <div className="rounded-3xl border border-border bg-card p-6 backdrop-blur-xl shadow-xl space-y-4">
+      {/* View Mode Switcher: 3D SCADA Simulator vs GIS Map */}
+      <div className="flex items-center p-1 rounded-2xl bg-muted/80 border border-border w-fit shadow-sm">
+        <button
+          type="button"
+          onClick={() => setActiveViewMode("scada_3d")}
+          className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 ${
+            activeViewMode === "scada_3d"
+              ? "bg-card text-foreground shadow-sm"
+              : "text-muted-foreground hover:text-foreground"
+          }`}
+        >
+          <Waves className="size-3.5 text-stream-water" />
+          <span>Meter-to-Meter 3D Supply & Loss Simulator</span>
+        </button>
+        <button
+          type="button"
+          onClick={() => setActiveViewMode("gis_map")}
+          className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 ${
+            activeViewMode === "gis_map"
+              ? "bg-card text-foreground shadow-sm"
+              : "text-muted-foreground hover:text-foreground"
+          }`}
+        >
+          <MapPin className="size-3.5 text-primary" />
+          <span>Ward 24 GIS Pipeline Map</span>
+        </button>
+      </div>
+
+      {activeViewMode === "scada_3d" ? (
+        <WaterSupplyLossSimulator mode="supervisor" />
+      ) : (
+        <>
+          {/* Ward 24 Real Water Pipeline & SCADA Map Visualizer */}
+          <div className="rounded-3xl border border-border bg-card p-6 backdrop-blur-xl shadow-xl space-y-4">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-border">
           <div>
             <div className="flex items-center gap-2">
@@ -244,6 +280,8 @@ export default function SupervisorWaterDashboard() {
           </table>
         </div>
       </div>
+      </>
+      )}
 
       {/* 6.2 AI Water Supply Alerts matching §6.2 */}
       <div className="space-y-4">
