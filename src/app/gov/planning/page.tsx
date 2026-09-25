@@ -12,7 +12,7 @@ export default function GovPlanningPage() {
         title="Municipal Resource Allocation Planning"
         subtitle="Forward planning quotas, buffer margins, and multi-utility procurement schedules."
         badge={
-          <div className="flex items-center gap-2">
+          <div className="flex flex-wrap items-center gap-2">
             <StatusBadge status="normal" label="Quarterly Allocation Plan" />
             <span className="text-xs font-mono text-muted-foreground">Q4 2026</span>
           </div>

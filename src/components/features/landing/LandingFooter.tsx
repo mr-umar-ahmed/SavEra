@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { Sprout } from "lucide-react";
 
+import { HackfinixBadge } from "@/components/features/hackathon/HackfinixBadge";
 import { LabelChip } from "@/components/savera/LabelChip";
 
 interface FooterLink {
@@ -74,10 +75,13 @@ export function LandingFooter() {
           <FooterColumn title="Explore" links={EXPLORE_LINKS} />
         </div>
 
-        <p className="mt-10 border-t border-border pt-6 text-center font-mono text-2xs leading-relaxed tracking-[0.14em] text-faint uppercase md:text-left">
-          © 2026 SAVERA · Civic resource intelligence · Raichur, Karnataka · Demo build — all integrations
-          simulated
-        </p>
+        <div className="mt-10 flex flex-col items-center gap-4 border-t border-border pt-6 md:flex-row md:items-center md:justify-between">
+          <p className="text-center font-mono text-2xs leading-relaxed tracking-[0.14em] text-faint uppercase md:text-left">
+            © 2026 SAVERA · Civic resource intelligence · Raichur, Karnataka · Demo build — all integrations
+            simulated
+          </p>
+          <HackfinixBadge className="shrink-0" />
+        </div>
       </div>
     </footer>
   );

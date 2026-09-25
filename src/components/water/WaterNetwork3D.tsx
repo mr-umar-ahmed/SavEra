@@ -777,7 +777,7 @@ export function WaterNetwork3D({
     let previousMousePosition = { x: 0, y: 0 };
     let cameraAngle = 0;
     let cameraHeight = 16;
-    let cameraRadius = 26;
+    const cameraRadius = 26;
 
     const onMouseDown = (e: MouseEvent) => {
       isDragging = true;
@@ -810,7 +810,7 @@ export function WaterNetwork3D({
 
     // Animation Loop
     let animationFrameId: number;
-    let clock = new THREE.Clock();
+    const clock = new THREE.Clock();
 
     const animate = () => {
       animationFrameId = requestAnimationFrame(animate);

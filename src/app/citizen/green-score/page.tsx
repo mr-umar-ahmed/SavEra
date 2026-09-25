@@ -30,7 +30,7 @@ export default function CitizenGreenScorePage() {
         title="Habitat Green Score"
         subtitle="Normalized multi-utility efficiency rating evaluated against peer households in Ward 24."
         badge={
-          <div className="flex items-center gap-2">
+          <div className="flex flex-wrap items-center gap-2">
             <StatusBadge status="complete" label="Tier: Emerald Habitat" />
             <EstimatedChip confidence="High" inputs={["Normalized 3BHK", "4 Occupants", "700 Ward Peers"]} />
           </div>

@@ -93,7 +93,7 @@ export default function SupervisorHomePage() {
         title="Ward 24 Supervisory Desk"
         subtitle="Operational command desk for Ward 24 (XYZ, ABC, DEF, and GHI Colony), Raichur."
         badge={
-          <div className="flex items-center gap-2">
+          <div className="flex flex-wrap items-center gap-2">
             <StatusBadge status="normal" label="Ward 24 Active Desk" />
             <span className="text-xs font-mono text-muted-foreground">Supervisor: Rajesh Gowda</span>
           </div>

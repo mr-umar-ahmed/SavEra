@@ -224,7 +224,7 @@ export default function WaterSetupPage() {
 
         {/* 5. Regional Scarcity Impact Card matching §1 verbatim */}
         <div className="p-4 rounded-2xl bg-muted/60 border border-border space-y-2 text-xs">
-          <div className="flex items-center justify-between">
+          <div className="flex flex-wrap items-center justify-between gap-x-4 gap-y-2">
             <span className="font-semibold text-foreground flex items-center gap-1.5">
               <Info className="h-4 w-4 text-teal-ink" />
               <span>5. Regional Scarcity Impact</span>

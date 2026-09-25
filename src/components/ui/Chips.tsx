@@ -12,12 +12,13 @@ export function SimulationPrototypeBadge() {
   );
 }
 
+type BaseEstimatedChipProps = React.ComponentProps<typeof BaseEstimatedChip>;
+
 export function EstimatedChip({
   confidence = "high",
   ...props
-}: {
+}: Omit<BaseEstimatedChipProps, "confidence"> & {
   confidence?: "high" | "medium" | "low" | string;
-  [key: string]: any;
 }) {
   const normalizedConfidence =
     confidence === "high" ? "High" : confidence === "low" ? "Low" : "Medium";

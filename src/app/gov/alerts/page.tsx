@@ -57,7 +57,7 @@ export default function GovAlertsPage() {
         title="Official Municipal Disruption Alert Publisher"
         subtitle="Broadcast legally binding, official advisories for scheduled maintenance, load shedding, and emergency repairs."
         badge={
-          <div className="flex items-center gap-2">
+          <div className="flex flex-wrap items-center gap-2">
             <StatusBadge status="official" label="Official Department Feed" />
             <span className="text-xs font-mono text-muted-foreground">Human-Published Only</span>
           </div>

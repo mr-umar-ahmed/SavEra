@@ -281,7 +281,11 @@ export default function SmartScanPage() {
       />
 
       {/* Mode Switcher Tabs */}
-      <div className="flex items-center gap-1.5 p-1 rounded-xl bg-muted/60 border border-border">
+      <div
+        role="tablist"
+        aria-label="Scan mode"
+        className="grid grid-cols-2 gap-1.5 rounded-xl border border-border bg-muted/60 p-1 sm:flex sm:items-center [&>button]:min-w-0 [&>button]:leading-tight [&>button_span]:truncate"
+      >
         <button
           onClick={() => {
             setMode("camera");
@@ -293,8 +297,9 @@ export default function SmartScanPage() {
               : "text-muted-foreground hover:text-foreground"
           }`}
         >
-          <Camera className="h-4 w-4 text-positive" />
-          <span>Live Camera Viewfinder</span>
+          <Camera className="h-4 w-4 shrink-0 text-positive" />
+          <span className="sm:hidden">Camera</span>
+          <span className="hidden sm:inline">Live Camera Viewfinder</span>
         </button>
 
         <button
@@ -308,8 +313,9 @@ export default function SmartScanPage() {
               : "text-muted-foreground hover:text-foreground"
           }`}
         >
-          <FileUp className="h-4 w-4 text-cyan-ink" />
-          <span>Label / QR Photo Upload</span>
+          <FileUp className="h-4 w-4 shrink-0 text-cyan-ink" />
+          <span className="sm:hidden">Photo upload</span>
+          <span className="hidden sm:inline">Label / QR Photo Upload</span>
         </button>
 
         <button
@@ -323,8 +329,9 @@ export default function SmartScanPage() {
               : "text-muted-foreground hover:text-foreground"
           }`}
         >
-          <QrCode className="h-4 w-4 text-amber-ink" />
-          <span>Interactive Barcodes &amp; QR</span>
+          <QrCode className="h-4 w-4 shrink-0 text-amber-ink" />
+          <span className="sm:hidden">Sample codes</span>
+          <span className="hidden sm:inline">Interactive Barcodes &amp; QR</span>
         </button>
 
         <button
@@ -338,8 +345,9 @@ export default function SmartScanPage() {
               : "text-muted-foreground hover:text-foreground"
           }`}
         >
-          <Scan className="h-4 w-4 text-purple-ink" />
-          <span>Manual Code Lookup</span>
+          <Scan className="h-4 w-4 shrink-0 text-purple-ink" />
+          <span className="sm:hidden">Manual code</span>
+          <span className="hidden sm:inline">Manual Code Lookup</span>
         </button>
       </div>
 
@@ -403,7 +411,7 @@ export default function SmartScanPage() {
               </div>
 
               {/* Camera Controls Bar */}
-              <div className="absolute bottom-3 left-3 right-3 flex items-center justify-between pointer-events-auto">
+              <div className="pointer-events-auto absolute right-3 bottom-3 left-3 flex flex-wrap items-center justify-between gap-2">
                 <div className="flex items-center gap-2">
                   {isCameraActive ? (
                     <Button

@@ -44,7 +44,7 @@ export interface ApplianceStrategy {
   savingsRange: string;
   description: string;
   dutyCycleDetail: string;
-  appliedCheck: (devices: any) => boolean;
+  appliedCheck: (devices?: unknown) => boolean;
   apply: () => void;
   revert: () => void;
 }

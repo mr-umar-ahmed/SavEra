@@ -73,30 +73,30 @@ export default function CitizenSetupHubPage() {
     switch (row.type) {
       case "complete":
         return (
-          <span className="flex items-center gap-1.5 text-positive font-medium text-xs font-mono">
-            <CheckCircle2 className="h-3.5 w-3.5" />
-            <span>✅ {row.statusText}</span>
+          <span className="inline-flex items-center gap-1.5 whitespace-nowrap rounded-full border border-positive/25 bg-positive/10 px-2 py-0.5 font-mono text-2xs font-semibold text-positive">
+            <CheckCircle2 className="size-3.5" aria-hidden />
+            <span>{row.statusText}</span>
           </span>
         );
       case "partial":
         return (
-          <span className="flex items-center gap-1.5 text-amber-ink font-medium text-xs font-mono">
-            <Sparkles className="h-3.5 w-3.5" />
-            <span>⚠️ {row.statusText}</span>
+          <span className="inline-flex items-center gap-1.5 whitespace-nowrap rounded-full border border-amber-500/30 bg-amber-500/10 px-2 py-0.5 font-mono text-2xs font-semibold text-amber-ink">
+            <Sparkles className="size-3.5" aria-hidden />
+            <span>{row.statusText}</span>
           </span>
         );
       case "later":
         return (
-          <span className="flex items-center gap-1.5 text-sky-ink font-medium text-xs font-mono">
-            <Clock className="h-3.5 w-3.5" />
-            <span>⏳ {row.statusText}</span>
+          <span className="inline-flex items-center gap-1.5 whitespace-nowrap rounded-full border border-sky-500/30 bg-sky-500/10 px-2 py-0.5 font-mono text-2xs font-semibold text-sky-ink">
+            <Clock className="size-3.5" aria-hidden />
+            <span>{row.statusText}</span>
           </span>
         );
       case "none":
         return (
-          <span className="flex items-center gap-1.5 text-faint font-medium text-xs font-mono">
-            <HelpCircle className="h-3.5 w-3.5" />
-            <span>❌ {row.statusText}</span>
+          <span className="inline-flex items-center gap-1.5 whitespace-nowrap rounded-full border border-border-strong bg-secondary px-2 py-0.5 font-mono text-2xs font-semibold text-faint">
+            <HelpCircle className="size-3.5" aria-hidden />
+            <span>{row.statusText}</span>
           </span>
         );
     }
@@ -108,7 +108,7 @@ export default function CitizenSetupHubPage() {
         title="Digitize Your Habitat"
         subtitle="Select a utility stream to configure. Our AI requires context to map your historical consumption accurately."
         badge={
-          <div className="flex items-center gap-2">
+          <div className="flex flex-wrap items-center gap-2">
             <StatusBadge status="complete" label="Household H-1024" />
             <span className="text-xs font-mono text-muted-foreground">Ward 24 · XYZ Colony</span>
           </div>
@@ -286,24 +286,21 @@ export default function CitizenSetupHubPage() {
           {profileRows.map((row) => (
             <div
               key={row.name}
-              className="py-3 sm:py-3.5 flex items-center justify-between gap-4 text-xs"
+              className="flex flex-wrap items-center justify-between gap-x-4 gap-y-2 py-3 text-xs sm:flex-nowrap sm:py-3.5"
             >
-              <div className="flex items-center gap-2 min-w-0">
-                <span className="text-soft font-medium">{row.name}</span>
-              </div>
+              <span className="min-w-0 flex-1 basis-full font-medium text-soft sm:basis-auto">{row.name}</span>
 
-              <div className="flex items-center gap-4 shrink-0">
-                <div>{getStatusBadge(row)}</div>
+              <div className="flex items-center gap-3 sm:shrink-0">
+                {getStatusBadge(row)}
                 {row.actionHref && (
-                  <Link href={row.actionHref}>
-                    <Button
-                      size="sm"
-                      variant="ghost"
-                      className="h-7 px-2.5 text-xs text-positive hover:text-positive hover:bg-positive/10 font-semibold"
-                    >
-                      Complete now &rarr;
-                    </Button>
-                  </Link>
+                  <Button
+                    asChild
+                    size="sm"
+                    variant="ghost"
+                    className="h-7 px-2.5 text-xs font-semibold text-positive hover:bg-positive/10 hover:text-positive"
+                  >
+                    <Link href={row.actionHref}>Complete now &rarr;</Link>
+                  </Button>
                 )}
               </div>
             </div>

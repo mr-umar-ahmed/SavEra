@@ -45,10 +45,10 @@ function CitizenTwinContent() {
   }, [searchParams]);
 
   return (
-    <div className="max-w-7xl mx-auto px-4 py-8 space-y-8">
+    <div className="mx-auto max-w-7xl space-y-8">
       {/* Top Header */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-border/80 pb-6">
-        <div>
+      <div className="flex flex-col justify-between gap-5 border-b border-border/80 pb-6 xl:flex-row xl:items-end">
+        <div className="min-w-0">
           <div className="flex items-center gap-2 text-xs text-muted-foreground mb-1 font-mono">
             <Link
               href="/citizen"
@@ -59,55 +59,68 @@ function CitizenTwinContent() {
             <span>/</span>
             <span className="text-positive font-bold">Digital Twin</span>
           </div>
-          <div className="flex items-center gap-3">
-            <h1 className="text-3xl font-black text-foreground tracking-tight">
+          <div className="flex flex-wrap items-center gap-x-3 gap-y-2">
+            <h1 className="text-3xl font-black text-foreground tracking-tight sm:text-4xl">
               My Home — Connected Simulation
             </h1>
             <SimulationPrototypeBadge />
           </div>
-          <p className="text-xs text-muted-foreground mt-1 max-w-2xl leading-relaxed">
+          <p className="text-sm text-muted-foreground mt-2 max-w-2xl leading-relaxed">
             Simulate your household micro-grid, municipal water supply, and piped gas distribution in real time. Adjust appliance setpoints, test peak-load shifting, monitor meter-to-meter hydraulic distribution, and manage pipeline safety.
           </p>
         </div>
 
-        <div className="flex flex-wrap items-center gap-2">
+        <div className="flex flex-col gap-2 sm:flex-row sm:flex-wrap sm:items-center">
           {/* Multi-Utility Twin Mode Tabs: Electricity, Water, Gas */}
-          <div className="flex items-center p-1 rounded-2xl bg-muted/80 border border-border">
+          <div
+            role="tablist"
+            aria-label="Twin utility"
+            className="grid grid-cols-3 items-center gap-1 rounded-2xl border border-border bg-muted/80 p-1 sm:inline-flex sm:w-auto"
+          >
             <button
               type="button"
+              role="tab"
+              aria-selected={twinPortalTab === "electricity"}
               onClick={() => setTwinPortalTab("electricity")}
-              className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 ${
+              className={`flex min-w-0 items-center justify-center gap-1.5 rounded-xl px-2.5 py-2 text-xs font-bold transition-all sm:px-3.5 sm:py-1.5 ${
                 twinPortalTab === "electricity"
                   ? "bg-card text-foreground shadow-sm"
                   : "text-muted-foreground hover:text-foreground"
               }`}
             >
-              <Zap className="size-3.5 text-amber-ink" />
-              <span>Electricity Micro-Grid</span>
+              <Zap className="size-3.5 shrink-0 text-amber-ink" />
+              <span className="truncate sm:hidden">Electricity</span>
+              <span className="hidden sm:inline">Electricity Micro-Grid</span>
             </button>
             <button
               type="button"
+              role="tab"
+              aria-selected={twinPortalTab === "water"}
               onClick={() => setTwinPortalTab("water")}
-              className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 ${
+              className={`flex min-w-0 items-center justify-center gap-1.5 rounded-xl px-2.5 py-2 text-xs font-bold transition-all sm:px-3.5 sm:py-1.5 ${
                 twinPortalTab === "water"
                   ? "bg-card text-foreground shadow-sm"
                   : "text-muted-foreground hover:text-foreground"
               }`}
             >
-              <Waves className="size-3.5 text-stream-water" />
-              <span>Water SCADA & Losses</span>
+              <Waves className="size-3.5 shrink-0 text-stream-water" />
+              <span className="truncate sm:hidden">Water</span>
+              <span className="hidden sm:inline">Water SCADA & Losses</span>
             </button>
             <button
               type="button"
+              role="tab"
+              aria-selected={twinPortalTab === "gas"}
               onClick={() => setTwinPortalTab("gas")}
-              className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 ${
+              className={`flex min-w-0 items-center justify-center gap-1.5 rounded-xl px-2.5 py-2 text-xs font-bold transition-all sm:px-3.5 sm:py-1.5 ${
                 twinPortalTab === "gas"
                   ? "bg-card text-foreground shadow-sm"
                   : "text-muted-foreground hover:text-foreground"
               }`}
             >
-              <Flame className="size-3.5 text-amber-500" />
-              <span>Gas & LPG Network</span>
+              <Flame className="size-3.5 shrink-0 text-stream-lpg" />
+              <span className="truncate sm:hidden">Gas</span>
+              <span className="hidden sm:inline">Gas & LPG Network</span>
             </button>
           </div>
 
@@ -119,7 +132,7 @@ function CitizenTwinContent() {
                 ? "/citizen/water"
                 : "/citizen/gas"
             }
-            className="px-4 py-2 rounded-xl bg-card border border-border text-xs font-semibold text-foreground hover:border-border-strong hover:bg-muted/60 transition-all flex items-center gap-1.5 shadow-sm"
+            className="flex items-center justify-center gap-1.5 rounded-xl border border-border bg-card px-4 py-2 text-xs font-semibold text-foreground shadow-sm transition-all hover:border-border-strong hover:bg-muted/60"
           >
             <span>
               {twinPortalTab === "electricity"

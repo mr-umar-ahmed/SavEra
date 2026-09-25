@@ -41,7 +41,7 @@ export default function CarbonFootprintPage() {
         title="Carbon Footprint Analyzer"
         subtitle="Holistic ecological footprint analysis mapping domestic energy, commuting, and lifestyle habits."
         badge={
-          <div className="flex items-center gap-2">
+          <div className="flex flex-wrap items-center gap-2">
             <span className="text-2xs font-mono px-2 py-0.5 rounded bg-positive/20 text-positive font-semibold border border-positive/30">
               New ESG Framework
             </span>

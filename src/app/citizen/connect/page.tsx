@@ -38,7 +38,7 @@ export default function DataIntegrationPage() {
         title="Consent-Based Data Integration"
         subtitle="Secure, consent-driven synchronization with municipal utility portals and domestic smart meters."
         badge={
-          <div className="flex items-center gap-2">
+          <div className="flex flex-wrap items-center gap-2">
             <StatusBadge status="simulation" label="Integration-Ready · Simulated" />
             <span className="text-xs font-mono text-muted-foreground">DigiLocker / API Setu Model</span>
           </div>

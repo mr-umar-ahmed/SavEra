@@ -1,12 +1,12 @@
 {
-  "name": "SAVERA",
+  "name": "SAVERA — Resource Intelligence Platform",
   "short_name": "SAVERA",
-  "description": "AI-powered household-to-city resource intelligence for electricity, water and LPG.",
+  "description": "AI-powered household-to-city resource intelligence for electricity, water and LPG. Made for HACKFINIX 2026 · Cambridge North Campus, Bangalore.",
   "start_url": "/",
   "display": "standalone",
   "orientation": "portrait",
-  "theme_color": "#050B08",
-  "background_color": "#050B08",
+  "theme_color": "#6B3D1C",
+  "background_color": "#F3ECE1",
   "lang": "en",
   "icons": [
     {

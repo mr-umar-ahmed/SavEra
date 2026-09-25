@@ -23,7 +23,7 @@ export default function GovIndustrialPage() {
         title="Industrial Environmental Intelligence & GHG Accounting"
         subtitle="Continuous ambient emission monitoring (OCEMS simulated telemetry) and Scope 1/2/3 municipal greenhouse gas inventories."
         badge={
-          <div className="flex items-center gap-2">
+          <div className="flex flex-wrap items-center gap-2">
             <StatusBadge status="simulation" label="Simulated Feeds / GHG Prototype" />
             <span className="text-xs font-mono text-muted-foreground">OCEMS Standards</span>
           </div>

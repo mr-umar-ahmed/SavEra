@@ -84,7 +84,7 @@ export default function GovWaterPage() {
         title="City Water Supply Board Command"
         subtitle="Bulk municipal water allocation, feeder manifold balancing, and ward distribution telemetry across Raichur."
         badge={
-          <div className="flex items-center gap-2">
+          <div className="flex flex-wrap items-center gap-2">
             <span className="inline-flex items-center gap-1.5 rounded-full border border-teal-500/30 bg-teal-500/10 px-2.5 py-0.5 text-xs font-mono font-medium text-teal-ink">
               <MapPin className="h-3 w-3" />
               City of Raichur · Water Board
@@ -259,7 +259,7 @@ export default function GovWaterPage() {
                 </span>
               </div>
 
-              <div className="flex items-center gap-6 font-mono">
+              <div className="flex flex-wrap items-center gap-x-6 gap-y-2 font-mono">
                 <div>
                   <span className="text-2xs text-faint block">CURRENT</span>
                   <span className="text-foreground font-bold">{w.current}</span>

@@ -89,7 +89,7 @@ export function GasSupplyAnomalySimulator({
   let drsInflowScmh = 10.0;
   let downstreamSumScmh = 9.8;
   let isStandby = false;
-  let unattendedDurationMins = 0;
+  const unattendedDurationMins = 0;
 
   if (activeScenario === "scenario_normal") {
     instantFlowScmh = 0.28;

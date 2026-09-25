@@ -24,7 +24,7 @@ export default function GovHeatmapPage() {
         title="Municipal Multi-Utility GIS Heatmap"
         subtitle="Geographic stress index mapping across Raichur's 24 municipal wards and industrial zones."
         badge={
-          <div className="flex items-center gap-2">
+          <div className="flex flex-wrap items-center gap-2">
             <StatusBadge status="normal" label="GIS Layers Active" />
             <span className="text-xs font-mono text-muted-foreground">Raichur Spatial Matrix</span>
           </div>

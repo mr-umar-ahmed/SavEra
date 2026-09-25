@@ -110,7 +110,7 @@ export default function GovCommandCenterPage() {
         title="Municipal Resource Command Center"
         subtitle="City-scale GIS spatial intelligence, hydraulic pipeline networks, real-time SCADA telemetry, and multi-utility demand analytics."
         badge={
-          <div className="flex items-center gap-2">
+          <div className="flex flex-wrap items-center gap-2">
             <StatusBadge status="normal" label="City of Raichur" />
             <span className="text-xs font-mono text-positive font-bold">24 Wards Active</span>
           </div>
@@ -172,53 +172,69 @@ export default function GovCommandCenterPage() {
       </div>
 
       {/* Primary Command Navigation Tabs: Clearly Separating Map, Resources, SCADA, and Operations */}
-      <div className="flex items-center gap-2 p-1.5 rounded-2xl bg-muted/60 border border-border">
+      <div
+        role="tablist"
+        aria-label="Command center views"
+        className="grid grid-cols-2 gap-1.5 rounded-2xl border border-border bg-muted/60 p-1.5 md:flex md:items-center md:gap-2"
+      >
         <button
+          role="tab"
+          aria-selected={activeTab === "map"}
           onClick={() => setActiveTab("map")}
-          className={`flex-1 flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl text-xs font-bold transition-all ${
+          className={`flex min-w-0 items-center justify-center gap-2 rounded-xl px-3 py-2.5 text-xs font-bold transition-all md:flex-1 md:px-4 ${
             activeTab === "map"
               ? "bg-card text-foreground shadow-md border border-border"
               : "text-muted-foreground hover:text-foreground"
           }`}
         >
-          <Compass className="h-4 w-4 text-cyan-ink" />
-          <span>Spatial GIS &amp; Water Pipeline Grid</span>
+          <Compass className="h-4 w-4 shrink-0 text-cyan-ink" />
+          <span className="truncate lg:hidden">GIS &amp; Pipelines</span>
+          <span className="hidden lg:inline">Spatial GIS &amp; Water Pipeline Grid</span>
         </button>
 
         <button
+          role="tab"
+          aria-selected={activeTab === "resources"}
           onClick={() => setActiveTab("resources")}
-          className={`flex-1 flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl text-xs font-bold transition-all ${
+          className={`flex min-w-0 items-center justify-center gap-2 rounded-xl px-3 py-2.5 text-xs font-bold transition-all md:flex-1 md:px-4 ${
             activeTab === "resources"
               ? "bg-card text-foreground shadow-md border border-border"
               : "text-muted-foreground hover:text-foreground"
           }`}
         >
-          <BarChart3 className="h-4 w-4 text-amber-ink" />
-          <span>Municipal Resource Intelligence</span>
+          <BarChart3 className="h-4 w-4 shrink-0 text-amber-ink" />
+          <span className="truncate lg:hidden">Resources</span>
+          <span className="hidden lg:inline">Municipal Resource Intelligence</span>
         </button>
 
         <button
+          role="tab"
+          aria-selected={activeTab === "infrastructure"}
           onClick={() => setActiveTab("infrastructure")}
-          className={`flex-1 flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl text-xs font-bold transition-all ${
+          className={`flex min-w-0 items-center justify-center gap-2 rounded-xl px-3 py-2.5 text-xs font-bold transition-all md:flex-1 md:px-4 ${
             activeTab === "infrastructure"
               ? "bg-card text-foreground shadow-md border border-border"
               : "text-muted-foreground hover:text-foreground"
           }`}
         >
-          <Gauge className="h-4 w-4 text-positive" />
-          <span>SCADA Assets &amp; Pumping Infrastructure</span>
+          <Gauge className="h-4 w-4 shrink-0 text-positive" />
+          <span className="truncate lg:hidden">SCADA Assets</span>
+          <span className="hidden lg:inline">SCADA Assets &amp; Pumping Infrastructure</span>
         </button>
 
         <button
+          role="tab"
+          aria-selected={activeTab === "operations"}
           onClick={() => setActiveTab("operations")}
-          className={`flex-1 flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl text-xs font-bold transition-all ${
+          className={`flex min-w-0 items-center justify-center gap-2 rounded-xl px-3 py-2.5 text-xs font-bold transition-all md:flex-1 md:px-4 ${
             activeTab === "operations"
               ? "bg-card text-foreground shadow-md border border-border"
               : "text-muted-foreground hover:text-foreground"
           }`}
         >
-          <Activity className="h-4 w-4 text-destructive" />
-          <span>Operations &amp; Incident Triage</span>
+          <Activity className="h-4 w-4 shrink-0 text-destructive" />
+          <span className="truncate lg:hidden">Operations</span>
+          <span className="hidden lg:inline">Operations &amp; Incident Triage</span>
         </button>
       </div>
 

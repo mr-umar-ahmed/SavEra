@@ -52,7 +52,7 @@ export default function GovElectricityPage() {
         title="City Grid Operations & Automated Demand Response (ADR)"
         subtitle="City-wide load management, smart meter telemetry, and automated peak shedding coordination."
         badge={
-          <div className="flex items-center gap-2">
+          <div className="flex flex-wrap items-center gap-2">
             <StatusBadge status="normal" label="City Grid Nominal" />
             <span className="text-xs font-mono text-positive font-bold">842 MW Peak</span>
           </div>

@@ -20,7 +20,7 @@ export default function GovGreenScorePage() {
         title="City Green Score Distribution"
         subtitle="Aggregated sustainability benchmark across Raichur's 45,230 participating households."
         badge={
-          <div className="flex items-center gap-2">
+          <div className="flex flex-wrap items-center gap-2">
             <StatusBadge status="complete" label="City Mean: 78 / 100" />
             <span className="text-xs font-mono text-positive font-bold">+3.4 YoY</span>
           </div>

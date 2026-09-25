@@ -27,7 +27,7 @@ export default function GovGasPage() {
         title="City Gas & LPG Distribution Intelligence"
         subtitle="City Gate Station telemetry, PE-100 distribution network integrity, and cylinder buffer allocations."
         badge={
-          <div className="flex items-center gap-2">
+          <div className="flex flex-wrap items-center gap-2">
             <StatusBadge status="normal" label="Distribution Nominal" />
             <span className="text-xs font-mono text-rose-ink font-bold">56,000 kg Monthly</span>
           </div>

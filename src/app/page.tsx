@@ -1,3 +1,4 @@
+import { HackfinixSplash } from "@/components/features/hackathon/HackfinixSplash";
 import { CtaSection } from "@/components/features/landing/CtaSection";
 import { HeroSection } from "@/components/features/landing/HeroSection";
 import { ImpactSection } from "@/components/features/landing/ImpactSection";
@@ -41,6 +42,7 @@ export default function LandingPage() {
       </main>
 
       <LandingFooter />
+      <HackfinixSplash />
     </div>
   );
 }

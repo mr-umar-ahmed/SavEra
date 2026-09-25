@@ -3,7 +3,7 @@
 **Rule:** this file is updated every time a task changes state (start, finish, block, defer). Plan: `docs/IMPLEMENTATION_PLAN.md` + `docs/CONTINUATION_PLAN.md` (Phase T and Phases 4–8 detail). Deviations: `DECISIONS.md`.
 Legend: ⬜ not started · 🟡 in progress · ✅ done · ❌ blocked · ⏭ deferred
 
-_Last updated: 2026-09-25 (Phase L complete; 50/50 routes verified, ready for deployment)_
+_Last updated: 2026-09-25 (Phase F — HACKFINIX final polish: splash credit, mobile tab bar, 49-route phone overflow sweep, lint back to 0 errors, architecture DOCX)_
 
 ## Overall
 
@@ -20,6 +20,7 @@ _Last updated: 2026-09-25 (Phase L complete; 50/50 routes verified, ready for de
 | 6 Electricity Sup + Gov | ✅ | slice S6 complete: grid ops, ward electricity, ADR, official alerts |
 | 7 Connected Layer | ✅ | slice S7 complete: 3D twin, voice assistant, scan, connect, services |
 | 8 Gov intelligence, notifications, polish, demo readiness | ✅ | slices S8, S9 + master README, clean 50-route next build, QA verified |
+| F Final polish for HACKFINIX 2026 | ✅ | HACKFINIX splash + badges, phone bottom tab bar, route progress bar, 49-route 390 px overflow sweep (0 overflows), lint 0 errors, `docs/SAVERA_Architecture_and_Pitch.docx` |
 
 ## Phase 0 — Foundation
 
@@ -70,6 +71,21 @@ User request: landing hero with financial savings/impact and Problem → Solutio
 | L.6 | Verification: typecheck, lint, tests, `next build`, browser walkthrough (light/dark/375 px) | ✅ | 50/50 routes compiled statically and dynamically without errors |
 | L.7 | Docs: PROGRESS, DECISIONS, README demo script | ✅ | PROGRESS.md and DECISIONS.md updated, README demo script aligned |
 
+## Phase F — Final polish for HACKFINIX 2026 (2026-09-25)
+
+User request: add a popup crediting "Made for HACKFINIX 2026 · Cambridge North Campus, Bangalore", make the UI winner-ready (smooth flow, good looking, mobile responsive), and deliver a complete architecture/flow/pitch document as DOCX.
+
+| # | Task | Status | Evidence |
+|---|---|---|---|
+| F.1 | HACKFINIX credit: `features/hackathon/{HackfinixContent,HackfinixSplash,HackfinixBadge}` — once-per-session splash on `/`, pill badge in landing + auth footers, compact badge in every portal sidebar (all reopen the dialog) | ✅ | splash verified in browser; badge visible in sidebar/footers in all sweeps |
+| F.2 | Mobile navigation: `layout/MobileTabBar` (4 primary tabs per role + More → drawer, safe-area aware) mounted in `PortalShell`; voice FAB/panel lifted above it below `lg`; `main` bottom padding | ✅ | 390 px screenshots of citizen/supervisor/gov routes |
+| F.3 | Smooth flow: `layout/RouteProgress` brand progress bar during client navigation (root layout); `devIndicators: false` so the dev bubble never overlaps chrome; `TabsList` `justify-start` + hidden scrollbar (first tab was unreachable on phones) | ✅ | typecheck clean; tab strip scrolls from "Overview" on 390 px |
+| F.4 | Phone overflow sweep: Playwright scan of 49 routes at 390 px (`scrollWidth` vs `innerWidth`, clipped-ancestor aware). Fixed: electricity top-recommendation header, citizen hub status rows, water availability row, water area chip, green-score header, scan mode switch (2×2 grid), twin utility switcher (3-col grid, short labels), gov command tabs (2×2 grid, short labels), gov water ward rows, supervisor area report bar-chart tooltip + summary row, verified-reports rows, water setup chip row, all 26 `PageHeader` badge wrappers (`flex-wrap`) | ✅ | second scan: 49/49 routes `ok` (no horizontal overflow) |
+| F.5 | Landing verification after changes (hero 3D stage, reveal animations, splash) at 1440 px and 390 px | ✅ | per-section captures: every reveal node visible (`hidden: 0`) on both widths |
+| F.6 | Lint: 9 pre-existing errors in 3D twin files fixed (prefer-const, explicit any) | ✅ | `npm run lint` → 0 errors (407 warnings, unused vars from earlier phases) |
+| F.7 | `docs/SAVERA_Architecture_and_Pitch.docx` — cover, TOC, positioning, problem, solution, end-to-end flows (entry, electricity, water case pipeline, LPG, supervisor, government, connected layer, 6-minute demo script), architecture (stack, layers, directory, data model, engine formulas, trust rules, design system, quality), pitch guide (30 s, 2 min, differentiators, judge Q&A, demo tips), production checklist + roadmap, appendix (routes, accounts, commands, glossary) | ✅ | generated with docx-js from the markdown sources; opened in Word: 32 pages, TOC pre-populated + `Page X of 32` footer resolve, cover/tables/diagrams render (sample pages exported and reviewed) |
+| F.8 | `manifest.json` refreshed to Savera Earth colours + HACKFINIX description; PROGRESS / DECISIONS (#25–#28) / README updated | ✅ | this file |
+
 ## Phases 1–7 — feature slices
 
 | Slice | Scope | Build | Review | Fix |
@@ -118,7 +134,9 @@ User request: landing hero with financial savings/impact and Problem → Solutio
 - 2026-09-25 12:25 — Real 3D Physical Micro-Grid SCADA Simulation for Electricity (`ElectricityNetwork3D.tsx`): true Three.js WebGL physical 3D model simulation matching `WaterNetwork3D` with municipal substation transformer, 3.2 kWp rooftop solar PV array, L&T bi-directional net meter, flowing energy particles, transparent architectural house, and clickable 3D appliances that directly update twinStore. 127/127 tests pass, 50/50 routes clean.
 
 
+- 2026-09-25 13:30 — Phase F (final polish for HACKFINIX 2026): "Made for HACKFINIX 2026 · Cambridge North Campus, Bangalore" splash + badges, phone bottom tab bar in every portal, route progress bar, 49-route 390 px overflow scan fixed to 0 overflows, ESLint back to 0 errors, `docs/SAVERA_Architecture_and_Pitch.docx` (32 pages) delivered. typecheck / lint (0 errors) / 127 tests / `next build` (50/50 routes) green.
+
 ## Known issues / blockers
 
-- 281 pre-existing `no-unused-vars` lint warnings (0 errors) from earlier phases; to be cleaned in Phase 8 polish.
-- The Next.js dev indicator ("N" bubble) overlaps the sidebar footer in dev only; not present in production builds.
+- 407 pre-existing `no-unused-vars` lint warnings (0 errors) from earlier phases; cosmetic only.
+- The Next.js dev indicator is now disabled in `next.config.ts` (`devIndicators: false`), so it no longer overlaps the sidebar footer or the mobile tab bar during `npm run dev` demos.

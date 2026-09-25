@@ -193,7 +193,7 @@ export default function CitizenWaterPortalPage() {
         eyebrow="WATER"
         subtitle="Report localized water delivery experience, track municipal schedule, and view area-wide telemetry."
         badge={
-          <div className="flex items-center gap-2">
+          <div className="flex flex-wrap items-center gap-2">
             <StatusBadge
               status={activeCase ? "warning" : "normal"}
               label={activeCase ? "🟡 Concern under review" : "🟢 Supply as scheduled"}
@@ -291,8 +291,8 @@ export default function CitizenWaterPortalPage() {
           <div className="pt-6 border-t border-border/60 mt-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
             <div>
               <span className="text-xs text-muted-foreground block">Estimated Household Availability:</span>
-              <div className="flex items-center gap-2 mt-0.5">
-                <span className="text-base font-bold font-mono text-positive">~640 L / day</span>
+              <div className="mt-0.5 flex flex-wrap items-center gap-x-3 gap-y-1.5">
+                <span className="text-base font-bold font-mono text-positive whitespace-nowrap">~640 L / day</span>
                 <EstimatedChip confidence="Medium" />
               </div>
             </div>

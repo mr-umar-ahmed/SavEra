@@ -12,6 +12,8 @@ export interface TwinDevicesList extends Array<TwinDevice> {
   washing_machine: TwinDevice;
   water_pump: TwinDevice;
   ev_charger: TwinDevice;
+  // Hybrid array + id-keyed map; the index signature must stay open for dynamic device ids.
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   [key: string]: any;
 }
 
@@ -140,7 +142,7 @@ export function wrapDevices(list: TwinDevice[]): TwinDevicesList {
     if (d.setpointC !== undefined && d.tempC === undefined) {
       d.tempC = d.setpointC;
     }
-    (arr as any)[d.id] = d;
+    (arr as unknown as Record<string, TwinDevice>)[d.id] = d;
   }
   return arr;
 }
@@ -394,14 +396,15 @@ export const useTwinStore = create<TwinState>()(
     }),
     {
       name: "savera-twin-v1",
-      merge: (persistedState: any, currentState: TwinState) => {
-        if (!persistedState || !Array.isArray(persistedState.devices)) {
+      merge: (persistedState: unknown, currentState: TwinState) => {
+        const persisted = persistedState as Partial<TwinState> | undefined;
+        if (!persisted || !Array.isArray(persisted.devices)) {
           return currentState;
         }
         return {
           ...currentState,
-          ...persistedState,
-          devices: wrapDevices(persistedState.devices),
+          ...persisted,
+          devices: wrapDevices(persisted.devices),
         };
       },
     },

@@ -73,7 +73,7 @@ export default function SupervisorWaterDashboard() {
         title="Ward 24 Water Operations"
         subtitle="Monitor area supply schedules, triage AI-grouped citizen pressure reports, and coordinate field verification teams."
         badge={
-          <div className="flex items-center gap-2">
+          <div className="flex flex-wrap items-center gap-2">
             <span className="text-xs font-mono font-bold text-teal-ink bg-teal-500/10 border border-teal-500/20 px-2.5 py-0.5 rounded-full">
               Ward 24
             </span>

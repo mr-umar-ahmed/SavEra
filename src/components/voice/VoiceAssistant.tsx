@@ -176,7 +176,7 @@ export function VoiceAssistant() {
   return (
     <>
       {/* Floating Trigger Button */}
-      <div className="fixed bottom-6 right-6 z-40">
+      <div className="fixed right-4 bottom-[5.75rem] z-40 sm:right-6 lg:bottom-6">
         <button
           onClick={toggleOpen}
           className="relative group flex items-center justify-center h-14 w-14 rounded-full bg-primary text-primary-foreground shadow-xl glow-primary hover:bg-primary-hover hover:scale-105 active:scale-95 transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
@@ -188,7 +188,7 @@ export function VoiceAssistant() {
 
       {/* Slide-in Assistant Modal / Drawer */}
       {isOpen && (
-        <div className="fixed bottom-24 right-6 z-40 w-96 max-w-[calc(100vw-3rem)] rounded-2xl bg-card border border-border-strong backdrop-blur-2xl shadow-2xl flex flex-col overflow-hidden text-foreground animate-scale-in">
+        <div className="fixed right-4 bottom-[10.25rem] z-40 flex w-96 max-w-[calc(100vw-2rem)] flex-col overflow-hidden rounded-2xl border border-border-strong bg-card text-foreground shadow-2xl backdrop-blur-2xl animate-scale-in sm:right-6 sm:max-w-[calc(100vw-3rem)] lg:bottom-24">
           {/* Header */}
           <div className="p-4 border-b border-border flex items-center justify-between bg-inset">
             <div className="flex items-center gap-2.5">

@@ -6,6 +6,7 @@ import { MapPin, Sprout, X } from "lucide-react";
 import type { Role } from "@/types";
 import { CITIZEN_NAV, GOV_NAV, SUPERVISOR_NAV } from "./nav";
 import { useSessionStore } from "@/stores/session";
+import { HackfinixBadge } from "@/components/features/hackathon/HackfinixBadge";
 import { cn } from "@/lib/utils";
 
 interface SidebarProps {
@@ -143,7 +144,7 @@ export function Sidebar({ role, isOpen, onClose }: SidebarProps) {
         </nav>
 
         {/* Active context footer */}
-        <div className="border-sidebar-border shrink-0 border-t p-4">
+        <div className="border-sidebar-border shrink-0 space-y-3 border-t p-4">
           <div className="bg-card border-border rounded-xl border p-3.5 shadow-xs">
             <div className="mb-2 flex items-center justify-between text-sm">
               <span className="text-muted-foreground">Active Context</span>
@@ -158,6 +159,9 @@ export function Sidebar({ role, isOpen, onClose }: SidebarProps) {
                 <span className="text-muted-foreground block truncate text-xs">{meta.subtitle}</span>
               </span>
             </div>
+          </div>
+          <div className="flex justify-center">
+            <HackfinixBadge variant="compact" showDemoLink={false} />
           </div>
         </div>
       </aside>

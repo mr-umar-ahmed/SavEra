@@ -109,7 +109,7 @@ export default function VerifiedReportsPage() {
           { label: "Verified Reports" },
         ]}
         badge={
-          <div className="flex items-center gap-2">
+          <div className="flex flex-wrap items-center gap-2">
             <span className="inline-flex items-center gap-1.5 rounded-full border border-teal-500/30 bg-teal-500/10 px-2.5 py-0.5 text-xs font-mono font-medium text-teal-ink">
               <MapPin className="h-3 w-3" />
               Ward 24 Supervisor Desk
@@ -129,7 +129,7 @@ export default function VerifiedReportsPage() {
 
       {/* Verbatim Department Response Card */}
       <div className="p-6 rounded-2xl border border-positive/40 bg-positive/[0.04] backdrop-blur-xl space-y-3">
-        <div className="flex items-center justify-between">
+        <div className="flex flex-wrap items-center justify-between gap-x-4 gap-y-2">
           <div className="flex items-center gap-2 text-positive font-bold text-xs uppercase tracking-wider font-mono">
             <ShieldCheck className="h-4 w-4" />
             <span>Latest Municipal Department Response</span>
@@ -204,7 +204,7 @@ export default function VerifiedReportsPage() {
                 className="py-4 flex flex-col md:flex-row md:items-center justify-between gap-4 text-xs group hover:bg-muted/60 px-2 rounded-xl transition-all"
               >
                 <div className="space-y-1.5 flex-1">
-                  <div className="flex items-center gap-2.5">
+                  <div className="flex flex-wrap items-center gap-x-2.5 gap-y-1.5">
                     <span className="font-bold text-foreground font-mono text-sm tracking-wide">
                       {item.id.toUpperCase()}
                     </span>

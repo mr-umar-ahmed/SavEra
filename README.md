@@ -10,6 +10,8 @@
 
 > **SavEra** is an end-to-end, multi-utility resource intelligence and conservation platform bridging citizens, municipal supervisors, and government administrators. It transforms urban utility management across **Electricity**, **Water**, and **LPG Gas** through real-time GIS mapping, 3D digital twinning, computer vision appliance scanning, predictive demand analytics, and automated SCADA telemetry.
 
+> 🏆 **Made for HACKFINIX 2026 · Cambridge North Campus, Bangalore.** The complete architecture, end-to-end flows, pitch script, judge Q&A and production checklist are in [`docs/SAVERA_Architecture_and_Pitch.docx`](docs/SAVERA_Architecture_and_Pitch.docx) (markdown sources: `docs/ARCHITECTURE.md`, `docs/MASTER_PROMPT.md`, `docs/spec/`).
+
 ---
 
 ## 📑 Table of Contents

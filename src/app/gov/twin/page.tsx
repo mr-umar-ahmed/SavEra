@@ -11,7 +11,7 @@ export default function GovTwinPage() {
         title="City Simulation & Digital Twin Prototype"
         subtitle="Simulated macro-grid demand response, water distribution pumping loads, and city-scale decarbonization scenarios."
         badge={
-          <div className="flex items-center gap-2">
+          <div className="flex flex-wrap items-center gap-2">
             <StatusBadge status="simulation" label="Simulation Prototype" />
             <span className="text-xs font-mono text-muted-foreground">City of Raichur</span>
           </div>

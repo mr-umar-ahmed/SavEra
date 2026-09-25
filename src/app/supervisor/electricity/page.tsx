@@ -54,7 +54,7 @@ export default function SupervisorElectricityPage() {
         title="Grid Operations & Ward Electricity Management"
         subtitle="Live telemetry from Raichur power grid sub-stations, feeder sensor matrices, and demand response."
         badge={
-          <div className="flex items-center gap-2">
+          <div className="flex flex-wrap items-center gap-2">
             <span className="flex h-2 w-2 rounded-full bg-positive animate-ping" />
             <span className="text-xs font-mono text-positive font-bold">LIVE TELEMETRY FEED</span>
           </div>

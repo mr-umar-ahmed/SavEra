@@ -13,7 +13,7 @@ export default function GovForecastPage() {
         title="City-Wide AI Demand Forecasting"
         subtitle="Predictive resource models across Electricity, Water, and LPG for municipal forward-planning."
         badge={
-          <div className="flex items-center gap-2">
+          <div className="flex flex-wrap items-center gap-2">
             <EstimatedChip confidence="High" inputs={["6 Months Historical Telemetry", "Seasonal Weather Models", "Occupancy Sensors"]} />
             <StatusBadge status="simulation" label="Simulation Model" />
           </div>

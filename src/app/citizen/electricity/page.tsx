@@ -162,7 +162,7 @@ export default function CitizenElectricityDashboard() {
         eyebrow="ELECTRICITY"
         subtitle="Household meter reconciliation, personalized baselines, and predictive disaggregation."
         badge={
-          <div className="flex items-center gap-2">
+          <div className="flex flex-wrap items-center gap-2">
             <span className="text-xs font-mono px-2 py-0.5 rounded bg-positive/10 text-positive border border-positive/20">
               Sep 2026
             </span>
@@ -430,7 +430,7 @@ export default function CitizenElectricityDashboard() {
 
       {/* Six Tabs Navigation matching §4 */}
       <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
-        <TabsList className="flex w-full overflow-x-auto">
+        <TabsList className="flex w-full overflow-x-auto" aria-label="Electricity dashboard sections">
           <TabsTrigger value="overview" className="text-sm">Overview</TabsTrigger>
           <TabsTrigger value="this-vs-last" className="text-sm">This vs Last Month</TabsTrigger>
           <TabsTrigger value="appliances" className="text-sm">Appliances</TabsTrigger>
@@ -445,7 +445,7 @@ export default function CitizenElectricityDashboard() {
             {/* Top Recommendation Hero Card */}
             <div className="lg:col-span-2 p-6 rounded-3xl border border-border bg-card backdrop-blur-xl shadow-xl flex flex-col justify-between">
               <div>
-                <div className="flex items-center justify-between mb-4">
+                <div className="mb-4 flex flex-wrap items-center justify-between gap-x-4 gap-y-2">
                   <div className="flex items-center gap-2 text-positive font-bold text-xs uppercase tracking-wider font-mono">
                     <Sparkles className="h-4 w-4" />
                     <span>Top Recommendation</span>

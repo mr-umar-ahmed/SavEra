@@ -20,7 +20,7 @@ export default function GovWardsPage() {
         title="Ward & Area Comparative Benchmarking"
         subtitle="Cross-ward resource demand indices, participation rates, and geographic stress metrics."
         badge={
-          <div className="flex items-center gap-2">
+          <div className="flex flex-wrap items-center gap-2">
             <StatusBadge status="normal" label="Privacy-Preserving Aggregates" />
             <span className="text-xs font-mono text-muted-foreground">Zero Citizen PII</span>
           </div>

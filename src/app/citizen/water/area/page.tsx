@@ -51,14 +51,15 @@ export default function AreaWaterStatusPage() {
       {/* Main Status & Breakdown Card */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
         <div className="md:col-span-2 p-6 sm:p-8 rounded-3xl border border-border bg-card backdrop-blur-xl shadow-xl space-y-6">
-          <div className="flex items-center justify-between pb-3 border-b border-border">
+          <div className="flex flex-wrap items-center justify-between gap-x-4 gap-y-2 pb-3 border-b border-border">
             <div className="flex items-center gap-2 text-teal-ink font-bold text-xs uppercase tracking-wider font-mono">
               <MapPin className="h-4 w-4" />
               <span>XYZ Colony · Ward 24</span>
             </div>
             <StatusBadge
               status="danger"
-              label="🔴 Concern detected — under verification"
+              label="Concern detected — under verification"
+              className="max-w-full whitespace-normal text-left"
             />
           </div>
 

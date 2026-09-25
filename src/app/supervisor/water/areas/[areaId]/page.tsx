@@ -90,7 +90,7 @@ export default function AreaWaterReportPage({
           { label: currentArea.name },
         ]}
         badge={
-          <div className="flex items-center gap-2">
+          <div className="flex flex-wrap items-center gap-2">
             <span className="inline-flex items-center gap-1.5 rounded-full border border-teal-500/30 bg-teal-500/10 px-2.5 py-0.5 text-xs font-mono font-medium text-teal-ink">
               <MapPin className="h-3 w-3" />
               Ward 24 · Zone 3
@@ -256,7 +256,7 @@ export default function AreaWaterReportPage({
             </div>
 
             {/* CSS / SVG Bar Chart */}
-            <div className="pt-4">
+            <div className="pt-4 overflow-x-clip">
               <div className="h-44 w-full flex items-end justify-between gap-1.5 px-2 pb-2 border-b border-border">
                 {historyData.map((d, idx) => {
                   const maxVal = 80;
@@ -288,7 +288,7 @@ export default function AreaWaterReportPage({
                 })}
               </div>
 
-              <div className="flex items-center justify-between text-xs text-faint pt-2 font-mono">
+              <div className="flex flex-wrap items-center justify-between gap-x-4 gap-y-1 text-xs text-faint pt-2 font-mono">
                 <span>30-Day Baseline Avg: 9 reports/day</span>
                 <span className="text-rose-ink font-semibold">Today: 78 reports (+766% anomaly)</span>
               </div>

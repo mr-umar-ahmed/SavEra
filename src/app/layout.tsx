@@ -3,6 +3,7 @@ import { JetBrains_Mono, Plus_Jakarta_Sans } from "next/font/google";
 import { ThemeProvider } from "@/components/theme/ThemeProvider";
 import { Toaster } from "@/components/ui/sonner";
 import { StoreHydrator } from "@/components/layout/StoreHydrator";
+import { RouteProgress } from "@/components/layout/RouteProgress";
 import "./globals.css";
 
 const jakarta = Plus_Jakarta_Sans({
@@ -48,6 +49,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
       <body className="bg-background text-foreground min-h-screen overflow-x-hidden antialiased">
         <ThemeProvider attribute="class" defaultTheme="light" enableSystem={false} storageKey="savera-theme-v2">
           <StoreHydrator />
+          <RouteProgress />
           {children}
           <Toaster />
         </ThemeProvider>

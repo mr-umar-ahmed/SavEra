@@ -31,6 +31,7 @@ import { useSessionStore } from "@/stores/session";
 import { SEED_USERS } from "@/data/seed/users";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { HackfinixBadge } from "@/components/features/hackathon/HackfinixBadge";
 import type { Role } from "@/types";
 
 const loginSchema = z.object({
@@ -1017,8 +1018,9 @@ export default function AuthPage() {
       </main>
 
       {/* Footer */}
-      <footer className="p-4 border-t border-border/60 text-center text-xs text-faint font-mono">
-        SAVERA Hackathon Demonstration Prototype · Pure deterministic client simulation · Raichur
+      <footer className="flex flex-col items-center justify-center gap-3 border-t border-border/60 p-4 text-center font-mono text-xs text-faint sm:flex-row sm:gap-5">
+        <span>SAVERA Hackathon Demonstration Prototype · Pure deterministic client simulation · Raichur</span>
+        <HackfinixBadge />
       </footer>
     </div>
   );
