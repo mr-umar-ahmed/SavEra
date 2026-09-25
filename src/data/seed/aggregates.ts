@@ -9,6 +9,7 @@ import type {
 import { currentMonth } from "@/lib/dates";
 import { addDaysIso } from "../fixtures/shared";
 import { AREAS } from "../geo/raichur";
+import { seedLpgAreaAggregates } from "./lpgAggregates";
 
 export function seedAggregates(now: string): {
   areaAggregates: AreaAggregate[];
@@ -20,12 +21,12 @@ export function seedAggregates(now: string): {
 } {
   const month = currentMonth(now);
 
-  const areaAggregates: AreaAggregate[] = [];
+  // LPG rows come from the consistent ward/area plan in ./lpgAggregates (spec 03 anchors).
+  const areaAggregates: AreaAggregate[] = [...seedLpgAreaAggregates(now)];
 
   for (const area of AREAS) {
     const isW24 = area.wardId === "ward-24";
     const isAreaA = area.id === "area-xyz";
-    const isAreaB = area.id === "area-abc";
 
     // 1. Electricity Aggregate
     const elBaseline = isAreaA ? 175000 : 160000;
@@ -72,28 +73,6 @@ export function seedAggregates(now: string): {
       trendPct: isAreaA ? 8.3 : -3.2,
     });
 
-    // 3. LPG Aggregate
-    // Anchor: ABC (Area B) baseline 4,100 kg, current 4,900 kg (> 15% increase, significantly_higher)
-    const lpgBaseline = isAreaB ? 4100 : 3800;
-    const lpgCons = isAreaB ? 4900 : 3850;
-    areaAggregates.push({
-      areaId: area.id,
-      wardId: area.wardId,
-      zoneId: area.zoneId,
-      stream: "lpg",
-      month,
-      unit: "kg",
-      totalConsumption: lpgCons,
-      baseline: lpgBaseline,
-      activeHouseholds: isW24 ? 280 : 220,
-      totalHouseholds: area.householdCount,
-      avgPerHousehold: Math.round((lpgCons / (isW24 ? 280 : 220)) * 10) / 10,
-      status: isAreaB ? "significantly_higher" : "normal",
-      demand: Math.round(lpgCons * 1.03),
-      forecast: isAreaB ? 5100 : 3900,
-      aboveBaselineHouseholds: isAreaB ? 42 : 12,
-      trendPct: isAreaB ? 19.5 : 1.3,
-    });
   }
 
   const gridSnapshot: GridSnapshot = {
@@ -264,6 +243,29 @@ export function seedAggregates(now: string): {
           at: `${addDaysIso(now, -1)}T11:45:00.000Z`,
           text: "Maintenance complete. Feeder energized and load normalized.",
           status: "resolved",
+        },
+      ],
+    },
+    {
+      id: "alert-003",
+      stream: "lpg",
+      type: "lpg_advisory",
+      title: "LPG Distribution Advisory — Ward 24",
+      areaIds: ["area-xyz", "area-abc", "area-def", "area-ghi"],
+      wardIds: ["ward-24"],
+      // 8:00 AM – 8:00 PM IST
+      windowStart: `${addDaysIso(now, 2)}T02:30:00.000Z`,
+      windowEnd: `${addDaysIso(now, 2)}T14:30:00.000Z`,
+      reason: "Bottling-plant maintenance; cylinder deliveries in Ward 24 may be delayed by up to one day. Book refills early.",
+      status: "scheduled",
+      publishedBy: "gas",
+      publishedByUserId: "u-gov-gas",
+      publishedAt: `${now}T09:10:00.000Z`,
+      updates: [
+        {
+          at: `${now}T09:10:00.000Z`,
+          text: "Advisory published. Distributors informed; deliveries will resume on the following day.",
+          status: "scheduled",
         },
       ],
     },

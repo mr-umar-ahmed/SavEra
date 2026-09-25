@@ -6,6 +6,8 @@ import { analyzeLpg } from "@/lib/engine/lpg";
 import { rollup } from "@/lib/engine/aggregate";
 import { selectNotificationsFor } from "../notifications";
 import { api } from "../index";
+import { computeBill } from "@/lib/engine/tariff";
+import { billsFromHistory } from "@/data/fixtures/shared";
 import type {
   Area,
   AreaAggregate,
@@ -35,21 +37,38 @@ export function useCurrentHousehold(): {
   };
 }
 
-export function useEnergyAnalysis(householdId = "H-1024"): EnergyAnalysis | undefined {
+export function useEnergyAnalysis(propHouseholdId?: string): EnergyAnalysis | undefined {
+  const user = useSessionStore((s) => s.user);
   const now = useSessionStore((s) => s.demoNow);
   const households = useDataStore((s) => s.households);
   const appliances = useDataStore((s) => s.appliances);
   const bills = useDataStore((s) => s.bills);
 
+  const householdId = propHouseholdId || user?.householdId || "H-1024";
+
   return useMemo(() => {
-    const hh = households.find((h) => h.id === householdId);
+    const hh = households.find((h) => h.id === householdId) ?? households[0];
     if (!hh) return undefined;
     const hhAppliances = appliances.filter((a) => a.householdId === householdId);
-    const hhBills = bills.filter((b) => b.householdId === householdId);
+    let hhBills = bills.filter((b) => b.householdId === householdId);
+
+    if (hhBills.length === 0) {
+      const people = hh.people || 3;
+      const baseKwh = 110 + people * 45;
+      const seasonalMultipliers = [1.08, 1.02, 0.98, 1.15, 1.32, 1.28, 1.05, 0.92, 0.85, 0.86, 0.95, 1.00];
+      const billHistory = seasonalMultipliers.map((mult, idx) => {
+        const kwh = Math.round(baseKwh * mult);
+        return { offset: -idx, kwh, amount: computeBill(kwh).total };
+      });
+      hhBills = billsFromHistory(householdId, billHistory, now, {
+        meterStart: 2100,
+        tariffName: "Demo Domestic LT-1",
+      });
+    }
 
     return buildEnergyAnalysis({
       household: hh,
-      appliances: hhAppliances,
+      appliances: hhAppliances.length > 0 ? hhAppliances : appliances.filter((a) => a.householdId === "H-1024"),
       bills: hhBills,
       areaAvgKwh: 340,
       now,

@@ -39,11 +39,14 @@ export interface DataState extends SeedDb {
   resetDemo(now: string): void;
 
   // Household / electricity
+  addHousehold(h: Household): void;
   updateHousehold(id: string, patch: Partial<Household>): void;
   upsertAppliance(a: Appliance): void;
+  addAppliances(list: Appliance[]): void;
   removeAppliance(id: string): void;
   setSectionStatus(householdId: string, section: SetupSection, status: SetupStatus): void;
   addBill(b: ElectricityBill): void;
+  addBills(list: ElectricityBill[]): void;
 
   // Water
   addWaterReport(r: WaterReport): { report: WaterReport; case: WaterCase | null };
@@ -110,6 +113,14 @@ export const useDataStore = create<DataState>()(
         });
       },
 
+      addHousehold(h) {
+        set((state) => ({
+          households: state.households.some((existing) => existing.id === h.id)
+            ? state.households.map((existing) => (existing.id === h.id ? h : existing))
+            : [h, ...state.households],
+        }));
+      },
+
       updateHousehold(id, patch) {
         set((state) => ({
           households: state.households.map((h) => (h.id === id ? { ...h, ...patch } : h)),
@@ -125,6 +136,12 @@ export const useDataStore = create<DataState>()(
               : [...state.appliances, a],
           };
         });
+      },
+
+      addAppliances(list) {
+        set((state) => ({
+          appliances: [...state.appliances, ...list],
+        }));
       },
 
       removeAppliance(id) {
@@ -152,6 +169,12 @@ export const useDataStore = create<DataState>()(
       addBill(b) {
         set((state) => ({
           bills: [...state.bills.filter((item) => item.id !== b.id), b],
+        }));
+      },
+
+      addBills(list) {
+        set((state) => ({
+          bills: [...state.bills.filter((b) => !list.some((newItem) => newItem.id === b.id)), ...list],
         }));
       },
 

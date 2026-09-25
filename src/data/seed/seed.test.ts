@@ -8,7 +8,7 @@ describe("Seed Generator", () => {
   const seed = buildSeed(now);
 
   it("produces a valid SEED_VERSION and all collections populated", () => {
-    expect(SEED_VERSION).toBe("1.0.0");
+    expect(SEED_VERSION).toBe("1.1.0");
     expect(seed.users.length).toBe(6);
     expect(seed.zones.length).toBe(3);
     expect(seed.wards.length).toBe(8);
@@ -25,7 +25,7 @@ describe("Seed Generator", () => {
     expect(seed.industrialUnits.length).toBe(8);
     expect(seed.ghgActivity.length).toBe(8);
     expect(seed.drEvents.length).toBe(3);
-    expect(seed.officialAlerts.length).toBe(2);
+    expect(seed.officialAlerts.length).toBe(3);
     expect(seed.notifications.length).toBeGreaterThanOrEqual(6);
     expect(seed.leaderboard.length).toBe(700);
   });

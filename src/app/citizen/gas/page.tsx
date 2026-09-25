@@ -1,187 +1,222 @@
 "use client";
 
-import { useState } from "react";
+import * as React from "react";
 import Link from "next/link";
-import {
-  AlertTriangle,
-  ArrowRight,
-  Bell,
-  Calendar,
-  CheckCircle2,
-  Clock,
-  Flame,
-  History,
-  Plus,
-  ShieldCheck,
-  Sparkles,
-} from "lucide-react";
-import { PageHeader } from "@/components/savera/PageHeader";
-import { KpiCard } from "@/components/savera/KpiCard";
-import { StatusBadge } from "@/components/savera/StatusBadge";
+import { CalendarClock, Cylinder, Flame, Gauge, History, Plus, Timer } from "lucide-react";
+
+import { useHasMounted } from "@/components/hooks/useHasMounted";
+import { AlertBanner } from "@/components/savera/AlertBanner";
+import { EmptyState } from "@/components/savera/EmptyState";
 import { EstimatedChip } from "@/components/savera/EstimatedChip";
+import { KpiCard } from "@/components/savera/KpiCard";
+import { LabelChip } from "@/components/savera/LabelChip";
+import { PageHeader } from "@/components/savera/PageHeader";
 import { Button } from "@/components/ui/button";
-import { useLpgAnalysis } from "@/lib/api/hooks";
-import { useSessionStore } from "@/stores/session";
-import { useDataStore } from "@/stores/data";
-import { toast } from "sonner";
+import { BookingTracker } from "@/components/features/lpg/BookingTracker";
+import { CurrentCylinderCard } from "@/components/features/lpg/CurrentCylinderCard";
+import { LpgCycleChart } from "@/components/features/lpg/LpgCycleChart";
+import { LpgInsightCard } from "@/components/features/lpg/LpgInsightCard";
+import { LpgSkeleton } from "@/components/features/lpg/LpgSkeleton";
+import { RefillPredictionCard } from "@/components/features/lpg/RefillPredictionCard";
+import { useLpgHousehold } from "@/lib/api/hooks/lpg";
+import { lpgApi } from "@/lib/api/lpg";
+import { formatDate, formatDayMonth, formatDays, formatKg } from "@/lib/format";
 
-export default function CitizenLpgDashboardPage() {
-  const user = useSessionStore((s) => s.user);
-  const householdId = user?.householdId ?? "H-1024";
-  const { analysis, bookings } = useLpgAnalysis(householdId);
-  const upsertLpgBooking = useDataStore((s) => s.upsertLpgBooking);
+const rate = (n?: number) => (n === undefined ? "—" : `${n.toFixed(2)} kg/day`);
 
-  const [bookingInProgress, setBookingInProgress] = useState(false);
+export default function CitizenLpgDashboard() {
+  const mounted = useHasMounted();
+  const view = useLpgHousehold();
+  const { analysis, openCylinder, householdId } = view;
 
-  const isAbnormal = householdId === "H-1088" || analysis?.status === "higher";
+  // Raise the higher-consumption notification once per cylinder (idempotent in the API).
+  React.useEffect(() => {
+    if (mounted && analysis.status === "higher") {
+      void lpgApi.notifyHigherConsumption(householdId, analysis.deltaPct ?? 0);
+    }
+  }, [mounted, analysis.status, analysis.deltaPct, householdId]);
 
-  const handleSimulatedBooking = () => {
-    setBookingInProgress(true);
-    setTimeout(() => {
-      const now = new Date().toISOString();
-      upsertLpgBooking({
-        id: `bk-${Date.now()}`,
-        householdId,
-        ref: `LPG-${Math.floor(1000 + Math.random() * 9000)}`,
-        status: "confirmed",
-        createdAt: now,
-        updatedAt: now,
-        history: [{ status: "confirmed", at: now }],
-        simulated: true,
-      });
-      setBookingInProgress(false);
-      toast.success("Simulated LPG refill booked successfully! Confirmation #LPG-9924");
-    }, 1000);
-  };
+  if (!mounted) return <LpgSkeleton />;
+
+  const current = analysis.current;
+  const previous = analysis.cycles.at(-1);
 
   return (
     <div className="space-y-6">
       <PageHeader
-        title="LPG Cylinder Management & Consumption Forecast"
-        subtitle="Track domestic cylinder cycles, monitor daily burn rates, and receive automated refill reminders."
-        badge={
-          <div className="flex items-center gap-2">
-            <EstimatedChip confidence="Medium" inputs={["18 days elapsed", "14.2 kg domestic", "historical median 25 days"]} />
-            {isAbnormal ? (
-              <StatusBadge status="warning" label="Abnormal Burn Rate" />
-            ) : (
-              <StatusBadge status="normal" label="Normal Cycle" />
-            )}
-          </div>
+        eyebrow="LPG"
+        title="Your LPG"
+        description="Track your cylinder, understand your consumption, get alerted when usage changes and predict your next refill."
+        chips={
+          <>
+            <EstimatedChip confidence={analysis.confidence} inputs={analysis.inputs} />
+            {view.household?.gas?.provider ? (
+              <span className="bg-secondary border-border text-soft rounded-full border px-3 py-1 font-mono text-xs">
+                {view.household.gas.provider}
+              </span>
+            ) : null}
+          </>
         }
         actions={
-          <div className="flex items-center gap-2">
-            <Link href="/citizen/gas/history">
-              <Button variant="outline" size="sm" className="h-8 gap-1.5 border-border bg-muted text-xs text-foreground">
-                <History className="h-3.5 w-3.5" />
-                <span>History</span>
-              </Button>
-            </Link>
-            <Link href="/citizen/gas/cylinder">
-              <Button size="sm" className="h-8 gap-1.5 bg-primary text-primary-foreground hover:bg-primary-hover text-xs font-semibold">
-                <Plus className="h-3.5 w-3.5" />
-                <span>Update Cylinder</span>
-              </Button>
-            </Link>
-          </div>
+          <>
+            <Button asChild variant="outline" className="gap-2">
+              <Link href="/citizen/gas/history">
+                <History className="size-4" />
+                Usage History
+              </Link>
+            </Button>
+            <Button asChild className="gap-2">
+              <Link href="/citizen/gas/cylinder">
+                <Cylinder className="size-4" />
+                Update Cylinder
+              </Link>
+            </Button>
+          </>
         }
       />
 
-      {/* KPI Overview */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        <KpiCard
-          title="Current Cylinder"
-          value="14.2 kg Domestic"
-          subtitle="Started 18 days ago (07 Sep)"
-          badge={<StatusBadge status="normal" label="Active" />}
-        />
+      {view.officialAlert ? <AlertBanner alert={view.officialAlert} /> : null}
 
-        <KpiCard
-          title="Daily Consumption Rate"
-          value="0.57 kg / day"
-          subtitle="Typical range: 0.55 – 0.60 kg/day"
-          badge={<EstimatedChip confidence="Medium" />}
+      {!openCylinder && analysis.cycles.length === 0 ? (
+        <EmptyState
+          icon={Flame}
+          title="No cylinders yet — add your first cylinder to start tracking."
+          description="SAVERA learns your typical LPG use from the dates you start and finish each cylinder."
+          action={{ label: "Add a cylinder", href: "/citizen/gas/cylinder", icon: Plus }}
+          secondaryAction={{ label: "Gas & Heating setup", href: "/citizen/setup/gas" }}
         />
-
-        <KpiCard
-          title="Estimated Remaining Days"
-          value="~7 Days"
-          subtitle="Projected completion: 02 Oct 2026"
-          badge={<EstimatedChip confidence="Medium" />}
-        />
-
-        <KpiCard
-          title="Refill Prediction"
-          value="02 Oct 2026"
-          subtitle="Recommended booking: 28 Sep"
-          badge={<StatusBadge status="warning" label="Order Soon" />}
-        />
-      </div>
-
-      {/* Abnormal Warning Banner if applicable */}
-      {isAbnormal && (
-        <div className="p-4 rounded-xl bg-rose-500/10 border border-rose-500/30 text-xs text-rose-ink flex items-start gap-3">
-          <AlertTriangle className="h-5 w-5 text-rose-ink shrink-0 mt-0.5" />
-          <div>
-            <span className="font-bold block mb-1">Higher LPG Consumption Rate Detected (0.78 kg/day)</span>
-            <p className="text-soft">
-              Possible cause — further inspection may be required: Check burner valve seals and regulator hose for possible leakage. Verify safety clips. If odor is detected, turn off regulator immediately.
-            </p>
+      ) : (
+        <>
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
+            <KpiCard
+              label="Current cylinder"
+              value={openCylinder ? formatKg(openCylinder.sizeKg) : "None in use"}
+              sub={openCylinder ? `Started ${formatDate(openCylinder.startDate)}` : "Add the cylinder you are using"}
+              icon={Cylinder}
+              tone="normal"
+              footer={openCylinder ? <LabelChip kind="measured" size="sm" /> : undefined}
+            />
+            <KpiCard
+              label="Estimated remaining"
+              value={current ? `~${formatDays(current.estimatedRemainingDays)}` : "—"}
+              sub={current ? `~${formatKg(current.estimatedRemainingKg)} left · ${formatDays(current.daysUsed)} used` : undefined}
+              icon={Timer}
+              tone={current && current.estimatedRemainingDays <= 3 ? "critical" : "moderate"}
+              estimated
+              confidence={analysis.confidence}
+              inputs={analysis.inputs}
+            />
+            <KpiCard
+              label="Average consumption"
+              value={rate(analysis.currentKgPerDay)}
+              sub={
+                analysis.typicalRange
+                  ? `Typical ${analysis.typicalRange.low.toFixed(2)}–${analysis.typicalRange.high.toFixed(2)} kg/day`
+                  : "Typical rate not learned yet"
+              }
+              icon={Gauge}
+              tone={analysis.status === "higher" ? "critical" : "normal"}
+              estimated
+              confidence={analysis.confidence}
+              inputs={analysis.inputs}
+            />
+            <KpiCard
+              label="Next expected refill"
+              value={analysis.refill ? `~${formatDayMonth(analysis.refill.date)}` : "—"}
+              sub={
+                view.refillWindow
+                  ? `Window ${formatDayMonth(view.refillWindow.earliest)} – ${formatDayMonth(view.refillWindow.latest)}`
+                  : undefined
+              }
+              icon={CalendarClock}
+              tone="optimal"
+              estimated
+              confidence={analysis.confidence}
+              inputs={analysis.inputs}
+            />
           </div>
-        </div>
+
+          <div className="grid grid-cols-1 gap-6 lg:grid-cols-5">
+            <div className="lg:col-span-2">
+              {openCylinder ? (
+                <CurrentCylinderCard analysis={analysis} cylinder={openCylinder} usedPct={view.usedPct} />
+              ) : (
+                <EmptyState
+                  icon={Cylinder}
+                  title="No cylinder in use"
+                  description="Add the cylinder you connected most recently to keep predictions accurate."
+                  action={{ label: "Add new cylinder", href: "/citizen/gas/cylinder" }}
+                  className="glass h-full rounded-2xl"
+                />
+              )}
+            </div>
+            <LpgInsightCard analysis={analysis} className="lg:col-span-3" />
+          </div>
+
+          <section id="usage" className="glass scroll-mt-28 space-y-5 rounded-2xl p-6" aria-labelledby="lpg-usage-title">
+            <div className="flex flex-wrap items-start justify-between gap-3">
+              <div>
+                <p className="eyebrow">My LPG usage</p>
+                <h2 id="lpg-usage-title" className="font-display text-foreground mt-1 text-xl font-bold">
+                  Consumption per cylinder
+                </h2>
+                <p className="text-muted-foreground mt-1 text-sm">
+                  Rates are estimated from cylinder dates; the dates themselves are measured.
+                </p>
+              </div>
+              <Button asChild variant="outline" size="sm">
+                <Link href="/citizen/gas/history">Full history</Link>
+              </Button>
+            </div>
+            <dl className="grid grid-cols-2 gap-3 lg:grid-cols-4">
+              <UsageStat label="Current rate" value={rate(analysis.currentKgPerDay)} estimated />
+              <UsageStat
+                label="Current cycle"
+                value={current ? formatDays(current.daysUsed) : "—"}
+                hint={current ? "in progress" : undefined}
+              />
+              <UsageStat label="Previous cylinder" value={previous ? formatDays(previous.days) : "—"} />
+              <UsageStat
+                label="Typical per cylinder"
+                value={analysis.typicalDaysPerCylinder ? formatDays(analysis.typicalDaysPerCylinder) : "—"}
+                estimated
+              />
+            </dl>
+            {analysis.cycles.length > 0 || current ? <LpgCycleChart analysis={analysis} /> : null}
+          </section>
+
+          <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
+            <RefillPredictionCard view={view} />
+            <BookingTracker
+              booking={view.activeBooking ?? view.lastBooking}
+              inUseSince={openCylinder?.startDate}
+            />
+          </div>
+        </>
       )}
+    </div>
+  );
+}
 
-      {/* Refill Prediction & Booking Card */}
-      <div className="p-6 rounded-2xl border border-border bg-card backdrop-blur-xl flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
-        <div>
-          <div className="flex items-center gap-2 text-rose-ink font-bold text-xs uppercase tracking-wider mb-1">
-            <Flame className="h-4 w-4" />
-            <span>Automated Refill Prediction</span>
-          </div>
-          <h3 className="text-xl font-bold text-foreground mb-2">Book Refill for Delivery by 02 October 2026</h3>
-          <p className="text-xs text-muted-foreground max-w-xl leading-relaxed">
-            Based on your 0.57 kg/day burn rate over the last 18 days, reserving 4 days ahead prevents interruption during holiday transit windows.
-          </p>
-        </div>
-
-        <div className="flex items-center gap-3">
-          <Button
-            onClick={handleSimulatedBooking}
-            disabled={bookingInProgress}
-            className="bg-primary text-primary-foreground hover:bg-primary-hover font-semibold text-xs h-9 px-6 gap-2"
-          >
-            <span>{bookingInProgress ? "Booking Refill..." : "Book Refill (Simulated)"}</span>
-            <ArrowRight className="h-3.5 w-3.5" />
-          </Button>
-        </div>
-      </div>
-
-      {/* Conservation & Safety Guidance */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div className="p-5 rounded-xl border border-border bg-muted/60 space-y-2">
-          <div className="flex items-center gap-2 text-positive font-bold text-xs uppercase tracking-wider">
-            <Sparkles className="h-4 w-4" />
-            <span>Thermal Efficiency Tips</span>
-          </div>
-          <ul className="space-y-1.5 text-xs text-soft">
-            <li>· Always use broad-bottom pans that cover burner flames completely.</li>
-            <li>· Covering pots with tight lids may reduce cooking gas consumption by up to 20%.</li>
-            <li>· Pre-soak pulses and grains prior to pressure cooking.</li>
-          </ul>
-        </div>
-
-        <div className="p-5 rounded-xl border border-border bg-muted/60 space-y-2">
-          <div className="flex items-center gap-2 text-amber-ink font-bold text-xs uppercase tracking-wider">
-            <ShieldCheck className="h-4 w-4" />
-            <span>Standard Safety Check</span>
-          </div>
-          <ul className="space-y-1.5 text-xs text-soft">
-            <li>· Inspect orange Suraksha rubber tube every 6 months for surface micro-cracks.</li>
-            <li>· Switch off regulator knob every night before retiring.</li>
-            <li>· Keep cylinders upright in well-ventilated locations at ground level.</li>
-          </ul>
-        </div>
-      </div>
+function UsageStat({
+  label,
+  value,
+  hint,
+  estimated,
+}: {
+  label: string;
+  value: string;
+  hint?: string;
+  estimated?: boolean;
+}) {
+  return (
+    <div className="bg-muted border-border rounded-xl border p-4">
+      <dt className="text-muted-foreground flex items-center gap-1.5 text-sm">
+        {label}
+        {estimated ? <span className="text-faint font-mono text-2xs uppercase">est.</span> : null}
+      </dt>
+      <dd className="font-display text-foreground mt-1 text-xl font-bold">{value}</dd>
+      {hint ? <dd className="text-muted-foreground text-xs">{hint}</dd> : null}
     </div>
   );
 }

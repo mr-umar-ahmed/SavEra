@@ -10,7 +10,7 @@ import { seedGreenScore } from "./greenScore";
 import { seedConnected } from "./connected";
 import { seedNotifications } from "./notifications";
 
-export const SEED_VERSION = "1.0.0";
+export const SEED_VERSION = "1.1.0";
 
 /**
  * Builds the complete deterministic demo database for the given `now` date (`YYYY-MM-DD`).
